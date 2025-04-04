@@ -22,7 +22,7 @@ const isAdmin = false
 
             <div className="flex items-center space-x-4">
             <SignedIn>
-                <Link href="/newasset">
+                <Link href="/assetForm">
                     <Button>
                         <CassetteTape size={18} />
                         <span className='hidden md:inline'>New Asset</span>
