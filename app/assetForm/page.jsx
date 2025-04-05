@@ -7,9 +7,12 @@ import { validateInventionForm } from "@/lib/validateInventRecognitionForm";
 import useFormStore from "@/store/store";
 import React from "react";
 import EntityDetails from "@/components/InventionRecognition/EntityDetails";
+import TechnologyDetails from "@/components/InventionRecognition/TechnologyDetails";
+import TrainRunExperimentation from "@/components/InventionRecognition/TrainRunExperimentation";
+import MiniHeader from "@/components/MiniHeader";
+import EffortSheetDetails from "@/components/InventionRecognition/EffortSheet";
 
 const InventionRecognitionForm = () => {
-
   const { formData, setErrors } = useFormStore();
 
   const handleSave = () => {
@@ -18,31 +21,38 @@ const InventionRecognitionForm = () => {
       setErrors(errors);
       return;
     }
-
-    // ✅ Form is valid
-    //console.log("Valid form data:", formData);
-    // ... submit form logic here
   };
 
   return (
     <div className="min-h-screen flex flex-col pt-24">
-    <CardWrapper
-      label="Invention Recognition"
-      title="Register"
-      backButtonHref="/previous-page"
-      nextButtonHref="/next-page"
-      className="w-full max-w-[90%] mx-auto p-8" // 💡 Increased width
-      onSave={handleSave}
-    >
-       {/* Form Layout (Stacked One Below The Other) */}
-      <div className="flex flex-col gap-6 p-6">
-        <InventionDetails /> 
-        <div className="ml-4">
-          <AddOrDeleteInventor />
+      <CardWrapper
+        label="Invention Recognition"
+        title="Register"
+        backButtonHref="/previous-page"
+        nextButtonHref="/next-page"
+        className="w-full max-w-[90%] mx-auto p-8"
+        onSave={handleSave}
+      >
+        <MiniHeader title="Invention Details" />
+
+        {/* Form Layout (Stacked One Below The Other) */}
+        <div className="flex flex-col gap-6 p-6">
+          <InventionDetails />
+          <div className="ml-4">
+            <AddOrDeleteInventor />
+          </div>
+          <EntityDetails />
         </div>
-        <EntityDetails/>
-      </div>
-    </CardWrapper>
+
+        <MiniHeader title="Technology Details" />
+        <TechnologyDetails />
+
+        <MiniHeader title="Experiments" />
+        <TrainRunExperimentation />
+
+        <MiniHeader title="Effort Sheet" />
+        <EffortSheetDetails/>
+      </CardWrapper>
     </div>
   );
 };

@@ -3,6 +3,22 @@ import { create } from "zustand";
 const useFormStore = create((set) => ({
   formData: {
     inventors: [], // 🛑 Add inventors array
+    incrementalRenovation: '',  // Default to empty string to avoid undefined
+    patentNumbers: '',
+    journalNumbers: '',
+    productIdentity: '',
+    problemAddressed: '',
+    trainRun: '',  // Default empty string to prevent undefined errors
+    experimentResults: '',
+    evidence: null, // File inputs should be initialized as null
+    minuteOfMeeting: null,
+    attachments: null,
+    ipRecognizer: '',        // IP Recognizer (Emp ID)
+    hoursSpent: '',          // Number of hours spent
+    agencyRecognizer: '',    // External agency recognizer
+    agencyCost: '',          // Cost spent on agency
+    reviewEffort: '',        // Efforts in hours for review
+    managerEmpId: '',
   },
   errors: {},
 
