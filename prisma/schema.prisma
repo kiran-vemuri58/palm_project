@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model inventions {
+  asset_id              String   @id @default(dbgenerated()) @db.Text
+  inventiontitle        String   @db.Text
+  commonname            String   @db.Text
+  inventordetails       String   @db.Text
+
+  // Technology Details
+  incrementalrenovation String?  @db.Text
+  patentnumbers         String?  @db.Text
+  journalnumbers        String?  @db.Text
+  productidentity       String?  @db.Text
+  problemaddressed      String?  @db.Text
+
+  // Train Run / Experimentation
+  trainrun              String?  @db.Text
+  experimentresults     String?  @db.Text
+  evidence              String?  @db.Text
+  minuteofmeeting       String?  @db.Text
+  attachments           String?  @db.Text
+
+  // IP Review Section
+  iprecognizer          String?  @db.Text
+  hoursspent            String?  @db.Text
+  agencyrecognizer      String?  @db.Text
+  agencycost            String?  @db.Text
+  revieweffort          String?  @db.Text
+  managerempid          String?  @db.Text
+
+  // Entity Details
+  entity                String?  @db.Text
+  date                  DateTime
+  inventioncountry      String?  @db.Text
+  creationcountry       String?  @db.Text
+  collaboration         String?  @db.Text
+  collaboratorname      String?  @db.Text
+  collaboratorcountry   String?  @db.Text
+  stakeholders          String?  @db.Text
+
+  created_at            DateTime @default(now())
+}

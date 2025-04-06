@@ -1,25 +1,51 @@
 import { create } from "zustand";
 
 const useFormStore = create((set) => ({
+  uploadedPaths: {},
   formData: {
-    inventors: [], // 🛑 Add inventors array
-    incrementalRenovation: '',  // Default to empty string to avoid undefined
+    // Invention Details
+    inventiontitle: '',
+    commonName: '',
+    inventorDetails: '',
+  
+    // Inventors
+    inventors: [],
+  
+    // Technology Details
+    incrementalRenovation: '',      // Yes/No
     patentNumbers: '',
-    journalNumbers: '',
+    journalNumbers: '',             // Used in multiple places, okay to share
     productIdentity: '',
     problemAddressed: '',
-    trainRun: '',  // Default empty string to prevent undefined errors
+  
+    // Train Run / Experimentation
+    trainRun: '',                   // Yes/No
     experimentResults: '',
-    evidence: null, // File inputs should be initialized as null
+    evidence: null,
     minuteOfMeeting: null,
     attachments: null,
-    ipRecognizer: '',        // IP Recognizer (Emp ID)
-    hoursSpent: '',          // Number of hours spent
-    agencyRecognizer: '',    // External agency recognizer
-    agencyCost: '',          // Cost spent on agency
-    reviewEffort: '',        // Efforts in hours for review
+  
+    // IP Review Section
+    ipRecognizer: '',
+    hoursSpent: '',
+    agencyRecognizer: '',
+    agencyCost: '',
+    reviewEffort: '',
     managerEmpId: '',
+  
+    // Entity Details
+    entity: '',
+    date: '',                       // Format: YYYY-MM-DD
+    inventionCountry: '',
+    creationCountry: '',
+    collaboration: '',              // Yes/No
+    collaboratorName: '',
+    collaboratorCountry: '',
+    stakeholders: '', 
+    journalNumbers: '',          // 💡 Required for collaboration: 'yes'
+    productIdentity: '', 
   },
+  
   errors: {},
 
   updateFormData: (data) =>

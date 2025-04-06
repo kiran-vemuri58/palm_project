@@ -13,15 +13,64 @@ import MiniHeader from "@/components/MiniHeader";
 import EffortSheetDetails from "@/components/InventionRecognition/EffortSheet";
 
 const InventionRecognitionForm = () => {
-  const { formData, setErrors } = useFormStore();
+  const { formData, setErrors, uploadedPaths } = useFormStore();
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const errors = validateInventionForm(formData);
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
       return;
     }
+  
+    try {
+      const fileFields = ['evidence', 'minuteOfMeeting', 'attachments'];
+      const uploadedPaths = {};
+  
+      // Upload files
+      for (const field of fileFields) {
+        const file = formData[field];
+        if (file) {
+          const uploadForm = new FormData();
+          uploadForm.append('file', file);
+          uploadForm.append('registerId', 'A0004'); // or generate dynamically
+  
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            body: uploadForm,
+          });
+  
+          const result = await res.json();
+          if (result.success) {
+            uploadedPaths[field] = result.path;
+          } else {
+            console.error(`Upload failed for ${field}:`, result.error);
+            return;
+          }
+        }
+      }
+  
+      // Merge uploaded file paths into payload
+      const payload = {
+        ...formData,
+        ...uploadedPaths,
+      };
+  
+      // Submit to invention API
+      const saveRes = await fetch('/api/invention', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+  
+      const resultDB = await saveRes.json();
+      console.log('Invention saved:', resultDB);
+    } catch (error) {
+      console.error('Error saving invention:', error);
+    }
   };
+  
 
   return (
     <div className="min-h-screen flex flex-col pt-24">
