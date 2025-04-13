@@ -32,7 +32,7 @@ const InventionRecognitionForm = () => {
         if (file) {
           const uploadForm = new FormData();
           uploadForm.append('file', file);
-          uploadForm.append('registerId', 'A0004'); // or generate dynamically
+          uploadForm.append('registerId', 'A0005'); // or generate dynamically
   
           const res = await fetch('/api/upload', {
             method: 'POST',
@@ -78,7 +78,7 @@ const InventionRecognitionForm = () => {
         label="Invention Recognition"
         title="Register"
         backButtonHref="/previous-page"
-        nextButtonHref="/next-page"
+        nextButtonHref="/assetForm2"
         className="w-full max-w-[90%] mx-auto p-8"
         onSave={handleSave}
       >
