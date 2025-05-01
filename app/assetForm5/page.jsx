@@ -9,39 +9,33 @@ import MiniHeader from "@/components/MiniHeader";
 import DecisionSheet from "@/components/PatentabilityAnalysis/DecisionSheet";
 import Innovation from "@/components/PatentabilityAnalysis/Innovation";
 import PAExtractor from "@/components/PatentabilityAnalysis/PAExtractor";
+//import PSPInventionDetails from "@/components/PatentSpecificationPreparation/PSPInventionDetails";
 
-const Patentability_Analysis = () => {
+const PatentFiling = () => {
 
   const handleSave = () => {
     
   }
 
    return(
-    <div className="min-h-screen flex flex-col pt-14">
+    <div className="min-h-screen flex flex-col pt-24">
     <CardWrapper
-        label="3- Patentability Analysis"
+        label="5- PatentFiling"
         title="Register"
-        backButtonHref="/assetForm2"
-        nextButtonHref="/assetForm4"
+        backButtonHref="/assetForm4"
+        nextButtonHref="/assetForm6"
         className="w-full max-w-[90%] mx-auto p-8"
         onSave={handleSave}
       >
      <MiniHeader title="Invention Details"/>
-     <InventionDetails/>
-     <MiniHeader title="Extractor Details"/>
-     <PAExtractor/>
-     <MiniHeader title="Innovation"/>
-     <Innovation/>
-     <MiniHeader title="Decision Sheet"/>
-     <DecisionSheet/>
-     <MiniHeader title="Efforts Sheet"/>
-     <EffortSheetDetails/>
+     <InventionDetails />
      <MiniHeader title="Activity Status" />
      <ActivityStatus />
+     
      
     </CardWrapper>
   </div>
    ) 
 }
 
-export default Patentability_Analysis;
+export default PatentFiling;

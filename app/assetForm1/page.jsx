@@ -11,6 +11,7 @@ import TechnologyDetails from "@/components/InventionRecognition/TechnologyDetai
 import TrainRunExperimentation from "@/components/InventionRecognition/TrainRunExperimentation";
 import MiniHeader from "@/components/MiniHeader";
 import EffortSheetDetails from "@/components/InventionRecognition/EffortSheet";
+import ActivityStatus from "@/components/InventionRecognition/ActivityStatus";
 
 const InventionRecognitionForm = () => {
   const { formData, setErrors, uploadedPaths } = useFormStore();
@@ -73,10 +74,10 @@ const InventionRecognitionForm = () => {
   
 
   return (
-    <div className="min-h-screen flex flex-col pt-24">
+    <div className="min-h-screen flex flex-col pt-14">
       <CardWrapper
-        label="Invention Recognition"
-        title="Register"
+        label="1- Invention Recognition"
+        title="Register" 
         backButtonHref="/previous-page"
         nextButtonHref="/assetForm2"
         className="w-full max-w-[90%] mx-auto p-8"
@@ -101,6 +102,8 @@ const InventionRecognitionForm = () => {
 
         <MiniHeader title="Effort Sheet" />
         <EffortSheetDetails/>
+        <MiniHeader title="Activity Status" />
+        <ActivityStatus />
       </CardWrapper>
     </div>
   );
