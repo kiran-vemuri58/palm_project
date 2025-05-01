@@ -87,6 +87,7 @@ const InventionRecognitionForm = () => {
 
         {/* Form Layout (Stacked One Below The Other) */}
         <div className="flex flex-col gap-6 p-6">
+          
           <InventionDetails />
           <div className="ml-4">
             <AddOrDeleteInventor />

@@ -31,7 +31,7 @@ const InventionExtraction = () => {
       <MiniHeader title="Extractor Details"/>
       <ExtractorDetails/>
       <MiniHeader title="Efforts Sheet"/>
-      <EffortSheetDetails/>
+      <EffortSheetDetails formNumber="formData2"/>
       <MiniHeader title="Activity Status" />
       <ActivityStatus />
       <MiniHeader title="Updates" />

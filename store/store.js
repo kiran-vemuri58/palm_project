@@ -45,6 +45,23 @@ const useFormStore = create((set) => ({
     journalNumbers: '',          // 💡 Required for collaboration: 'yes'
     productIdentity: '', 
   },
+
+  formData2: {
+
+    // Extractor Details
+    extractorOne: '',
+    extractortwo: '',
+    iedate:'',
+    iawpl: '',
+    nfeature: '',
+    ifeature: '',
+    idattachments: '',
+    scountry: '',
+    oextractor:'',
+
+    // Invention Details
+    
+  },
   
   errors: {},
 
@@ -52,6 +69,10 @@ const useFormStore = create((set) => ({
     set((state) => ({
       formData: { ...state.formData, ...data },
     })),
+    updateformData2: (data) =>
+      set((state) => ({
+        formData: { ...state.formData, ...data },
+      })),
 
   // ✅ Update specific inventor field
   updateInventor: (index, field, value) =>
