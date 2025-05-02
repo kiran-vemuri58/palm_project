@@ -29,9 +29,9 @@ const InventionExtraction = () => {
       <MiniHeader title="Invention Details"/>
       <InventionDetails/>
       <MiniHeader title="Extractor Details"/>
-      <ExtractorDetails/>
+      <ExtractorDetails formKey="formData2" updateFunction="updateFormData2"/>
       <MiniHeader title="Efforts Sheet"/>
-      <EffortSheetDetails formNumber="formData2"/>
+      <EffortSheetDetails formKey="formData2"/>
       <MiniHeader title="Activity Status" />
       <ActivityStatus />
       <MiniHeader title="Updates" />

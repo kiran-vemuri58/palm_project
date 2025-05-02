@@ -6,17 +6,19 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import React from 'react';
 
-const ExtractorDetails = () => {
-  const { formData2, updateformData2 } = useFormStore();
+const ExtractorDetails = ({formKey, updateFunction}) => {
+
+  const formData = useFormStore((state) => state[formKey]);
+  const updateFormDataByKey = useFormStore((state) => state[updateFunction]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    updateformData2({ ...formData2, [name]: value });
+    updateFormDataByKey({ ...formData, [name]: value });
   };
 
   const handleFileUpload = (e) => {
     const { name, files } = e.target;
-    updateformData2({ [name]: files[0] || null }); // Store only the first file or null
+    updateFormDataByKey({ [name]: files[0] || null }); // Store only the first file or null
   };
 
   return (
@@ -26,17 +28,17 @@ const ExtractorDetails = () => {
       <div className="grid grid-cols-3 gap-4">
         <div>
           <Label className="mb-1">Name of the Extractor 1</Label>
-          <Input className="p-2" placeholder="Enter the name of Extractor 1" id="entity" name="extractorOne" value={formData2.extractorOne} onChange={handleChange} />
+          <Input className="p-2" placeholder="Enter the name of Extractor 1" id="entity" name="extractorOne" value={formData.extractorOne} onChange={handleChange} />
         </div>
         
         <div>
           <Label className="mb-1">Name of the Extractor 2</Label>
-          <Input className="p-2" placeholder="Enter the name of Extractor 2" id="inventionCountry" name="extractortwo" value={formData2.extractortwo} onChange={handleChange} />
+          <Input className="p-2" placeholder="Enter the name of Extractor 2" id="inventionCountry" name="extractortwo" value={formData.extractortwo} onChange={handleChange} />
         </div>
         
         <div>
           <Label className="mb-1">Invention Extraction Date</Label>
-          <Input className="p-2" placeholder="Select a date..." id="date" name="iEDate" type="date" value={formData2.iEDate} onChange={handleChange} />
+          <Input className="p-2" placeholder="Select a date..." id="date" name="iEDate" type="date" value={formData.iEDate} onChange={handleChange} />
         </div>
       </div>
 
@@ -44,7 +46,7 @@ const ExtractorDetails = () => {
       <div className="grid grid-cols-3 gap-4 mt-4">
         <div>
           <Label className="mb-1">is Invention Accordance with Patent Laws?</Label>
-          <Select className="w-full" onValueChange={(value) => updateformData2({ ...formData2, iawpl: value })}>
+          <Select className="w-full" value={formData.iawpl} onValueChange={(value) => updateFormDataByKey({ ...formData, iawpl: value })}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select an option" />
             </SelectTrigger>
@@ -56,17 +58,17 @@ const ExtractorDetails = () => {
         </div>
       </div>
 
-      {formData2.iawpl === 'yes' && (
+      {formData.iawpl === 'yes' && (
         <>
           {/* Third Row */}
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div>
               <Label className="mb-1">Novel Feature(Assumed)</Label>
-              <Input className="p-2" placeholder="Enter Novel Feature" id="collaboratorName" name="nfeature" value={formData2.nfeature} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter Novel Feature" id="collaboratorName" name="nfeature" value={formData.nfeature} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Inventive Feature (Assumed)</Label>
-              <Input className="p-2" placeholder="Enter collaborator country..." id="collaboratorCountry" name="ifeature" value={formData2.ifeature} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter collaborator country..." id="collaboratorCountry" name="ifeature" value={formData.ifeature} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Invention Detail Attachment</Label>
@@ -84,11 +86,11 @@ const ExtractorDetails = () => {
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div>
               <Label className="mb-1">Specific Country</Label>
-              <Input className="p-2" placeholder="Enter journal numbers..." id="journalNumbers" name="scountry" value={formData2.scountry} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter journal numbers..." id="journalNumbers" name="scountry" value={formData.scountry} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Opinion Of Extractor</Label>
-              <Input className="p-2" placeholder="Enter Opinion Of Extractor" id="productIdentity" name="oextractor" value={formData2.oextractor} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter Opinion Of Extractor" id="productIdentity" name="oextractor" value={formData.oextractor} onChange={handleChange} />
             </div>
           </div>
         </>

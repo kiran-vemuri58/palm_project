@@ -69,9 +69,9 @@ const useFormStore = create((set) => ({
     set((state) => ({
       formData: { ...state.formData, ...data },
     })),
-    updateformData2: (data) =>
+    updateFormData2: (data) =>
       set((state) => ({
-        formData: { ...state.formData, ...data },
+        formData2: { ...state.formData2, ...data },
       })),
 
   // ✅ Update specific inventor field
