@@ -10,8 +10,12 @@ import {
 } from "@/components/ui/select";
 import useFormStore from '@/store/store';
 
-const ActivityStatus = () => {
-  const { formData, updateFormData } = useFormStore();
+
+
+const ActivityStatus = ({formKey,updateFunction}) => {
+  
+  const formData = useFormStore((state) => state[formKey]);
+  const updateFormDataByKey = useFormStore((state) => state[updateFunction]);
 
   return (
     <div className="activity-status w-full">
@@ -20,7 +24,7 @@ const ActivityStatus = () => {
       </label>
       <Select
         value={formData.activityStatus || ""}
-        onValueChange={(value) => updateFormData({ activityStatus: value })}
+        onValueChange={(value) => updateFormDataByKey({ ...formData,activityStatus: value })}
       >
         <SelectTrigger className="w-full border-gray-300">
           <SelectValue placeholder="Select status" />

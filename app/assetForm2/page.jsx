@@ -7,12 +7,14 @@ import ActivityStatus from "@/components/InventionRecognition/ActivityStatus";
 import EffortSheetDetails from "@/components/InventionRecognition/EffortSheet";
 import InventionDetails from "@/components/InventionRecognition/InventionDetails";
 import MiniHeader from "@/components/MiniHeader";
+import useFormStore from "@/store/store";
+
 
 const InventionExtraction = () => {
-
+  const { formData2, uploadedPaths } = useFormStore();
 
    const handleSave = () => {
-
+        console.log(formData2)
    }
 
    return(
@@ -31,9 +33,9 @@ const InventionExtraction = () => {
       <MiniHeader title="Extractor Details"/>
       <ExtractorDetails formKey="formData2" updateFunction="updateFormData2"/>
       <MiniHeader title="Efforts Sheet"/>
-      <EffortSheetDetails formKey="formData2"/>
-      <MiniHeader title="Activity Status" />
-      <ActivityStatus />
+      <EffortSheetDetails formKey="formData2" updateFunction="updateFormData2"/>
+      <MiniHeader title="Activity Status"   />
+      <ActivityStatus formKey="formData2" updateFunction="updateFormData2" />
       <MiniHeader title="Updates" />
       <UpdatesNBA />
 

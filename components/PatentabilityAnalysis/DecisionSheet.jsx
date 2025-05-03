@@ -28,8 +28,8 @@ const DecisionSheet = () => {
             className="p-2"
             placeholder="Enter Name of Decision Maker"
             id="ipRecognizer"
-            name="ipRecognizer"
-            value={formData.ipRecognizer}
+            name="nodc"
+            value={formData.nodc}
             onChange={handleChange}
           />
         </div>
@@ -39,9 +39,9 @@ const DecisionSheet = () => {
             className="p-2"
             placeholder="Enter decision in brief"
             id="hoursSpent"
-            name="hoursSpent"
+            name="dibrief"
             type="number"
-            value={formData.hoursSpent}
+            value={formData.dibrief}
             onChange={handleChange}
           />
         </div>

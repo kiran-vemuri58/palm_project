@@ -10,15 +10,15 @@ import {
 import useFormStore from '@/store/store';
 
 const UpdatesNBA = () => {
-    const { formData, updateFormData } = useFormStore();
+    const { formData2, updateFormData2 } = useFormStore();
     return (
         <div className="activity-status w-full">
             <label className="block text-sm font-medium text-gray-700 mb-2">
             Is there need of NBA for applying patent
             </label>
             <Select
-                value={formData.activityStatus || ""}
-                onValueChange={(value) => updateFormData({ activityStatus: value })}
+                value={formData2.updatenba || ""}
+                onValueChange={(value) => updateFormData2({ ...formData2,updatenba: value })}
             >
                 <SelectTrigger className="w-full border-gray-300">
                     <SelectValue placeholder="Select status" />

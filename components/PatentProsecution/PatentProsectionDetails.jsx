@@ -27,7 +27,7 @@ const PatentProsectionDetails = () => {
       <div className="grid grid-cols-3 gap-4 mt-4">
         <div>
           <Label className="mb-1">application pregrant Opposed?</Label>
-          <Select className="w-full" onValueChange={(value) => updateFormData({ ...formData, collaboration: value })}>
+          <Select className="w-full" onValueChange={(value) => updateFormData({ ...formData, apopposed: value })}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select an option" />
             </SelectTrigger>
@@ -45,7 +45,7 @@ const PatentProsectionDetails = () => {
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div>
               <Label className="mb-1">Opposer Name</Label>
-              <Input className="p-2" placeholder="Enter Opposer Name" id="collaboratorName" name="collaboratorName" value={formData.collaboratorName} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter Opposer Name" id="collaboratorName" name="oname" value={formData.oname} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Opposer Attachment</Label>
@@ -59,7 +59,7 @@ const PatentProsectionDetails = () => {
             </div>
             <div>
               <Label className="mb-1">Citations Filed by Opposer</Label>
-              <Input className="p-2" placeholder="Enter Citations Filed by Opposer" id="collaboratorCountry" name="collaboratorCountry" value={formData.collaboratorCountry} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter Citations Filed by Opposer" id="collaboratorCountry" name="cfbopposer" value={formData.cfbopposer} onChange={handleChange} />
             </div>
             
           </div>
@@ -68,11 +68,11 @@ const PatentProsectionDetails = () => {
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div>
               <Label className="mb-1">Brief Opinion About Opposition Findings</Label>
-              <Input className="p-2" placeholder="Enter Opposer Name" id="journalNumbers" name="journalNumbers" value={formData.journalNumbers} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter Opposer Name" id="journalNumbers" name="boaof" value={formData.boaof} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Response Filed for Opposition</Label>
-              <Input className="p-2" placeholder="Enter Opinion Of Extractor" id="productIdentity" name="productIdentity" value={formData.productIdentity} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter Opinion Of Extractor" id="productIdentity" name="rffo" value={formData.rffo} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Attachment</Label>
@@ -86,15 +86,15 @@ const PatentProsectionDetails = () => {
             </div>
             <div>
               <Label className="mb-1">Opposition Response Prepared By</Label>
-              <Input className="p-2" placeholder="Enter Employee ID" id="productIdentity" name="productIdentity" value={formData.productIdentity} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter Employee ID" id="productIdentity" name="orpby" value={formData.orpby} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">External Agency (if prepared by them)</Label>
-              <Input className="p-2" placeholder="Enter Agency Number" id="productIdentity" name="productIdentity" value={formData.productIdentity} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter Agency Number" id="productIdentity" name="eagency" value={formData.eagency} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Reviewed By</Label>
-              <Input className="p-2" placeholder="Enter Employee ID" id="productIdentity" name="productIdentity" value={formData.productIdentity} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter Employee ID" id="productIdentity" name="revby" value={formData.revby} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Review Attachment (Versions of Response with Reviews)

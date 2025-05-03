@@ -18,7 +18,7 @@ const useFormStore = create((set) => ({
     productIdentity: '',
     problemAddressed: '',
   
-    // Train Run / Experimentation
+    //  Experiments
     trainRun: '',                   // Yes/No
     experimentResults: '',
     evidence: null,
@@ -44,14 +44,26 @@ const useFormStore = create((set) => ({
     stakeholders: '', 
     journalNumbers: '',          // 💡 Required for collaboration: 'yes'
     productIdentity: '', 
+
+    // Effort Sheet
+    ipRecognizer: '',
+    hoursSpent: '',
+    agencyRecognizer: '',
+    agencyCost: '',
+    reviewEffort: '',
+    managerEmpId: '',
+
+    // Activity Status
+    activityStatus: '',
+
   },
 
   formData2: {
 
-    // Extractor Details
+    // Extractor Details-9
     extractorOne: '',
     extractortwo: '',
-    iedate:'',
+    iEDate:'',
     iawpl: '',
     nfeature: '',
     ifeature: '',
@@ -59,7 +71,82 @@ const useFormStore = create((set) => ({
     scountry: '',
     oextractor:'',
 
+    
+    // Effort Sheet-6
+    ipRecognizer: '',
+    hoursSpent: '',
+    agencyRecognizer: '',
+    agencyCost: '',
+    reviewEffort: '',
+    managerEmpId: '',
+
+    // Activity Status
+    activityStatus: '',
+    
+    // Updates NBA
+    updatenba: '',
+    
+  },
+  formData3: {
+    // Extractor Details
+    psone: '',
+    pstwo: '',
+    rating: '',
+    nfeature: '',
+    ifeature: '',
+    scountry: '',
+    ooextractor: '',
+
     // Invention Details
+    trainRun: '',
+
+    // Decission sheet
+    nodc: '',
+    dibrief: '',
+
+
+  },
+
+  formData4:{
+    nodrafter: '',
+    noreviewer: '',
+
+    bned: '',
+    ifdescribed: '',
+    toinvention: '',
+    esfd: '',
+    pdrafter: '',
+    nohspent: '',
+    eafd: '',
+    csoagency: '',
+    eihfr: '',
+    mres: '',
+  },
+  formData5:{
+
+  },
+  
+  formData6:{
+    // Patent Prosecution
+    apopposed: '',
+    oname: '',
+    cfbopposer:'',
+    boaof: '',
+    rffo: '',
+
+    orpby: '',
+    eagency: '',
+    revby: '',
+
+    // Patent Application status
+    pstatus: '',
+    pnumber: '',
+
+    pgdate: '',
+
+    pgdate: '',
+    
+    //FER
     
   },
   

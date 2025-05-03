@@ -5,12 +5,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import React from 'react';
 
-const EffortSheetDetails = ({formNumber}) => {
-  const { formData, updateFormData } = useFormStore();
+const EffortSheetDetails = ({formKey,updateFunction}) => {
+  const formData = useFormStore((state) => state[formKey]);
+  const updateFormDataByKey = useFormStore((state) => state[updateFunction]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    updateFormData({ ...formData, [name]: value });
+    updateFormDataByKey({ ...formData, [name]: value });
   };
 
   return (

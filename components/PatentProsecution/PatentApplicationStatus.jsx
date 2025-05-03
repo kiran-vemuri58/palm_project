@@ -27,7 +27,7 @@ const PatentApplicationStatus = () => {
       <div className="grid grid-cols-3 gap-4 mt-4">
         <div>
           <Label className="mb-1">Patent Status</Label>
-          <Select className="w-full" onValueChange={(value) => updateFormData({ ...formData, collaboration: value })}>
+          <Select className="w-full" onValueChange={(value) => updateFormData({ ...formData, pstatus: value })}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select an option" />
             </SelectTrigger>
@@ -45,21 +45,21 @@ const PatentApplicationStatus = () => {
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div>
               <Label className="mb-1">Patent Number</Label>
-              <Input className="p-2" placeholder="Enter Patent Number" id="collaboratorName" name="collaboratorName" value={formData.collaboratorName} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter Patent Number" id="collaboratorName" name="pnumber" value={formData.pnumber} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Patent Attachment</Label>
               <Input
                 type="file"
                 id="attachments"
-                name="attachments"
+                name="pattachments"
                 className="grid w-full max-w-sm items-center gap-1.5"
                 onChange={handleFileUpload}
               />
             </div>
             <div>
           <Label className="mb-1">Patent Grant Date</Label>
-          <Input className="p-2" placeholder="Select a date..." id="date" name="date" type="date" value={formData.date} onChange={handleChange} />
+          <Input className="p-2" placeholder="Select a date..." id="date" name="pgdate" type="date" value={formData.pgdate} onChange={handleChange} />
            </div>
             
             <div>
@@ -67,7 +67,7 @@ const PatentApplicationStatus = () => {
               <Input
                 type="file"
                 id="attachments"
-                name="attachments"
+                name="wprattachments"
                 className="grid w-full max-w-sm items-center gap-1.5"
                 onChange={handleFileUpload}
               />
@@ -80,14 +80,14 @@ const PatentApplicationStatus = () => {
         <div className="grid grid-cols-3 gap-4 mt-4">
           <div>
           <Label className="mb-1">Patent Grant Date</Label>
-          <Input className="p-2" placeholder="Select a date..." id="date" name="date" type="date" value={formData.date} onChange={handleChange} />
+          <Input className="p-2" placeholder="Select a date..." id="date" name="pgdate" type="date" value={formData.pgdate} onChange={handleChange} />
         </div>
         <div>
         <Label className="mb-1">Why Patent is Rejected</Label>
         <Input
           type="file"
           id="attachments"
-          name="attachments"
+          name="prattachments"
           className="grid w-full max-w-sm items-center gap-1.5"
           onChange={handleFileUpload}
         />

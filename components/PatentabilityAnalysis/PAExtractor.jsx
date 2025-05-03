@@ -30,12 +30,12 @@ const PAExtractor = () => {
       <div className="grid grid-cols-3 gap-4">
         <div>
           <Label className="mb-1">Name of Patent Searcher 1 </Label>
-          <Input className="p-2" placeholder="Enter the Name of Patent Searcher 1" id="entity" name="entity" value={formData.entity} onChange={handleChange} />
+          <Input className="p-2" placeholder="Enter the Name of Patent Searcher 1" id="entity" name="psone" value={formData.psone} onChange={handleChange} />
         </div>
         
         <div>
           <Label className="mb-1">Name of Patent Searcher 2</Label>
-          <Input className="p-2" placeholder="Enter the Name of Patent Searcher 2" id="inventionCountry" name="inventionCountry" value={formData.inventionCountry} onChange={handleChange} />
+          <Input className="p-2" placeholder="Enter the Name of Patent Searcher 2" id="inventionCountry" name="pstwo" value={formData.pstwo} onChange={handleChange} />
         </div>
         <div className="flex items-center gap-2">
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -81,11 +81,11 @@ const PAExtractor = () => {
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div>
               <Label className="mb-1">Novel Feature(Assumed)</Label>
-              <Input className="p-2" placeholder="Enter Novel Feature" id="collaboratorName" name="collaboratorName" value={formData.collaboratorName} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter Novel Feature" id="collaboratorName" name="nfeature" value={formData.nfeature} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Inventive Feature (Assumed)</Label>
-              <Input className="p-2" placeholder="Enter collaborator country..." id="collaboratorCountry" name="collaboratorCountry" value={formData.collaboratorCountry} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter collaborator country..." id="collaboratorCountry" name="ifeature" value={formData.ifeature} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Invention Detail Attachment</Label>
@@ -103,11 +103,11 @@ const PAExtractor = () => {
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div>
               <Label className="mb-1">Specific Country</Label>
-              <Input className="p-2" placeholder="Enter journal numbers..." id="journalNumbers" name="journalNumbers" value={formData.journalNumbers} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter journal numbers..." id="journalNumbers" name="scountry" value={formData.scountry} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Opinion Of Extractor</Label>
-              <Input className="p-2" placeholder="Enter Opinion Of Extractor" id="productIdentity" name="productIdentity" value={formData.productIdentity} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter Opinion Of Extractor" id="productIdentity" name="ooextractor" value={formData.ooextractor} onChange={handleChange} />
             </div>
           </div>
         </>

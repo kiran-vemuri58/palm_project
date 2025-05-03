@@ -29,8 +29,8 @@ const Provisional = () => {
             className="p-2"
             placeholder="Enter Name of Drafter"
             id="ipRecognizer"
-            name="ipRecognizer"
-            value={formData.ipRecognizer}
+            name="nodrafter"
+            value={formData.nodrafter}
             onChange={handleChange}
           />
         </div>
@@ -40,8 +40,8 @@ const Provisional = () => {
             className="p-2"
             placeholder="Enter Employee ID"
             id="ipRecognizer"
-            name="ipRecognizer"
-            value={formData.ipRecognizer}
+            name="noreviewer"
+            value={formData.noreviewer}
             onChange={handleChange}
           />
         </div>
@@ -65,8 +65,8 @@ const Provisional = () => {
             className="p-2"
             placeholder="Broadest Novel Element Described"
             id="ipRecognizer"
-            name="ipRecognizer"
-            value={formData.ipRecognizer}
+            name="bned"
+            value={formData.bned}
             onChange={handleChange}
           />
         </div>
@@ -76,8 +76,8 @@ const Provisional = () => {
             className="p-2"
             placeholder="Inventive Feature Described"
             id="ipRecognizer"
-            name="ipRecognizer"
-            value={formData.ipRecognizer}
+            name="ifdescribed"
+            value={formData.ifdescribed}
             onChange={handleChange}
           />
         </div>
@@ -87,8 +87,8 @@ const Provisional = () => {
             className="p-2"
             placeholder="Enter Title of invention"
             id="ipRecognizer"
-            name="ipRecognizer"
-            value={formData.ipRecognizer}
+            name="toinvention"
+            value={formData.toinvention}
             onChange={handleChange}
           />
             </div>
@@ -103,8 +103,8 @@ const Provisional = () => {
             className="p-2"
             placeholder="Enter Efforts spent for drafting"
             id="ipRecognizer"
-            name="ipRecognizer"
-            value={formData.ipRecognizer}
+            name="esfd"
+            value={formData.esfd}
             onChange={handleChange}
           />
         </div>
@@ -114,8 +114,8 @@ const Provisional = () => {
             className="p-2"
             placeholder="Enter Patent Drafter"
             id="ipRecognizer"
-            name="ipRecognizer"
-            value={formData.ipRecognizer}
+            name="pdrafter"
+            value={formData.pdrafter}
             onChange={handleChange}
           />
         </div>
@@ -125,8 +125,8 @@ const Provisional = () => {
             className="p-2"
             placeholder="Enter Number of hours spent"
             id="ipRecognizer"
-            name="ipRecognizer"
-            value={formData.ipRecognizer}
+            name="nohspent"
+            value={formData.nohspent}
             onChange={handleChange}
           />
             </div>
@@ -140,8 +140,8 @@ const Provisional = () => {
             className="p-2"
             placeholder="External Agency for drafting"
             id="ipRecognizer"
-            name="ipRecognizer"
-            value={formData.ipRecognizer}
+            name="eafd"
+            value={formData.eafd}
             onChange={handleChange}
           />
         </div>
@@ -151,8 +151,8 @@ const Provisional = () => {
             className="p-2"
             placeholder="Enter Agency cost"
             id="ipRecognizer"
-            name="ipRecognizer"
-            value={formData.ipRecognizer}
+            name="csoagency"
+            value={formData.csoagency}
             onChange={handleChange}
           />
         </div>
@@ -162,8 +162,8 @@ const Provisional = () => {
             className="p-2"
             placeholder="Enter Efforts in Hours for review"
             id="ipRecognizer"
-            name="ipRecognizer"
-            value={formData.ipRecognizer}
+            name="eihfr"
+            value={formData.eihfr}
             onChange={handleChange}
           />
             </div>
@@ -175,8 +175,8 @@ const Provisional = () => {
             className="p-2"
             placeholder="EnterManager Responsible (Employee ID)"
             id="ipRecognizer"
-            name="ipRecognizer"
-            value={formData.ipRecognizer}
+            name="mres"
+            value={formData.mres}
             onChange={handleChange}
           />
             </div>
