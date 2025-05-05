@@ -13,8 +13,24 @@ import useFormStore from "@/store/store";
 const InventionExtraction = () => {
   const { formData2, uploadedPaths } = useFormStore();
 
-   const handleSave = () => {
-        console.log(formData2)
+   const handleSave = async () => {
+         // Merge uploaded file paths into payload
+      const payload = {
+        ...formData2,
+      };
+  
+      // Submit to invention API
+      const saveRes = await fetch('/api/extraction', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+  
+      const resultDB = await saveRes.json();
+      console.log('Invention saved:', resultDB);
+    
    }
 
    return(

@@ -41,3 +41,5 @@ we need to pass the values from parent component like formKey
 now pass the props in child component
 const EffortSheetDetails = ({formKey,updateFunction})
 use this formKey and updateFunction in the child component(EffortsheeDetails)
+----
+page.jsx-> components->store (is nothing but json--form feilds)->apicall --in save method page.jsx-->route->prisma

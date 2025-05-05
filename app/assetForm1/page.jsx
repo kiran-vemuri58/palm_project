@@ -101,10 +101,10 @@ const InventionRecognitionForm = () => {
         <MiniHeader title="Experiments" />
         <TrainRunExperimentation />
 
-        <MiniHeader title="Effort Sheet" />
-        <EffortSheetDetails/>
+        <MiniHeader title="Effort Sheet"  />
+        <EffortSheetDetails formKey="formData" updateFunction="updateFormData" />
         <MiniHeader title="Activity Status" />
-        <ActivityStatus />
+        <ActivityStatus formKey="formData" updateFunction="updateFormData" />
       </CardWrapper>
     </div>
   );
