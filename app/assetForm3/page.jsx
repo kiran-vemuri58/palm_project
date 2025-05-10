@@ -27,7 +27,7 @@ const Patentability_Analysis = () => {
         onSave={handleSave}
       >
      <MiniHeader title="Invention Details"/>
-     <InventionDetails/>
+     <InventionDetails />
      <MiniHeader title="Extractor Details"/>
      <PAExtractor/>
      <MiniHeader title="Innovation"/>
@@ -35,9 +35,9 @@ const Patentability_Analysis = () => {
      <MiniHeader title="Decision Sheet"/>
      <DecisionSheet/>
      <MiniHeader title="Efforts Sheet"/>
-     <EffortSheetDetails/>
+     <EffortSheetDetails formKey="formData3" updateFunction="updateFormData3"/>
      <MiniHeader title="Activity Status" />
-     <ActivityStatus />
+     <ActivityStatus formKey="formData3" updateFunction="updateFormData3" />
      
     </CardWrapper>
   </div>

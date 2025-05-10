@@ -49,7 +49,7 @@ model inventions {
 }
 
 
-model extraction {
+model Extraction {
   id                 Int      @id @default(autoincrement())
   extractorOne       String
   extractortwo       String

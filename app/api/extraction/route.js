@@ -7,10 +7,10 @@ export async function POST(req) {
   try {
     const payload = await req.json(); // read body from POST request
         // 🧠 Fetch latest asset_id and generate a new one
-    const lastEntry = await prisma.inventions.findFirst({ 
-        orderBy: { created_at: 'desc' },
-        select: { asset_id: true },
-    });
+    // const lastEntry = await prisma.inventions.findFirst({ 
+    //     orderBy: { created_at: 'desc' },
+    //     select: { asset_id: true },
+    // });
 
     // let newAssetId = 'A0001';
     // if (lastEntry?.asset_id) {
@@ -40,14 +40,12 @@ export async function POST(req) {
       updatenba: payload.updatenba,
 
     };
-
-    const result = await prisma.extraction.create({
-      data,
-    });
+    console.log(prisma.Extraction)
+    const result = await prisma.Extraction.create({data});
 
     return NextResponse.json({ success: true, data: result }, { status: 200 });
   } catch (err) {
-    console.error('❌ Error inserting invention:', err);
+    console.error('❌ Error inserting extraction:', err);
     return NextResponse.json({ success: false, message: err.message }, { status: 500 });
   } finally {
     await prisma.$disconnect();

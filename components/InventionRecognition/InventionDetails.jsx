@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import useFormStore from '@/store/store';
 import { Star, Plus } from 'lucide-react';
 
-const InventionDetails = ({ showRating = false }) => {
+const InventionDetails = ({ showRating = false ,formKey,updateFunction }) => {
   const { formData, updateFormData, errors } = useFormStore();
   const [rating, setRating] = useState(0);
 

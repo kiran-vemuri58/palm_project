@@ -104,6 +104,16 @@ const useFormStore = create((set) => ({
     nodc: '',
     dibrief: '',
 
+      // Effort Sheet-6
+      ipRecognizer: '',
+      hoursSpent: '',
+      agencyRecognizer: '',
+      agencyCost: '',
+      reviewEffort: '',
+      managerEmpId: '',
+  
+      // Activity Status
+      activityStatus: '',
 
   },
 
@@ -160,6 +170,10 @@ const useFormStore = create((set) => ({
       set((state) => ({
         formData2: { ...state.formData2, ...data },
       })),
+      updateFormData3: (data) =>
+        set((state) => ({
+          formData2: { ...state.formData2, ...data },
+        })),
 
   // ✅ Update specific inventor field
   updateInventor: (index, field, value) =>
