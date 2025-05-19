@@ -36,8 +36,8 @@ const PostGrantOpposition = () => {
      <PatentProsectionDetails />
      <MiniHeader title="Effort Sheet - Number of Hours and Financial Efforts"/>
      <PGPEffortSheetDetails />
-     <MiniHeader title="Activity Status"/>
-     <ActivityStatus />
+     <MiniHeader title="Activity Status" />
+     <ActivityStatus formKey="formData7" updateFunction="updateFormData7"/>
 
     </CardWrapper>
   </div>

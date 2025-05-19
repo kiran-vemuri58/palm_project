@@ -18,8 +18,7 @@ const InventionDetails = () => {
     <div className="flex gap-6 w-full">
       {fields.map((field) => (
         <div key={field.id} className="flex flex-col w-full px-2">
-          <Label
-            htmlFor={field.id}
+          <Label            htmlFor={field.id}
             className="text-gray-700 font-medium mb-2 px-1"
           >
             {field.label}

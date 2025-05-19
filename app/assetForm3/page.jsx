@@ -3,16 +3,20 @@
 import CardWrapper from "@/components/CardWrapper";
 import ExtractorDetails from "@/components/InventionExtraction/ExtractorDetails";
 import ActivityStatus from "@/components/InventionRecognition/ActivityStatus";
-import EffortSheetDetails from "@/components/InventionRecognition/EffortSheet";
 import InventionDetails from "@/components/InventionRecognition/InventionDetails";
 import MiniHeader from "@/components/MiniHeader";
 import DecisionSheet from "@/components/PatentabilityAnalysis/DecisionSheet";
 import Innovation from "@/components/PatentabilityAnalysis/Innovation";
+import PAEffortSheetDetails from "@/components/PatentabilityAnalysis/PAEffortSheet";
 import PAExtractor from "@/components/PatentabilityAnalysis/PAExtractor";
 
 const Patentability_Analysis = () => {
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    // Merge uploaded file paths into payload
+ const payload = {
+   ...formData3,
+ };
     
   }
 
@@ -35,7 +39,7 @@ const Patentability_Analysis = () => {
      <MiniHeader title="Decision Sheet"/>
      <DecisionSheet/>
      <MiniHeader title="Efforts Sheet"/>
-     <EffortSheetDetails formKey="formData3" updateFunction="updateFormData3"/>
+     <PAEffortSheetDetails />
      <MiniHeader title="Activity Status" />
      <ActivityStatus formKey="formData3" updateFunction="updateFormData3" />
      

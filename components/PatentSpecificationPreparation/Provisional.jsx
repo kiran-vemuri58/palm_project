@@ -182,7 +182,7 @@ const Provisional = () => {
             </div>
             </div>
             <div>
-          <ActivityStatus />
+          
            </div>
             
 

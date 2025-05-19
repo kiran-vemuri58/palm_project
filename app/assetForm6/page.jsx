@@ -9,12 +9,12 @@ import MiniHeader from "@/components/MiniHeader";
 import DecisionSheet from "@/components/PatentabilityAnalysis/DecisionSheet";
 import Innovation from "@/components/PatentabilityAnalysis/Innovation";
 import PAExtractor from "@/components/PatentabilityAnalysis/PAExtractor";
-import PSPInventionDetails from "@/components/PatentFiling/PSPInventionDetails";
 import FER from "@/components/PatentProsecution/FER";
 import Hearing from "@/components/PatentProsecution/Hearing";
 import PatentApplicationStatus from "@/components/PatentProsecution/PatentApplicationStatus";
 import PatentProsectionDetails from "@/components/PatentProsecution/PatentProsectionDetails";
 import PPEffortSheet from "@/components/PatentProsecution/PPEffortSheet";
+import PPInventionDetails from "@/components/PatentProsecution/PPInventionDetails";
 //import PSPInventionDetails from "@/components/PatentSpecificationPreparation/PSPInventionDetails";
 
 const PatentProsecution = () => {
@@ -34,7 +34,8 @@ const PatentProsecution = () => {
         onSave={handleSave}
       >
      <MiniHeader title="Invention Details"/>
-     <PSPInventionDetails />
+     <InventionDetails isPAN={true} showRating={true} />
+
      <MiniHeader title="Patent Prosecution"/>
      <PatentProsectionDetails />
      <MiniHeader title="Patent Application Status"/>
@@ -47,7 +48,7 @@ const PatentProsecution = () => {
      <PPEffortSheet />
      
      <MiniHeader title="Activity Status" />
-     <ActivityStatus />
+     <ActivityStatus formKey="formData6" updateFunction="updateFormData6"/>
     </CardWrapper>
   </div>
    ) 

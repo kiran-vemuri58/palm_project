@@ -101,10 +101,29 @@ const PAExtractor = () => {
           
           {/* Fourth Row */}
           <div className="grid grid-cols-3 gap-4 mt-4">
-            <div>
-              <Label className="mb-1">Specific Country</Label>
-              <Input className="p-2" placeholder="Enter journal numbers..." id="journalNumbers" name="scountry" value={formData.scountry} onChange={handleChange} />
+          <div>
+            <Label className="mb-1" htmlFor="scountry">Specific Country</Label>
+              <select
+                id="scountry"
+                name="scountry"
+                className="p-2 border rounded w-full"
+                value={formData.scountry}
+                onChange={handleChange}
+              >
+                <option value="">Select a country</option>
+                <option value="United States">United States</option>
+                <option value="Canada">Canada</option>
+                <option value="Germany">Germany</option>
+                <option value="France">France</option>
+                <option value="Japan">Japan</option>
+                <option value="India">India</option>
+                <option value="China">China</option>
+                <option value="Australia">Australia</option>
+                <option value="Brazil">Brazil</option>
+                <option value="United Kingdom">United Kingdom</option>
+              </select>
             </div>
+
             <div>
               <Label className="mb-1">Opinion Of Extractor</Label>
               <Input className="p-2" placeholder="Enter Opinion Of Extractor" id="productIdentity" name="ooextractor" value={formData.ooextractor} onChange={handleChange} />

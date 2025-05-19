@@ -34,7 +34,7 @@ const PatentManagement = () => {
      <MiniHeader title="Patent Maintance History"/>
     <PatentMaintanceHistory />
     <MiniHeader title="Activy Status"/>
-    <ActivityStatus />
+    <ActivityStatus formKey="formData8" updateFunction="updateFormData8"/>
      
     </CardWrapper>
   </div>

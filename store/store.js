@@ -136,7 +136,10 @@ const useFormStore = create((set) => ({
 
   },
   
+  
   formData6:{
+    //PPInvention Details
+    
     // Patent Prosecution
     apopposed: '',
     oname: '',
@@ -159,6 +162,36 @@ const useFormStore = create((set) => ({
     //FER
     
   },
+  formData7:{
+    // Patent Prosecution
+    apopposed: '',
+    oname: '',
+    cfbopposer:'',
+    boaof: '',
+    rffo: '',
+
+    orpby: '',
+    eagency: '',
+    revby: '',
+
+    // Patent Application status
+    pstatus: '',
+    pnumber: '',
+
+    pgdate: '',
+
+    pgdate: '',
+    
+    //FER
+    
+  },
+  formData8:{
+
+  },
+  formData9:{
+
+  },
+  
   
   errors: {},
 
@@ -172,9 +205,32 @@ const useFormStore = create((set) => ({
       })),
       updateFormData3: (data) =>
         set((state) => ({
-          formData2: { ...state.formData2, ...data },
+          formData2: { ...state.formData3, ...data },
         })),
-
+        updateFormData4: (data) =>
+          set((state) => ({
+            formData2: { ...state.formData4, ...data },
+          })),
+          updateFormData5: (data) =>
+            set((state) => ({
+              formData2: { ...state.formData5, ...data },
+            })),
+            updateFormData6: (data) =>
+              set((state) => ({
+                formData2: { ...state.formData6, ...data },
+              })),
+              updateFormData7: (data) =>
+                set((state) => ({
+                  formData2: { ...state.formData7, ...data },
+                })),
+                updateFormData8: (data) =>
+                  set((state) => ({
+                    formData2: { ...state.formData2, ...data },
+                  })),  
+                updateFormData9: (data) =>
+                    set((state) => ({
+                      formData2: { ...state.formData2, ...data },
+                    })),           
   // ✅ Update specific inventor field
   updateInventor: (index, field, value) =>
     set((state) => {

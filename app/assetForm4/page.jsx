@@ -41,7 +41,7 @@ const PatentSpecificationPreparation = () => {
         <MiniHeader title="Invention Details" />
         <InventionDetails showRating={true} />
         <MiniHeader title="Activity Status" />
-        <ActivityStatus/>
+        <ActivityStatus formKey="formData4" updateFunction="updateFormData4"/>
         <MiniHeader title="Patent Specific information" />
         <TypeOfDraft value={draftType} onChange={setDraftType} />
         {draftType && <MiniHeader title = {draftType}/>}
