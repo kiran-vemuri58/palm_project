@@ -93,6 +93,24 @@ const EffortSheetDetails = ({formKey,updateFunction}) => {
           />
         </div>
       </div>
+
+
+      {/* Third Row - New Field */}
+      <div className="grid grid-cols-3 gap-4 mt-4">
+        <div>
+          <Label className="mb-1">Efforts Spent for Extraction</Label>
+          <Input
+            className="p-2"
+            placeholder="Enter extraction effort hours..."
+            id="extractionEffort"
+            name="extractionEffort"
+            type="number"
+            value={formData.extractionEffort}
+            onChange={handleChange}
+          />
+        </div>
+      </div>
+
     </div>
   );
 };

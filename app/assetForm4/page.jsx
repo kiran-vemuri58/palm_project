@@ -20,12 +20,14 @@ const PatentSpecificationPreparation = () => {
     
   }
 
-  const DraftComponent = {
-    complete: <Complete />,
-    provisional: <Provisional />,
-    pct: <PCT />,
-    national_phase: <NationalPhase />,
-  }[draftType];
+  const DraftComponentMap = {
+    complete: Complete,
+    provisional: Provisional,
+    pct: PCT,
+    national_phase: NationalPhase,
+  };
+  
+  const DraftComponent = DraftComponentMap[draftType];
 
    return(
     <div className='min-h-screen flex flex-col pt-14'>
@@ -44,9 +46,12 @@ const PatentSpecificationPreparation = () => {
         <ActivityStatus formKey="formData4" updateFunction="updateFormData4"/>
         <MiniHeader title="Patent Specific information" />
         <TypeOfDraft value={draftType} onChange={setDraftType} />
-        {draftType && <MiniHeader title = {draftType}/>}
-
-        {DraftComponent}
+        {DraftComponent && (
+          <>
+            <MiniHeader title={draftType} />
+            <DraftComponent formKey="formData4" updateFunction="updateFormData4" />
+          </>
+        )}
 
 
     </CardWrapper>

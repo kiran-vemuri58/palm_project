@@ -131,6 +131,8 @@ const useFormStore = create((set) => ({
     csoagency: '',
     eihfr: '',
     mres: '',
+    isProvisionalFiled: '',
+    isPCTFiled: '',
   },
   formData5:{
 
@@ -209,7 +211,7 @@ const useFormStore = create((set) => ({
         })),
         updateFormData4: (data) =>
           set((state) => ({
-            formData2: { ...state.formData4, ...data },
+            formData4: { ...state.formData4, ...data },
           })),
           updateFormData5: (data) =>
             set((state) => ({
