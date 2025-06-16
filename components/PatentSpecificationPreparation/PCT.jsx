@@ -26,10 +26,10 @@ const PCT = ({ formKey, updateFunction }) => {
     updateFormDataByKey({ ...formData, [name]: value });
   };
 
+  const isDirectPCTYes = formData.isDirectPCT === 'Yes';
+
   return (
     <div className="p-6 bg-white rounded-lg shadow space-y-6">
-      <div className="text-center text-lg font-semibold bg-green-100 p-2 rounded">PCT Details</div>
-
       {/* Row 1 */}
       <div className="grid grid-cols-3 gap-4">
         <div>
@@ -47,78 +47,94 @@ const PCT = ({ formKey, updateFunction }) => {
             </SelectContent>
           </Select>
         </div>
-        <div>
-          <Label>Date of Provisional Application</Label>
-          <Input
-            type="date"
-            name="pctProvisionalDate"
-            value={formData.pctProvisionalDate || ''}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <Label>Application number</Label>
-          <Input
-            name="pctApplicationNumber"
-            placeholder="Enter Application number"
-            value={formData.pctApplicationNumber || ''}
-            onChange={handleChange}
-          />
-        </div>
+
+        {isDirectPCTYes ? (
+          <div>
+            <Label>Permission from Parent Patent Office</Label>
+            <Input type="file" name="pctParentPermission" onChange={handleChange} />
+          </div>
+        ) : (
+          <>
+            <div>
+              <Label>Date of Provisional Application</Label>
+              <Input
+                type="date"
+                name="pctProvisionalDate"
+                value={formData.pctProvisionalDate || ''}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <Label>Application number</Label>
+              <Input
+                name="pctApplicationNumber"
+                placeholder="Enter Application number"
+                value={formData.pctApplicationNumber || ''}
+                onChange={handleChange}
+              />
+            </div>
+          </>
+        )}
       </div>
 
-      {/* Row 2 */}
-      <div className="grid grid-cols-3 gap-4">
-        <div>
-          <Label>Name Of Drafter</Label>
-          <Input
-            name="pctDrafterName"
-            placeholder="Name Of Drafter"
-            value={formData.pctDrafterName || ''}
-            onChange={handleChange}
-          />
+      {/* Conditional Row (only if isDirectPCT is No) */}
+      {!isDirectPCTYes && (
+        <div className="grid grid-cols-3 gap-4">
+          <div>
+            <Label>Name Of Drafter</Label>
+            <Input
+              name="pctDrafterName"
+              placeholder="Name Of Drafter"
+              value={formData.pctDrafterName || ''}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <Label>Claim Drafting Strategy Sheet</Label>
+            <Input type="file" name="pctClaimSheet" onChange={handleChange} />
+          </div>
+          <div>
+            <Label>Forms Prepared</Label>
+            <Select
+              value={formData.pctFormsPrepared || 'No'}
+              onValueChange={(value) => handleSelectChange('pctFormsPrepared', value)}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Yes">Yes</SelectItem>
+                <SelectItem value="No">No</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
-        <div>
-          <Label>Claim Drafting Strategy Sheet</Label>
-          <Input type="file" name="pctClaimSheet" onChange={handleChange} />
-        </div>
-        <div>
-          <Label>Forms Prepared</Label>
-          <Select
-            value={formData.pctFormsPrepared || 'No'}
-            onValueChange={(value) => handleSelectChange('pctFormsPrepared', value)}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Yes">Yes</SelectItem>
-              <SelectItem value="No">No</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+      )}
 
-      {/* Row 3 */}
+      {/* Common Fields (always shown) */}
       <div className="grid grid-cols-3 gap-4">
-        <div>
-          <Label>Country Prior Filing</Label>
-          <Input
-            name="pctCountryFiling"
-            placeholder="Country Prior Filing"
-            value={formData.pctCountryFiling || ''}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <Label>Review By</Label>
-          <Input
-            name="pctReviewBy"
-            placeholder="Review By"
-            value={formData.pctReviewBy || ''}
-            onChange={handleChange}
-          />
-        </div>
+        {!isDirectPCTYes && (
+          <>
+            <div>
+              <Label>Country Prior Filing</Label>
+              <Input
+                name="pctCountryFiling"
+                placeholder="Country Prior Filing"
+                value={formData.pctCountryFiling || ''}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <Label>Review By</Label>
+              <Input
+                name="pctReviewBy"
+                placeholder="Review By"
+                value={formData.pctReviewBy || ''}
+                onChange={handleChange}
+              />
+            </div>
+          </>
+        )}
         <div>
           <Label>Which Cited in Patent Document</Label>
           <Input
@@ -130,7 +146,6 @@ const PCT = ({ formKey, updateFunction }) => {
         </div>
       </div>
 
-      {/* Row 4 */}
       <div className="grid grid-cols-3 gap-4">
         <div>
           <Label>Independent Claim</Label>
@@ -161,7 +176,6 @@ const PCT = ({ formKey, updateFunction }) => {
         </div>
       </div>
 
-      {/* Row 5 */}
       <div className="grid grid-cols-3 gap-4">
         <div>
           <Label>Is it a Profitable Patent?</Label>
@@ -199,7 +213,6 @@ const PCT = ({ formKey, updateFunction }) => {
         </div>
       </div>
 
-      {/* Row 6 */}
       <div className="grid grid-cols-3 gap-4">
         <div>
           <Label>Efforts spent for drafting</Label>
@@ -232,7 +245,6 @@ const PCT = ({ formKey, updateFunction }) => {
         </div>
       </div>
 
-      {/* Row 7 */}
       <div className="grid grid-cols-3 gap-4">
         <div>
           <Label>External Agency Recognizer</Label>
@@ -265,7 +277,6 @@ const PCT = ({ formKey, updateFunction }) => {
         </div>
       </div>
 
-      {/* Final Row */}
       <div className="grid grid-cols-3 gap-4">
         <div>
           <Label>Manager Responsible (Employee ID)</Label>
