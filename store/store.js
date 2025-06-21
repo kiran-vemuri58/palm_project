@@ -215,23 +215,23 @@ const useFormStore = create((set) => ({
           })),
           updateFormData5: (data) =>
             set((state) => ({
-              formData2: { ...state.formData5, ...data },
+              formData5: { ...state.formData5, ...data },
             })),
             updateFormData6: (data) =>
               set((state) => ({
-                formData2: { ...state.formData6, ...data },
+                formData6: { ...state.formData6, ...data },
               })),
               updateFormData7: (data) =>
                 set((state) => ({
-                  formData2: { ...state.formData7, ...data },
+                  formData7: { ...state.formData7, ...data },
                 })),
                 updateFormData8: (data) =>
                   set((state) => ({
-                    formData2: { ...state.formData2, ...data },
+                    formData8: { ...state.formData8, ...data },
                   })),  
                 updateFormData9: (data) =>
                     set((state) => ({
-                      formData2: { ...state.formData2, ...data },
+                      formData9: { ...state.formData9, ...data },
                     })),           
   // ✅ Update specific inventor field
   updateInventor: (index, field, value) =>

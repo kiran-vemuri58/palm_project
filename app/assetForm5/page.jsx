@@ -8,7 +8,7 @@ import InventionDetails from "@/components/InventionRecognition/InventionDetails
 import MiniHeader from "@/components/MiniHeader";
 import TypeOfDraft from '@/components/PatentSpecificationPreparation/TypeOfDraft';
 import Complete from '@/components/PatentSpecificationPreparation/Complete';
-import Provisional from '@/components/PatentSpecificationPreparation/Provisional';
+import Provisional from '@/components/PatentFiling/Provisional';
 import PCT from '@/components/PatentSpecificationPreparation/PCT';
 import NationalPhase from '@/components/PatentSpecificationPreparation/NationalPhase';
 import DecisionSheet from "@/components/PatentabilityAnalysis/DecisionSheet";
@@ -24,12 +24,14 @@ const PatentFiling = () => {
     
   }
 
-  const DraftComponent = {
-    complete: <Complete />,
-    provisional: <Provisional />,
-    pct: <PCT />,
-    national_phase: <NationalPhase />,
-  }[draftType];
+  const DraftComponentMap = {
+    complete: Complete,
+    provisional: Provisional,
+    pct: PCT,
+    national_phase: NationalPhase,
+  };
+  
+  const DraftComponent = DraftComponentMap[draftType];
 
    return(
     <div className="min-h-screen flex flex-col pt-24">
@@ -46,10 +48,13 @@ const PatentFiling = () => {
      <MiniHeader title="Activity Status" />
      <ActivityStatus formKey="formData5" updateFunction="updateFormData5"/>
      <MiniHeader title="Patent Application Filing" />
-        <TypeOfDraft value={draftType} onChange={setDraftType} />
-        {draftType && <MiniHeader title = {draftType}/>}
-
-        {DraftComponent}
+      <TypeOfDraft value={draftType} onChange={setDraftType} />
+      {DraftComponent && (
+        <>
+          <MiniHeader title={draftType} />
+          <DraftComponent formKey="formData4" updateFunction="updateFormData4" />
+        </>
+      )}
 
      
     </CardWrapper>
