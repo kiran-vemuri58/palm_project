@@ -26,7 +26,7 @@ const PatentProsectionDetails = () => {
       {/* Second Row */}
       <div className="grid grid-cols-3 gap-4 mt-4">
         <div>
-          <Label className="mb-1">application pregrant Opposed?</Label>
+          <Label className="mb-1">post Grant Opposed?</Label>
           <Select className="w-full" onValueChange={(value) => updateFormData({ ...formData, apopposed: value })}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select an option" />
@@ -39,7 +39,7 @@ const PatentProsectionDetails = () => {
         </div>
       </div>
 
-      {formData.collaboration === 'yes' && (
+      {formData.apopposed === 'yes' && (
         <>
           {/* Third Row */}
           <div className="grid grid-cols-3 gap-4 mt-4">

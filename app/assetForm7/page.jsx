@@ -30,10 +30,10 @@ const PostGrantOpposition = () => {
         onSave={handleSave}
       >
      <MiniHeader title="Invention Details"/>
-     <InventionDetails />
+     <InventionDetails isPAN="true"/>
 
-     <MiniHeader title="Patent Prosecution"/>
-     <PatentProsectionDetails />
+     <MiniHeader title="Post Grant Opposition"/>
+     <PatentProsectionDetails formKey="formData7" updateFunction="updateFormData7"  />
      <MiniHeader title="Effort Sheet - Number of Hours and Financial Efforts"/>
      <PGPEffortSheetDetails />
      <MiniHeader title="Activity Status" />

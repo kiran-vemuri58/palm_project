@@ -7,10 +7,10 @@ import EffortSheetDetails from "@/components/InventionRecognition/EffortSheet";
 import InventionDetails from "@/components/InventionRecognition/InventionDetails";
 import MiniHeader from "@/components/MiniHeader";
 import TypeOfDraft from '@/components/PatentSpecificationPreparation/TypeOfDraft';
-import Complete from '@/components/PatentSpecificationPreparation/Complete';
+import Complete from '@/components/PatentFiling/Complete';
 import Provisional from '@/components/PatentFiling/Provisional';
-import PCT from '@/components/PatentSpecificationPreparation/PCT';
-import NationalPhase from '@/components/PatentSpecificationPreparation/NationalPhase';
+import PCT from '@/components/PatentFiling/PCT';
+import NationalPhase from '@/components/PatentFiling/NationalPhase';
 import DecisionSheet from "@/components/PatentabilityAnalysis/DecisionSheet";
 import Innovation from "@/components/PatentabilityAnalysis/Innovation";
 import PAExtractor from "@/components/PatentabilityAnalysis/PAExtractor";
@@ -44,7 +44,7 @@ const PatentFiling = () => {
         onSave={handleSave}
       >
      <MiniHeader title="Invention Details"/>
-     <InventionDetails />
+     <InventionDetails showRating="true"/>
      <MiniHeader title="Activity Status" />
      <ActivityStatus formKey="formData5" updateFunction="updateFormData5"/>
      <MiniHeader title="Patent Application Filing" />
