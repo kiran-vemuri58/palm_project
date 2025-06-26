@@ -9,6 +9,7 @@ import MiniHeader from "@/components/MiniHeader";
 import DecisionSheet from "@/components/PatentabilityAnalysis/DecisionSheet";
 import Innovation from "@/components/PatentabilityAnalysis/Innovation";
 import PAExtractor from "@/components/PatentabilityAnalysis/PAExtractor";
+import PatentCommercializationChild from "@/components/PatentCommercialisation/PatentCommercializationChild";
 import PCEfforts from "@/components/PatentCommercialisation/PCEfforts";
 
 import PatentProsectionDetails from "@/components/PatentProsecution/PatentProsectionDetails";
@@ -31,10 +32,13 @@ const PatentCommercialisation = () => {
         onSave={handleSave}
       >
      <MiniHeader title="Invention Details"/>
-     <PSPInventionDetails/>
-     <MiniHeader title="Efforts Sheet"/>
-     <PCEfforts />
+     <InventionDetails isPAN="true" patentNumber="true" />
+     <MiniHeader title="Patent Commercialization"/>
+     <PatentCommercializationChild formKey="formData9" updateFunction="updateFormData9" />
+     <MiniHeader title="Efforts Sheet Section"/>
+     <PCEfforts formKey="formData9" updateFunction="updateFormData9" />
      <MiniHeader title="Activy Status"/>
+     
     <ActivityStatus formKey="formData9" updateFunction="updateFormData9" />
      
     </CardWrapper>

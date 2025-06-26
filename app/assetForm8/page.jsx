@@ -10,6 +10,7 @@ import DecisionSheet from "@/components/PatentabilityAnalysis/DecisionSheet";
 import Innovation from "@/components/PatentabilityAnalysis/Innovation";
 import PAExtractor from "@/components/PatentabilityAnalysis/PAExtractor";
 import PatentMaintanceHistory from "@/components/PatentManagement/PatentMaintanceHistory";
+import PMEffortSheet from "@/components/PatentManagement/PMEffortSheet";
 import PatentProsectionDetails from "@/components/PatentProsecution/PatentProsectionDetails";
 import PSPInventionDetails from "@/components/PatentSpecificationPreparation/PSPInventionDetails";
 
@@ -30,9 +31,11 @@ const PatentManagement = () => {
         onSave={handleSave}
       >
      <MiniHeader title="Invention Details"/>
-     <PSPInventionDetails/>
+     <InventionDetails isPAN="true"/>
      <MiniHeader title="Patent Maintance History"/>
     <PatentMaintanceHistory />
+    <MiniHeader title="Effort Sheet - Number of Hours and Financial Efforts"/>
+    <PMEffortSheet formKey="formData8" updateFunction="updateFormData8"/>
     <MiniHeader title="Activy Status"/>
     <ActivityStatus formKey="formData8" updateFunction="updateFormData8"/>
      

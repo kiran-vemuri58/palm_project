@@ -6,7 +6,13 @@ import { Label } from "@/components/ui/label";
 import useFormStore from '@/store/store';
 import { Star, Plus } from 'lucide-react';
 
-const InventionDetails = ({ isPAN = false, showRating = false, formKey, updateFunction }) => {
+const InventionDetails = ({
+  isPAN = false,
+  showRating = false,
+  patentNumber = false,  // ✅ New flag
+  formKey,
+  updateFunction
+}) => {
   const { formData, updateFormData, errors } = useFormStore();
   const [rating, setRating] = useState(formData.rating || 0);
 
@@ -24,8 +30,10 @@ const InventionDetails = ({ isPAN = false, showRating = false, formKey, updateFu
   if (isPAN) {
     fields.push({ id: "PAN", label: "Patent Application Number" });
   }
+  if (patentNumber) {
+    fields.push({ id: "patentNumber", label: "Patent Number" }); // ✅ New field
+  }
 
-  // Optional reusable change handler
   const handleChange = (e) => {
     const { name, value } = e.target;
     updateFormData({ [name]: value });
@@ -40,7 +48,6 @@ const InventionDetails = ({ isPAN = false, showRating = false, formKey, updateFu
               {field.label}
             </Label>
 
-            {/* Handle special rating input */}
             {field.isRating ? (
               <div className="flex items-center gap-2">
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -78,8 +85,6 @@ const InventionDetails = ({ isPAN = false, showRating = false, formKey, updateFu
           </div>
         ))}
       </div>
-
-      
     </div>
   );
 };
