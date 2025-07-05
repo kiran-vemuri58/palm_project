@@ -35,8 +35,17 @@ const PatentProsecution = () => {
       >
      <MiniHeader title="Invention Details"/>
      <InventionDetails isPAN={true} showRating={true} />
-
      <MiniHeader title="Patent Prosecution"/>
+     <PatentProsectionDetails formKey="formData6" updateFunction="updateFormData6"/>
+     <MiniHeader title="Patent Application Status"/>
+     <PatentApplicationStatus formKey="formData6" updateFunction="updateFormData6" />
+     <MiniHeader title="FER" />
+     <FER formKey="formData6" updateFunction="updateFormData6"/>
+     <MiniHeader title="Hearing"/>
+     <Hearing formKey="formData6" updateFunction="updateFormData6" />
+     <MiniHeader title="Efforts Sheet"/>
+     <PPEffortSheet />
+     {/* <MiniHeader title="Patent Prosecution"/>
      <PatentProsectionDetails />
      <MiniHeader title="Patent Application Status"/>
      <PatentApplicationStatus />
@@ -45,7 +54,7 @@ const PatentProsecution = () => {
      <MiniHeader title="Hearing"/>
      <Hearing />
      <MiniHeader title="Efforts Sheet"/>
-     <PPEffortSheet />
+     <PPEffortSheet /> */}
      
      <MiniHeader title="Activity Status" />
      <ActivityStatus formKey="formData6" updateFunction="updateFormData6"/>
