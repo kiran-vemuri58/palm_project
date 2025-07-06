@@ -7,7 +7,7 @@ export async function POST(req) {
   try {
     const payload = await req.json(); // read body from POST request
         // 🧠 Fetch latest asset_id and generate a new one
-    const lastEntry = await prisma.inventions.findFirst({
+    const lastEntry = await prisma.Invention.findFirst({
         orderBy: { created_at: 'desc' },
         select: { asset_id: true },
     });
@@ -24,6 +24,7 @@ export async function POST(req) {
       asset_id: newAssetId,
       inventiontitle: payload.inventiontitle,
       commonname: payload.commonName,
+      inventors:payload.inventors,
       inventordetails: payload.inventorDetails,
       incrementalrenovation: payload.incrementalRenovation,
       patentnumbers: payload.patentNumbers,
@@ -51,7 +52,7 @@ export async function POST(req) {
       stakeholders: payload.stakeholders,
     };
 
-    const result = await prisma.inventions.create({
+    const result = await prisma.Invention.create({
       data,
     });
 
