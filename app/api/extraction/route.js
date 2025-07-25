@@ -21,6 +21,7 @@ export async function POST(req) {
 
     // Map payload to Prisma-compatible field names
     const data = {
+      asset_id:payload.asset_id,
       extractorOne: payload.extractorOne,
       extractortwo: payload.extractortwo,
       iEDate: payload.iEDate ? new Date(payload.iEDate) : new Date(), // Convert string to Date object
@@ -40,7 +41,6 @@ export async function POST(req) {
       updatenba: payload.updatenba,
 
     };
-    console.log(prisma.Extraction)
     const result = await prisma.Extraction.create({data});
 
     return NextResponse.json({ success: true, data: result }, { status: 200 });

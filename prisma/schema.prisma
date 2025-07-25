@@ -8,68 +8,60 @@ datasource db {
 }
 
 model Invention {
-  asset_id              String   @id @default(dbgenerated()) @db.Text
-  inventiontitle        String   @db.Text
-  commonname            String   @db.Text
-  inventordetails       String   @db.Text
-
-  inventors             Json?    // 👈 JSON field for inventors
-
-  // Technology Details
-  incrementalrenovation String?  @db.Text
-  patentnumbers         String?  @db.Text
-  journalnumbers        String?  @db.Text
-  productidentity       String?  @db.Text
-  problemaddressed      String?  @db.Text
-
-  // Train Run / Experimentation
-  trainrun              String?  @db.Text
-  experimentresults     String?  @db.Text
-  evidence              String?  @db.Text
-  minuteofmeeting       String?  @db.Text
-  attachments           String?  @db.Text
-
-  // IP Review Section
-  iprecognizer          String?  @db.Text
-  hoursspent            String?  @db.Text
-  agencyrecognizer      String?  @db.Text
-  agencycost            String?  @db.Text
-  revieweffort          String?  @db.Text
-  managerempid          String?  @db.Text
-
-  // Entity Details
-  entity                String?  @db.Text
+  asset_id              String       @id
+  inventiontitle        String
+  commonname            String
+  inventordetails       String
+  incrementalrenovation String?
+  patentnumbers         String?
+  journalnumbers        String?
+  productidentity       String?
+  problemaddressed      String?
+  trainrun              String?
+  experimentresults     String?
+  evidence              String?
+  minuteofmeeting       String?
+  attachments           String?
+  iprecognizer          String?
+  hoursspent            String?
+  agencyrecognizer      String?
+  agencycost            String?
+  revieweffort          String?
+  managerempid          String?
+  entity                String?
   date                  DateTime
-  inventioncountry      String?  @db.Text
-  creationcountry       String?  @db.Text
-  collaboration         String?  @db.Text
-  collaboratorname      String?  @db.Text
-  collaboratorcountry   String?  @db.Text
-  stakeholders          String?  @db.Text
-
-  created_at            DateTime @default(now())
+  inventioncountry      String?
+  creationcountry       String?
+  collaboration         String?
+  collaboratorname      String?
+  collaboratorcountry   String?
+  stakeholders          String?
+  created_at            DateTime     @default(now())
+  inventors             Json?
+  extractions           Extraction[]
 }
 
-
 model Extraction {
-  id                 Int      @id @default(autoincrement())
-  extractorOne       String
-  extractortwo       String
-  iEDate             DateTime
-  iawpl              String
-  nfeature           String
-  ifeature           String
-  idattachments      String
-  scountry           String
-  oextractor         String
-  ipRecognizer       String
-  hoursSpent         String
-  agencyRecognizer   String
-  agencyCost         String
-  reviewEffort       String
-  managerEmpId       String
-  activityStatus     String
-  updatenba          String
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  id               Int        @id @default(autoincrement())
+  asset_id         String?
+  invention        Invention? @relation(fields: [asset_id], references: [asset_id])
+  extractorOne     String
+  extractortwo     String
+  iEDate           DateTime
+  iawpl            String
+  nfeature         String
+  ifeature         String
+  idattachments    String
+  scountry         String
+  oextractor       String
+  ipRecognizer     String
+  hoursSpent       String
+  agencyRecognizer String
+  agencyCost       String
+  reviewEffort     String
+  managerEmpId     String
+  activityStatus   String
+  updatenba        String
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
 }

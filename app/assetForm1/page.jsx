@@ -12,10 +12,13 @@ import TrainRunExperimentation from "@/components/InventionRecognition/TrainRunE
 import MiniHeader from "@/components/MiniHeader";
 import EffortSheetDetails from "@/components/InventionRecognition/EffortSheet";
 import ActivityStatus from "@/components/InventionRecognition/ActivityStatus";
+import { Router } from "next/router";
+import { useRouter } from "next/navigation";
 
 const InventionRecognitionForm = () => {
   const { formData, setErrors, uploadedPaths } = useFormStore();
-
+  const setAssetId = useFormStore((state) => state.setAssetId);
+  const router = useRouter();
   const handleSave = async () => {
     const errors = validateInventionForm(formData);
     if (Object.keys(errors).length > 0) {
@@ -66,6 +69,9 @@ const InventionRecognitionForm = () => {
       });
   
       const resultDB = await saveRes.json();
+      setAssetId(resultDB && resultDB.data && resultDB.data.asset_id); // Set the asset ID in the store
+      router.push('/assetForm2'); // Redirect to next page on success
+     
       console.log('Invention saved:', resultDB);
     } catch (error) {
       console.error('Error saving invention:', error);

@@ -1,30 +1,32 @@
 import { create } from "zustand";
+import { devtools } from 'zustand/middleware';
 
-const useFormStore = create((set) => ({
+const useFormStore = create(devtools((set) => ({
   uploadedPaths: {},
+  assetId: '',
   formData: {
     // Invention Details
     inventiontitle: '',
     commonName: '',
     inventorDetails: '',
-  
+
     // Inventors
     inventors: [],
-  
-    // Technology Details
+
+  // Technology Details
     incrementalRenovation: '',      // Yes/No
     patentNumbers: '',
     journalNumbers: '',             // Used in multiple places, okay to share
     productIdentity: '',
     problemAddressed: '',
-  
+
     //  Experiments
     trainRun: '',                   // Yes/No
     experimentResults: '',
     evidence: null,
     minuteOfMeeting: null,
     attachments: null,
-  
+
     // IP Review Section
     ipRecognizer: '',
     hoursSpent: '',
@@ -32,7 +34,7 @@ const useFormStore = create((set) => ({
     agencyCost: '',
     reviewEffort: '',
     managerEmpId: '',
-  
+
     // Entity Details
     entity: '',
     date: '',                       // Format: YYYY-MM-DD
@@ -41,9 +43,9 @@ const useFormStore = create((set) => ({
     collaboration: '',              // Yes/No
     collaboratorName: '',
     collaboratorCountry: '',
-    stakeholders: '', 
+    stakeholders: '',
     journalNumbers: '',          // 💡 Required for collaboration: 'yes'
-    productIdentity: '', 
+    productIdentity: '',
 
     // Effort Sheet
     ipRecognizer: '',
@@ -63,15 +65,15 @@ const useFormStore = create((set) => ({
     // Extractor Details-9
     extractorOne: '',
     extractortwo: '',
-    iEDate:'',
+    iEDate: '',
     iawpl: '',
     nfeature: '',
     ifeature: '',
     idattachments: '',
     scountry: '',
-    oextractor:'',
+    oextractor: '',
 
-    
+
     // Effort Sheet-6
     ipRecognizer: '',
     hoursSpent: '',
@@ -82,10 +84,10 @@ const useFormStore = create((set) => ({
 
     // Activity Status
     activityStatus: '',
-    
+
     // Updates NBA
     updatenba: '',
-    
+
   },
   formData3: {
     // Extractor Details
@@ -104,20 +106,20 @@ const useFormStore = create((set) => ({
     nodc: '',
     dibrief: '',
 
-      // Effort Sheet-6
-      ipRecognizer: '',
-      hoursSpent: '',
-      agencyRecognizer: '',
-      agencyCost: '',
-      reviewEffort: '',
-      managerEmpId: '',
-  
-      // Activity Status
-      activityStatus: '',
+    // Effort Sheet-6
+    ipRecognizer: '',
+    hoursSpent: '',
+    agencyRecognizer: '',
+    agencyCost: '',
+    reviewEffort: '',
+    managerEmpId: '',
+
+    // Activity Status
+    activityStatus: '',
 
   },
 
-  formData4:{
+  formData4: {
     nodrafter: '',
     noreviewer: '',
 
@@ -134,18 +136,18 @@ const useFormStore = create((set) => ({
     isProvisionalFiled: '',
     isPCTFiled: '',
   },
-  formData5:{
+  formData5: {
 
   },
-  
-  
-  formData6:{
+
+
+  formData6: {
     //PPInvention Details
-    
+
     // Patent Prosecution
     apopposed: '',
     oname: '',
-    cfbopposer:'',
+    cfbopposer: '',
     boaof: '',
     rffo: '',
 
@@ -160,15 +162,15 @@ const useFormStore = create((set) => ({
     pgdate: '',
 
     pgdate: '',
-    
+
     //FER
-    
+
   },
-  formData7:{
+  formData7: {
     // Patent Prosecution
     apopposed: '',
     oname: '',
-    cfbopposer:'',
+    cfbopposer: '',
     boaof: '',
     rffo: '',
 
@@ -183,56 +185,59 @@ const useFormStore = create((set) => ({
     pgdate: '',
 
     pgdate: '',
-    
+
     //FER
-    
-  },
-  formData8:{
 
   },
-  formData9:{
+  formData8: {
 
   },
-  
-  
+  formData9: {
+
+  },
+
+
   errors: {},
+
+
+  setAssetId: (id) => set({ assetId: id }),
 
   updateFormData: (data) =>
     set((state) => ({
       formData: { ...state.formData, ...data },
     })),
-    updateFormData2: (data) =>
-      set((state) => ({
-        formData2: { ...state.formData2, ...data },
-      })),
-      updateFormData3: (data) =>
-        set((state) => ({
-          formData2: { ...state.formData3, ...data },
-        })),
-        updateFormData4: (data) =>
-          set((state) => ({
-            formData4: { ...state.formData4, ...data },
-          })),
-          updateFormData5: (data) =>
-            set((state) => ({
-              formData5: { ...state.formData5, ...data },
-            })),
-            updateFormData6: (data) =>
-              set((state) => ({
-                formData6: { ...state.formData6, ...data },
-              })),
-              updateFormData7: (data) =>
-                set((state) => ({
-                  formData7: { ...state.formData7, ...data },
-                })),
-                updateFormData8: (data) =>
-                  set((state) => ({
-                    formData8: { ...state.formData8, ...data },
-                  })),  
-                updateFormData9: (data) =>
-                    set((state) => ({
-                      formData9: { ...state.formData9, ...data },
-                    })),           
+  updateFormData2: (data) =>
+    set((state) => ({
+      formData2: { ...state.formData2, ...data },
+    })),
+  updateFormData3: (data) =>
+    set((state) => ({
+      formData2: { ...state.formData3, ...data },
+    })),
+  updateFormData4: (data) =>
+    set((state) => ({
+      formData4: { ...state.formData4, ...data },
+    })),
+  updateFormData5: (data) =>
+    set((state) => ({
+      formData5: { ...state.formData5, ...data },
+    })),
+  updateFormData6: (data) =>
+    set((state) => ({
+      formData6: { ...state.formData6, ...data },
+    })),
+  updateFormData7: (data) =>
+    set((state) => ({
+      formData7: { ...state.formData7, ...data },
+    })),
+  updateFormData8: (data) =>
+    set((state) => ({
+      formData8: { ...state.formData8, ...data },
+    })),
+  updateFormData9: (data) =>
+    set((state) => ({
+      formData9: { ...state.formData9, ...data },
+    })),
   // ✅ Update specific inventor field
   updateInventor: (index, field, value) =>
     set((state) => {
@@ -259,7 +264,7 @@ const useFormStore = create((set) => ({
       },
     })),
 
-    markInventorAsSaved: (index) => // ✅ Add this function
+  markInventorAsSaved: (index) => // ✅ Add this function
     set((state) => {
       const updatedInventors = [...state.formData.inventors];
       if (updatedInventors[index]) {
@@ -270,6 +275,6 @@ const useFormStore = create((set) => ({
 
   setErrors: (errors) => set({ errors }),
   resetForm: () => set({ formData: { inventors: [] }, errors: {} }), // 🛑 Reset inventors too
-}));
+})));
 
 export default useFormStore;

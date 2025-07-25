@@ -8,15 +8,18 @@ import EffortSheetDetails from "@/components/InventionRecognition/EffortSheet";
 import InventionDetails from "@/components/InventionRecognition/InventionDetails";
 import MiniHeader from "@/components/MiniHeader";
 import useFormStore from "@/store/store";
+import { useRouter } from "next/navigation";
 
 
 const InventionExtraction = () => {
-  const { formData2, uploadedPaths } = useFormStore();
+  const { formData2, uploadedPaths , assetId } = useFormStore();
+  const router = useRouter()
 
    const handleSave = async () => {
          // Merge uploaded file paths into payload
       const payload = {
         ...formData2,
+        asset_id: assetId,
       };
   
       // Submit to invention API
@@ -30,13 +33,17 @@ const InventionExtraction = () => {
   
       const resultDB = await saveRes.json();
       console.log('Invention saved:', resultDB);
+
+      if(resultDB.success){
+        router.push('/assetForm3'); // Navigate to next page on success
+      }
     
    }
 
    return(
     <div className="min-h-screen flex flex-col pt-14">
     <CardWrapper
-        label="2- invention Extraction"
+        label={`2 - Invention Extraction${assetId ? ` - ${assetId}` : ''}`}
         title="Register"
         backButtonHref="/assetForm1"
         nextButtonHref="/assetForm3"
