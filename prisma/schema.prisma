@@ -40,12 +40,13 @@ model Invention {
   inventors             Json?
   extractions           Extraction[]    @relation("InventionExtraction")
   patentabilities       Patentability[] @relation("InventionPatentabilities")
+  PatentSpecificInformation PatentSpecificInformation[] @relation("PatentSpecificInfoToInvention")
 }
 
 model Extraction {
   id               Int        @id @default(autoincrement())
   asset_id         String?
-  invention        Invention? @relation("InventionExtraction",fields: [asset_id], references: [asset_id])
+  invention        Invention? @relation("InventionExtraction",fields: [asset_id], references: [asset_id],onDelete: Cascade)
   extractorOne     String
   extractortwo     String
   iEDate           DateTime
@@ -106,4 +107,16 @@ model Patentability {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 }
+
+
+model PatentSpecificInformation {
+  id             String   @id @default(cuid())         // Primary key
+  asset_id       String                                 // Foreign key
+  activityStatus String?
+  draftType    String?
+  data           Json?
+  invention      Invention @relation("PatentSpecificInfoToInvention", fields: [asset_id], references: [asset_id], onDelete: Cascade)
+}
+
+
 

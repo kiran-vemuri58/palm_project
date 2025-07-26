@@ -13,7 +13,7 @@ const useFormStore = create(devtools((set) => ({
     // Inventors
     inventors: [],
 
-  // Technology Details
+    // Technology Details
     incrementalRenovation: '',      // Yes/No
     patentNumbers: '',
     journalNumbers: '',             // Used in multiple places, okay to share
@@ -105,10 +105,10 @@ const useFormStore = create(devtools((set) => ({
     // Decission sheet
     nodc: '',
     dibrief: '',
-    attachment:'',
+    attachment: '',
 
     // Effort Sheet-6
-    esfsearcher:'',
+    esfsearcher: '',
     ipRecognizer: '',
     hoursSpent: undefined,
     agencyRecognizer: '',
@@ -122,9 +122,95 @@ const useFormStore = create(devtools((set) => ({
   },
 
   formData4: {
+    activityStatus: '',
+    draftType: '',
+
+    //national Phase
+
+    npPCTDate: '',
+    npApplicationNumber: '',
+    npPCTPublication: '',
+    npSearchReport: null,
+    npPCTOrProvisionalDate: '',
+    npApplicationCountry: '',
+    npDrafterName: '',
+    npClaimSheet: null,
+    npFormsPrepared: 'No',
+    npCountryFiling: '',
+    npReviewBy: '',
+    npCitedPatent: '',
+    npIndependentClaim: '',
+    npDependentClaim: '',
+    npBroadenedFeature: '',
+    npIsProfit: 'No',
+    npIsDefensive: 'No',
+    npAllDrafts: null,
+    npDraftingEffort: '',
+    npDrafterEmpId: '',
+    npHoursSpent: '',
+    npAgencyRecognizer: '',
+    npAgencyCost: '',
+    npReviewEffort: '',
+    npManagerEmpId: '',
+    npActivityStatus: 'Initiated',
+
+
+    // PCT
+
+    isDirectPCT: 'No', // default No or empty string as fits your app
+    pctParentPermission: null, // file type - null initially
+    pctProvisionalDate: '',
+    pctApplicationNumber: '',
+    pctDrafterName: '',
+    pctClaimSheet: null,
+    pctFormsPrepared: 'No',
+    pctCountryFiling: '',
+    pctReviewBy: '',
+    pctCitedPatent: '',
+    pctIndependentClaim: '',
+    pctDependentClaim: '',
+    pctBroadenedFeature: '',
+    pctIsProfit: 'No',
+    pctIsDefensive: 'No',
+    pctAllDrafts: null,
+    pctDraftingEffort: '',
+    pctDrafterEmpId: '',
+    pctHoursSpent: '',
+    pctAgencyRecognizer: '',
+    pctAgencyCost: '',
+    pctReviewEffort: '',
+    pctManagerEmpId: '',
+    pctActivityStatus: 'Initiated',
+
+    // Complete
+
+    isProvisionalFiled: '',          // e.g. '' or 'No'
+    provisionalSpecDate: '',         // date string
+    applicationNumber: '',
+    isPCTFiled: '',
+    pctFilingDate: '',
+    isPCTPublished: '',
+    citedPatent: '',
+    independentClaim: '',
+    dependentClaim: '',
+    broadenedFeature: '',
+    isProfitPatent: '',
+    isDefensivePatent: '',
+    draftVersions: null,             // file or null initially
+    draftingEffort: '',
+    drafterEmpId: '',
+    hoursSpent: '',
+    agencyRecognizer: '',
+    agencyCost: '',
+    reviewEffort: '',
+    managerEmpId: '',
+    activityStatus: '',
+
+    // Provisional
+
     nodrafter: '',
     noreviewer: '',
-
+    attachments: null,         // files initialized as null
     bned: '',
     ifdescribed: '',
     toinvention: '',
@@ -135,8 +221,7 @@ const useFormStore = create(devtools((set) => ({
     csoagency: '',
     eihfr: '',
     mres: '',
-    isProvisionalFiled: '',
-    isPCTFiled: '',
+
   },
   formData5: {
 
