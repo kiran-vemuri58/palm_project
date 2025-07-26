@@ -9,20 +9,22 @@ import { Star, Plus } from 'lucide-react';
 
 //import React from 'react';
 
-const PAExtractor = () => {
-  const { formData, updateFormData } = useFormStore();
+const PAExtractor = ({formKey,updateFunction}) => {
+  const formData = useFormStore((state) => state[formKey]);
+  const updateFormDataByKey = useFormStore((state) => state[updateFunction]);
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    updateFormData({ ...formData, [name]: value });
+    updateFormDataByKey({ [name]: value });
   };
   const [rating, setRating] = useState(0);
   const handleFileUpload = (e) => {
     const { name, files } = e.target;
-    updateFormData({ [name]: files[0] || null }); // Store only the first file or null
+    updateFormDataByKey({ [name]: files[0] || null }); // Store only the first file or null
   };
 
-  
+
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
@@ -32,38 +34,37 @@ const PAExtractor = () => {
           <Label className="mb-1">Name of Patent Searcher 1 </Label>
           <Input className="p-2" placeholder="Enter the Name of Patent Searcher 1" id="entity" name="psone" value={formData.psone} onChange={handleChange} />
         </div>
-        
+
         <div>
           <Label className="mb-1">Name of Patent Searcher 2</Label>
           <Input className="p-2" placeholder="Enter the Name of Patent Searcher 2" id="inventionCountry" name="pstwo" value={formData.pstwo} onChange={handleChange} />
         </div>
         <div className="flex items-center gap-2">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star
-                    key={star}
-                    size={24}
-                    className={`cursor-pointer ${
-                      rating >= star ? "text-yellow-500" : "text-gray-300"
-                    }`}
-                    onClick={() => {
-                      setRating(star);
-                      updateFormData({ rating: star });
-                    }}
-                    fill={rating >= star ? "#facc15" : "none"}
-                  />
-                ))}
-                <Plus
-                  className="text-blue-500 cursor-pointer hover:text-blue-700"
-                  onClick={() => alert("You clicked the add icon!")}
-                />
-              </div>
-              </div>
+          {[1, 2, 3, 4, 5].map((star) => (
+            <Star
+              key={star}
+              size={24}
+              className={`cursor-pointer ${rating >= star ? "text-yellow-500" : "text-gray-300"
+                }`}
+              onClick={() => {
+                setRating(star);
+                updateFormDataByKey({ rating: star });
+              }}
+              fill={rating >= star ? "#facc15" : "none"}
+            />
+          ))}
+          <Plus
+            className="text-blue-500 cursor-pointer hover:text-blue-700"
+            onClick={() => alert("You clicked the add icon!")}
+          />
+        </div>
+      </div>
 
       {/* Second Row */}
       <div className="grid grid-cols-3 gap-4 mt-4">
         <div>
           <Label className="mb-1">is Invention Accordance with Patent Laws?</Label>
-          <Select className="w-full" onValueChange={(value) => updateFormData({ ...formData, collaboration: value })}>
+          <Select className="w-full" onValueChange={(value) => updateFormDataByKey({ ...formData, collaboration: value })}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select an option" />
             </SelectTrigger>
@@ -98,11 +99,11 @@ const PAExtractor = () => {
               />
             </div>
           </div>
-          
+
           {/* Fourth Row */}
           <div className="grid grid-cols-3 gap-4 mt-4">
-          <div>
-            <Label className="mb-1" htmlFor="scountry">Specific Country</Label>
+            <div>
+              <Label className="mb-1" htmlFor="scountry">Specific Country</Label>
               <select
                 id="scountry"
                 name="scountry"

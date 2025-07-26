@@ -34,17 +34,18 @@ model Invention {
   creationcountry       String?
   collaboration         String?
   collaboratorname      String?
-  collaboratorcountry   String?
+  collaboratorcountry   String? 
   stakeholders          String?
   created_at            DateTime     @default(now())
   inventors             Json?
-  extractions           Extraction[]
+  extractions           Extraction[]    @relation("InventionExtraction")
+  patentabilities       Patentability[] @relation("InventionPatentabilities")
 }
 
 model Extraction {
   id               Int        @id @default(autoincrement())
   asset_id         String?
-  invention        Invention? @relation(fields: [asset_id], references: [asset_id])
+  invention        Invention? @relation("InventionExtraction",fields: [asset_id], references: [asset_id])
   extractorOne     String
   extractortwo     String
   iEDate           DateTime
@@ -65,3 +66,44 @@ model Extraction {
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
 }
+
+model Patentability {
+  id                Int      @id @default(autoincrement())
+
+  // Foreign key to Invention
+  asset_id          String
+  invention         Invention @relation("InventionPatentabilities",fields: [asset_id], references: [asset_id], onDelete: Cascade)
+
+  // Extractor Details
+  psone             String
+  pstwo             String
+  rating            Int
+  nfeature          String
+  ifeature          String
+  scountry          String
+  ooextractor       String
+
+  // Invention Details
+  trainRun          String
+
+  // Decision Sheet
+  nodc              String
+  dibrief           String
+  attachment        String
+
+  // Effort Sheet-6
+  esfsearcher       String
+  ipRecognizer      String
+  hoursSpent        Float?
+  agencyRecognizer  String
+  agencyCost        Float?
+  reviewEffort      String
+  managerEmpId      String
+
+  // Activity Status
+  activityStatus    String
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+

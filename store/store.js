@@ -105,12 +105,14 @@ const useFormStore = create(devtools((set) => ({
     // Decission sheet
     nodc: '',
     dibrief: '',
+    attachment:'',
 
     // Effort Sheet-6
+    esfsearcher:'',
     ipRecognizer: '',
-    hoursSpent: '',
+    hoursSpent: undefined,
     agencyRecognizer: '',
-    agencyCost: '',
+    agencyCost: undefined,
     reviewEffort: '',
     managerEmpId: '',
 
@@ -212,7 +214,7 @@ const useFormStore = create(devtools((set) => ({
     })),
   updateFormData3: (data) =>
     set((state) => ({
-      formData2: { ...state.formData3, ...data },
+      formData3: { ...state.formData3, ...data },
     })),
   updateFormData4: (data) =>
     set((state) => ({
