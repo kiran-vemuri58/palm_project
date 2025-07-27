@@ -75,7 +75,10 @@ const PatentFiling = () => {
         onSave={handleSave}
       >
         <MiniHeader title="Invention Details" />
-        <InventionDetails showRating="true" />
+        <InventionDetails />
+        <MiniHeader title="Average Patentability Rating"
+        storeKey="formData5"
+        updateFunctionKey="updateFormData5" />
         <MiniHeader title="Activity Status" />
         <ActivityStatus formKey="formData5" updateFunction="updateFormData5" />
         <MiniHeader title="Patent Application Filing" />

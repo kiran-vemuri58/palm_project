@@ -14,6 +14,8 @@ import NationalPhase from '@/components/PatentSpecificationPreparation/NationalP
 import { useRouter } from 'next/navigation';
 import useFormStore from '@/store/store';
 import { buildPatentSpecificPayload } from '@/utils/PageField4Payload'; // Assuming this utility function exists
+import AveragePatentabilityRating from '@/components/PatentSpecificationPreparation/AveragePatentabilityRating';
+
 
 const PatentSpecificationPreparation = () => {
 
@@ -72,7 +74,11 @@ const PatentSpecificationPreparation = () => {
       >
 
         <MiniHeader title="Invention Details" />
-        <InventionDetails showRating={true} />
+        <InventionDetails  />
+        <MiniHeader title="Average Patentability Rating "
+        storeKey="formData4"
+        updateFunctionKey="updateFormData4" />
+        <AveragePatentabilityRating formKey="rating" />
         <MiniHeader title="Activity Status" />
         <ActivityStatus formKey="formData4" updateFunction="updateFormData4" />
         <MiniHeader title="Patent Specific information" />

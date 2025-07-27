@@ -124,6 +124,7 @@ const useFormStore = create(devtools((set) => ({
   formData4: {
     activityStatus: '',
     draftType: '',
+    rating: 0, // Default rating value
 
     //national Phase
 
@@ -227,7 +228,7 @@ const useFormStore = create(devtools((set) => ({
 
     draftType: '',
     activityStatus: '',
-    rating: '',
+    rating: 0,
 
     // provisional
 
