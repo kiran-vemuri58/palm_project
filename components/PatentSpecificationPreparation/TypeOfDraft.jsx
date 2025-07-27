@@ -10,21 +10,21 @@ import {
 } from "@/components/ui/select";
 import useFormStore from '@/store/store';
 
-const TypeOfDraft = ({ onChange, value }) => {
+const TypeOfDraft = ({ onChange, value ,formDataKey, updateFunctionKey }) => {
 
-  const formData4 = useFormStore((state) => state.formData4);
-  const setFormData4 = useFormStore((state) => state.updateFormData4);
+  const formData = useFormStore((state) => state[formDataKey]);
+  const updateFormData = useFormStore((state) => state[updateFunctionKey]);
 
 
   // Handler for selection change
   const handleValueChange = (newDraftType) => {
     // Update parent's state
-    onChange(newDraftType);
+    // onChange(newDraftType);
 
     // Update Zustand store's formData4 draft type
     // assuming formData4 is an object and has a 'draftType' field
-    setFormData4({
-      ...formData4,
+    updateFormData({
+      ...formData,
       draftType: newDraftType,
     });
   };

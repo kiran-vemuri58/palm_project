@@ -41,6 +41,7 @@ model Invention {
   extractions           Extraction[]    @relation("InventionExtraction")
   patentabilities       Patentability[] @relation("InventionPatentabilities")
   PatentSpecificInformation PatentSpecificInformation[] @relation("PatentSpecificInfoToInvention")
+  PatentFiling          PatentFiling[] @relation("PatentFiling")
 }
 
 model Extraction {
@@ -78,7 +79,7 @@ model Patentability {
   // Extractor Details
   psone             String
   pstwo             String
-  rating            Int
+  rating            Int?
   nfeature          String
   ifeature          String
   scountry          String
@@ -113,9 +114,21 @@ model PatentSpecificInformation {
   id             String   @id @default(cuid())         // Primary key
   asset_id       String                                 // Foreign key
   activityStatus String?
+  rating         Int?
   draftType    String?
   data           Json?
   invention      Invention @relation("PatentSpecificInfoToInvention", fields: [asset_id], references: [asset_id], onDelete: Cascade)
+}
+
+
+model PatentFiling {
+  id             String   @id @default(cuid())         // Primary key
+  asset_id       String                                 // Foreign key
+  activityStatus String?
+  rating         Int?
+  draftType    String?
+  data           Json?
+  invention      Invention @relation("PatentFiling", fields: [asset_id], references: [asset_id], onDelete: Cascade)
 }
 
 

@@ -20,12 +20,13 @@ const PatentSpecificationPreparation = () => {
   const assetId = useFormStore((state) => state.assetId);
   const formData4 = useFormStore((state) => state.formData4);
   const router = useRouter();
+  const draftType = useFormStore((state) => state.formData4.draftType);
 
-  const [draftType, setDraftType] = useState('');
+  //const [draftType, setDraftType] = useState('');
 
   const handleSave = async () => {
 
-    let payloadFromUtil = buildPatentSpecificPayload({assetId, formData4, activityStatus: formData4.activityStatus, draftType: formData4.draftType});
+    let payloadFromUtil = buildPatentSpecificPayload({ assetId, formData4, activityStatus: formData4.activityStatus, draftType: formData4.draftType });
 
     // Merge uploaded file paths into payload
     const payload = payloadFromUtil;
@@ -62,7 +63,7 @@ const PatentSpecificationPreparation = () => {
   return (
     <div className='min-h-screen flex flex-col pt-14'>
       <CardWrapper
-        label="Patent Specification Preparation"
+        label={`Patent Specification Preparation ${assetId ? `${assetId}` : ''}`}
         title="Register"
         backButtonHref="/assetForm3"
         nextButtonHref="/assetForm5"
@@ -75,7 +76,10 @@ const PatentSpecificationPreparation = () => {
         <MiniHeader title="Activity Status" />
         <ActivityStatus formKey="formData4" updateFunction="updateFormData4" />
         <MiniHeader title="Patent Specific information" />
-        <TypeOfDraft value={draftType} onChange={setDraftType} />
+        <TypeOfDraft value={draftType} 
+          formDataKey="formData4"
+          updateFunctionKey="updateFormData4"
+        />
         {DraftComponent && (
           <>
             <MiniHeader title={draftType} />

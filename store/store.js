@@ -93,7 +93,7 @@ const useFormStore = create(devtools((set) => ({
     // Extractor Details
     psone: '',
     pstwo: '',
-    rating: '',
+    rating: null,
     nfeature: '',
     ifeature: '',
     scountry: '',
@@ -224,6 +224,79 @@ const useFormStore = create(devtools((set) => ({
 
   },
   formData5: {
+
+    draftType: '',
+    activityStatus: '',
+    rating: '',
+
+    // provisional
+
+    "patentFilingName": "",
+    "provisionalPatent": null,
+    "attachment": null,
+    "dateProvision": "",
+    "applicantName": "",
+    "isProfilePatent": "",
+    "isDefensivePatent": "",
+    "claimingStartup": null,
+    "poaOffice": "",
+    "effortsSpent": "",
+    "patentFiler": "",
+    "hoursSpent": "",
+    "agencyRecognizer": "",
+    "agencyCost": "",
+    "managerResponsible": "",
+
+    // PCT
+
+
+    "postDated": "",
+    "dateProvision": "",
+    "applicationProvisionalNumber": "",
+    "datePatentApplication": "",
+    "pctFilingPermission": "",
+    "effortsSpent": "",
+    "patentFiler": "",
+    "hoursSpent": "",
+    "agencyRecognizer": "",
+    "agencyCost": "",
+    "managerResponsible": "",
+
+    //  National Phase
+
+    "postDated": "",
+    "dateProvisionalPatent": "",
+    "applicationProvisionalNumber": "",
+    "dateCompletePatentApplication": "",
+    "datePCTPatentApplication": "",
+    "finalSubmitted": "",
+    "filedForms": null,
+    "dateProvision": "",
+    "effortsSpent": "",
+    "patentFiler": "",
+    "hoursSpent": "",
+    "agencyRecognizer": "",
+    "agencyCost": "",
+    "managerResponsible": "",
+
+    // Complete
+
+    "dateOfPatent": "",
+    "provisionalNumber": "",
+    "specificationFiling": "",
+    "agentFiling": "",
+    "filedDraft": "",
+    "filedFormsComplete": "",
+    "dateOfComplete": "",
+    "postDated": "",
+    "isPostDated": "",
+    "effortsSpent": "",
+    "patentFiler": "",
+    "hoursSpent": "",
+    "agencyRecognizer": "",
+    "agencyCost": "",
+    "managerResponsible": ""
+
 
   },
 
