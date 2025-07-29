@@ -1,72 +1,71 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import React from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
-  SelectItem
-} from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
+  SelectItem,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import  useFormStore  from "@/store/store";
 
 const emptyFER = {
-  ferReceived: '',
-  ferDate: '',
-  ferArgument: '',
+  ferReceived: "",
+  ferDate: "",
+  ferArgument: "",
   examinerCitations: null,
-  relevancyDetails: '',
+  relevancyDetails: "",
   decisionPage: null,
-  ferPrepared: '',
-  ferPreparer: '',
-  ferFilingDate: '',
-  amendments: '',
-  patentProsecutor: '',
-  externalAgency: '',
-  agencyCost: '',
-  relevancyPreparer: ''
+  ferPrepared: "",
+  ferPreparer: "",
+  ferFilingDate: "",
+  amendments: "",
+  patentProsecutor: "",
+  externalAgency: "",
+  agencyCost: "",
+  relevancyPreparer: "",
 };
 
-const FER = () => {
-  const [ferList, setFerList] = useState([structuredClone(emptyFER)]);
-  const [isSaveEnabled, setIsSaveEnabled] = useState(false);
+const FER = ({ formKey, updateFunction }) => {
+  const formData = useFormStore((state) => state[formKey]);
+  const updateFormData = useFormStore((state) => state[updateFunction]);
 
   const handleChange = (index, e) => {
     const { name, value } = e.target;
-    const updated = [...ferList];
+    const updated = [...formData];
     updated[index][name] = value;
-    setFerList(updated);
+    updateFormData(updated);
   };
 
   const handleFileUpload = (index, e) => {
     const { name, files } = e.target;
-    const updated = [...ferList];
+    const updated = [...formData];
     updated[index][name] = files[0] || null;
-    setFerList(updated);
+    updateFormData(updated);
   };
 
   const handleAddFer = () => {
-    setFerList([...ferList, structuredClone(emptyFER)]);
-    setIsSaveEnabled(true);
+    updateFormData([...formData, structuredClone(emptyFER)]);
   };
 
   const handleDeleteFer = (index) => {
-    const updated = [...ferList];
+    const updated = [...formData];
     updated.splice(index, 1);
-    setFerList(updated);
-    if (updated.length <= 1) setIsSaveEnabled(false);
+    updateFormData(updated);
   };
 
   const handleSave = () => {
-    console.log('Saving FER List:', ferList);
-    // Handle your backend call here
+    console.log("Saving FER List:", formData);
+    // Backend save logic here
   };
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
-      {ferList.map((fer, index) => (
+      {formData.map((fer, index) => (
         <div key={index} className="mb-10 border-b pb-6">
           {/* Row 1 */}
           <div className="grid grid-cols-3 gap-4 mb-4">
@@ -75,9 +74,9 @@ const FER = () => {
               <Select
                 value={fer.ferReceived}
                 onValueChange={(value) => {
-                  const updated = [...ferList];
+                  const updated = [...formData];
                   updated[index].ferReceived = value;
-                  setFerList(updated);
+                  updateFormData(updated);
                 }}
               >
                 <SelectTrigger className="w-full h-10 px-3">
@@ -103,9 +102,9 @@ const FER = () => {
               <Select
                 value={fer.ferArgument}
                 onValueChange={(value) => {
-                  const updated = [...ferList];
+                  const updated = [...formData];
                   updated[index].ferArgument = value;
-                  setFerList(updated);
+                  updateFormData(updated);
                 }}
               >
                 <SelectTrigger className="w-full h-10 px-3">
@@ -123,7 +122,11 @@ const FER = () => {
           <div className="grid grid-cols-3 gap-4 mb-4">
             <div>
               <Label>References cited by examiner</Label>
-              <Input type="file" name="examinerCitations" onChange={(e) => handleFileUpload(index, e)} />
+              <Input
+                type="file"
+                name="examinerCitations"
+                onChange={(e) => handleFileUpload(index, e)}
+              />
             </div>
             <div>
               <Label>Relevancy details</Label>
@@ -136,7 +139,11 @@ const FER = () => {
             </div>
             <div>
               <Label>Decision page</Label>
-              <Input type="file" name="decisionPage" onChange={(e) => handleFileUpload(index, e)} />
+              <Input
+                type="file"
+                name="decisionPage"
+                onChange={(e) => handleFileUpload(index, e)}
+              />
             </div>
           </div>
 
@@ -147,9 +154,9 @@ const FER = () => {
               <Select
                 value={fer.ferPrepared}
                 onValueChange={(value) => {
-                  const updated = [...ferList];
+                  const updated = [...formData];
                   updated[index].ferPrepared = value;
-                  setFerList(updated);
+                  updateFormData(updated);
                 }}
               >
                 <SelectTrigger className="w-full h-10 px-3">
@@ -232,13 +239,18 @@ const FER = () => {
                 onChange={(e) => handleChange(index, e)}
               />
             </div>
-
-            {index === ferList.length - 1 && (
+            {index === formData.length - 1 && (
               <div className="flex flex-col justify-end gap-2">
-                <Button className="bg-green-600 hover:bg-green-700" onClick={handleAddFer}>
+                <Button
+                  className="bg-green-600 hover:bg-green-700"
+                  onClick={handleAddFer}
+                >
                   Add FER
                 </Button>
-                <Button className="bg-red-500 hover:bg-red-600" onClick={() => handleDeleteFer(index)}>
+                <Button
+                  className="bg-red-500 hover:bg-red-600"
+                  onClick={() => handleDeleteFer(index)}
+                >
                   Delete FER
                 </Button>
               </div>
@@ -250,7 +262,7 @@ const FER = () => {
       <div className="text-center mt-6">
         <Button
           className="bg-blue-600 hover:bg-blue-700"
-          disabled={!isSaveEnabled}
+          disabled={formData.length <= 1}
           onClick={handleSave}
         >
           Save FER

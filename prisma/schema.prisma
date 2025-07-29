@@ -42,6 +42,7 @@ model Invention {
   patentabilities       Patentability[] @relation("InventionPatentabilities")
   PatentSpecificInformation PatentSpecificInformation[] @relation("PatentSpecificInfoToInvention")
   PatentFiling          PatentFiling[] @relation("PatentFiling")
+  PostGrantOpposition PostGrantOpposition[] @relation("PostGrantOppositionToInvention")
 }
 
 model Extraction {
@@ -130,6 +131,39 @@ model PatentFiling {
   data           Json?
   invention      Invention @relation("PatentFiling", fields: [asset_id], references: [asset_id], onDelete: Cascade)
 }
+
+
+model PostGrantOpposition {
+  id             String   @id @default(cuid())    
+  asset_id                String
+  patentApplicationNumber String?
+  patentPublished         String? // "yes" or "no"
+  publicationNumber       String?
+  apopposed               String? // "yes" or "no"
+  oname                   String?
+  opposerAttachment       String?
+
+  boaof                   String? // Brief Opinion About Opposition Findings
+  rffo                    String? // Response Filed for Opposition
+  responseAttachment      String?
+
+  orpby                   String? // Opposition Response Prepared By
+  eagency                 String? // External Agency
+  revby                   String? // Reviewed By
+  reviewAttachment        String?
+
+  ipRecognizer            String?
+  hoursSpent              String?
+  agencyRecognizer        String?
+  agencyCost              String?
+  reviewEffort            String?
+  managerEmpId            String?
+
+  activityStatus          String?
+
+  invention               Invention @relation("PostGrantOppositionToInvention",fields: [asset_id], references: [asset_id], onDelete: Cascade)
+}
+
 
 
 

@@ -15,6 +15,8 @@ import PatentApplicationStatus from "@/components/PatentProsecution/PatentApplic
 import PatentProsectionDetails from "@/components/PatentProsecution/PatentProsectionDetails";
 import PPEffortSheet from "@/components/PatentProsecution/PPEffortSheet";
 import PPInventionDetails from "@/components/PatentProsecution/PPInventionDetails";
+import { Average } from "next/font/google";
+import AveragePatentabilityRating from "@/components/PatentProsecution/AveragePatentabilityRating";
 //import PSPInventionDetails from "@/components/PatentSpecificationPreparation/PSPInventionDetails";
 
 const PatentProsecution = () => {
@@ -34,7 +36,9 @@ const PatentProsecution = () => {
         onSave={handleSave}
       >
      <MiniHeader title="Invention Details"/>
-     <InventionDetails isPAN={true} showRating={true} />
+     <InventionDetails  />
+     <MiniHeader title="Rating and PAN Number"/>
+     <AveragePatentabilityRating formKey="formData6" storeKey="formData6" updateFunctionKey="updateFormData6"/>
      <MiniHeader title="Patent Prosecution"/>
      <PatentProsectionDetails formKey="formData6" updateFunction="updateFormData6"/>
      <MiniHeader title="Patent Application Status"/>
@@ -44,7 +48,7 @@ const PatentProsecution = () => {
      <MiniHeader title="Hearing"/>
      <Hearing formKey="formData6" updateFunction="updateFormData6" />
      <MiniHeader title="Efforts Sheet"/>
-     <PPEffortSheet />
+     <PPEffortSheet formKey="formData6" updateFunction="updateFormData6" />
      {/* <MiniHeader title="Patent Prosecution"/>
      <PatentProsectionDetails />
      <MiniHeader title="Patent Application Status"/>

@@ -12,8 +12,10 @@ import {
 } from '@/components/ui/select';
 import React from 'react';
 
-const PatentProsectionDetails = () => {
-  const { formData, updateFormData } = useFormStore();
+const PatentProsectionDetails = ({ formKey, updateFunction }) => {
+
+  const formData = useFormStore((state) => state[formKey]);
+  const updateFormData = useFormStore((state) => state[updateFunction]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -12,8 +12,10 @@ import {
   SelectItem
 } from '@/components/ui/select';
 
-const PatentStatusSection = () => {
-  const { formData, updateFormData } = useFormStore();
+const PatentStatusSection = ({formKey,updateFunction}) => {
+
+  const formData = useFormStore((state) => state[formKey]);
+  const updateFormData = useFormStore((state) => state[updateFunction]);
 
   useEffect(() => {
     if (!formData.patentStatus) {

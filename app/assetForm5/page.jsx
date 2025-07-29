@@ -17,6 +17,8 @@ import PAExtractor from "@/components/PatentabilityAnalysis/PAExtractor";
 import { useRouter } from 'next/navigation';
 import useFormStore from '@/store/store';
 import { buildPatentSpecificPayloadPage5 } from '@/utils/PageField5Payload'; // Assuming this utility function exists
+import { Average } from 'next/font/google';
+import AveragePatentabilityRating from '@/components/PatentProsecution/AveragePatentabilityRating';
 
 
 //import PSPInventionDetails from "@/components/PatentSpecificationPreparation/PSPInventionDetails";
@@ -50,7 +52,7 @@ const PatentFiling = () => {
     console.log('Patentability saved:', resultDB);
 
     if (resultDB.success) {
-      router.push('/assetForm6'); // Navigate to next page on success
+      router.push('/assetForm7'); // Navigate to next page on success
     }
 
   }
@@ -79,6 +81,7 @@ const PatentFiling = () => {
         <MiniHeader title="Average Patentability Rating"
         storeKey="formData5"
         updateFunctionKey="updateFormData5" />
+        <AveragePatentabilityRating formKey="formData5" updateFunction="updateFormData5" />
         <MiniHeader title="Activity Status" />
         <ActivityStatus formKey="formData5" updateFunction="updateFormData5" />
         <MiniHeader title="Patent Application Filing" />
@@ -88,7 +91,7 @@ const PatentFiling = () => {
         {DraftComponent && (
           <>
             <MiniHeader title={draftType} />
-            <DraftComponent formKey="formData4" updateFunction="updateFormData4" />
+            <DraftComponent formKey="formData5" updateFunction="updateFormData5" />
           </>
         )}
 

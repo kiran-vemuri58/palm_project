@@ -303,51 +303,60 @@ const useFormStore = create(devtools((set) => ({
 
 
   formData6: {
-    //PPInvention Details
 
-    // Patent Prosecution
+    rating: 0,
+    patentApplicationNumber: '',
+
+    patentPublished: '',
+    publicationNumber: '',
     apopposed: '',
     oname: '',
     cfbopposer: '',
     boaof: '',
     rffo: '',
-
     orpby: '',
     eagency: '',
     revby: '',
+    opposerAttachment: null,
+    responseAttachment: null,
+    reviewAttachment: null,
 
-    // Patent Application status
-    pstatus: '',
-    pnumber: '',
+    patentStatus: 'yes', // or 'no'
+    patentNumber: '',
+    patentAttachment: null,
+    patentGrantDate: '',
+    rejectionReasonAttachment: null
 
-    pgdate: '',
-
-    pgdate: '',
-
-    //FER
 
   },
   formData7: {
-    // Patent Prosecution
-    apopposed: '',
-    oname: '',
-    cfbopposer: '',
-    boaof: '',
-    rffo: '',
 
-    orpby: '',
-    eagency: '',
-    revby: '',
+    patentApplicationNumber: '',
+    patentPublished: '',              // "yes" or "no"
+    publicationNumber: '',           // string
 
-    // Patent Application status
-    pstatus: '',
-    pnumber: '',
+    apopposed: '',                   // "yes" or "no"
 
-    pgdate: '',
+    oname: '',                       // Opposer Name
+    opposerAttachment: '',           
 
-    pgdate: '',
+    boaof: '',                       // Brief Opinion About Opposition Findings
+    rffo: '',                        // Response Filed for Opposition
+    responseAttachment: '',         // File path for Response Attachment
 
-    //FER
+    orpby: '',                       // Opposition Response Prepared By
+    eagency: '',                     // External Agency (if prepared by them)
+    revby: '',                       // Reviewed By
+    reviewAttachment: '',
+
+    ipRecognizer: '',       // Efforts Spent for opposition of Invention
+    hoursSpent: '',         // Employee ID
+    agencyRecognizer: '',   // Number of Hours Spent
+    agencyCost: '',         // External Agency opposer
+    reviewEffort: '',       // Cost Spent on Agency
+    managerEmpId: '',
+
+    activityStatus: '',     // Activity Status of the opposition
 
   },
   formData8: {
