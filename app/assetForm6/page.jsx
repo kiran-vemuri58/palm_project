@@ -18,38 +18,66 @@ import PPInventionDetails from "@/components/PatentProsecution/PPInventionDetail
 import { Average } from "next/font/google";
 import AveragePatentabilityRating from "@/components/PatentProsecution/AveragePatentabilityRating";
 //import PSPInventionDetails from "@/components/PatentSpecificationPreparation/PSPInventionDetails";
+import useFormStore from "@/store/store";
+import { useRouter } from "next/navigation";
+
 
 const PatentProsecution = () => {
 
-  const handleSave = () => {
-    
+  const assetId = useFormStore((state) => state.assetId);
+  const formData6 = useFormStore((state) => state.formData6);
+  const router = useRouter();
+
+  const handleSave = async () => {
+    // Merge uploaded file paths into payload
+    const payload = {
+      ...formData6,
+      asset_id: assetId,
+    };
+
+    // Submit to invention API
+    const saveRes = await fetch('/api/ps', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const resultDB = await saveRes.json();
+    console.log('ps saved:', resultDB);
+
+    if (resultDB.success) {
+      router.push('/assetForm7'); // Navigate to next page on success
+    }
+
   }
 
-   return(
+  return (
     <div className="min-h-screen flex flex-col pt-24">
-    <CardWrapper
-        label="6- Patent Prosecution"
+      <CardWrapper
+        label={`6- Patent Prosecution` + (assetId ? ` - Asset ID: ${assetId}` : '')}
         title="Register"
         backButtonHref="/assetForm5"
         nextButtonHref="/assetForm7"
         className="w-full max-w-[90%] mx-auto p-8"
         onSave={handleSave}
       >
-     <MiniHeader title="Invention Details"/>
-     <InventionDetails  />
-     <MiniHeader title="Rating and PAN Number"/>
-     <AveragePatentabilityRating formKey="formData6" storeKey="formData6" updateFunctionKey="updateFormData6"/>
-     <MiniHeader title="Patent Prosecution"/>
-     <PatentProsectionDetails formKey="formData6" updateFunction="updateFormData6"/>
-     <MiniHeader title="Patent Application Status"/>
-     <PatentApplicationStatus formKey="formData6" updateFunction="updateFormData6" />
-     <MiniHeader title="FER" />
-     <FER formKey="formData6" updateFunction="updateFormData6"/>
-     <MiniHeader title="Hearing"/>
-     <Hearing formKey="formData6" updateFunction="updateFormData6" />
-     <MiniHeader title="Efforts Sheet"/>
-     <PPEffortSheet formKey="formData6" updateFunction="updateFormData6" />
-     {/* <MiniHeader title="Patent Prosecution"/>
+        <MiniHeader title="Invention Details" />
+        <InventionDetails />
+        <MiniHeader title="Rating and PAN Number" />
+        <AveragePatentabilityRating formKey="formData6" storeKey="formData6" updateFunctionKey="updateFormData6" />
+        <MiniHeader title="Patent Prosecution" />
+        <PatentProsectionDetails formKey="formData6" updateFunction="updateFormData6" />
+        <MiniHeader title="Patent Application Status" />
+        <PatentApplicationStatus formKey="formData6" updateFunction="updateFormData6" />
+        <MiniHeader title="FER" />
+        <FER formKey="formData6" updateFunction="updateFormData6" />
+        <MiniHeader title="Hearing" />
+        <Hearing formKey="formData6" updateFunction="updateFormData6" />
+        <MiniHeader title="Efforts Sheet" />
+        <PPEffortSheet formKey="formData6" updateFunction="updateFormData6" />
+        {/* <MiniHeader title="Patent Prosecution"/>
      <PatentProsectionDetails />
      <MiniHeader title="Patent Application Status"/>
      <PatentApplicationStatus />
@@ -59,12 +87,12 @@ const PatentProsecution = () => {
      <Hearing />
      <MiniHeader title="Efforts Sheet"/>
      <PPEffortSheet /> */}
-     
-     <MiniHeader title="Activity Status" />
-     <ActivityStatus formKey="formData6" updateFunction="updateFormData6"/>
-    </CardWrapper>
-  </div>
-   ) 
+
+        <MiniHeader title="Activity Status" />
+        <ActivityStatus formKey="formData6" updateFunction="updateFormData6" />
+      </CardWrapper>
+    </div>
+  )
 }
 
 export default PatentProsecution;

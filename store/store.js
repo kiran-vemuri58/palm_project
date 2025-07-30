@@ -307,26 +307,70 @@ const useFormStore = create(devtools((set) => ({
     rating: 0,
     patentApplicationNumber: '',
 
+    patentStatus: 'yes',              // string, either 'yes' or 'no'
+    patentNumber: '',                 // string, for entering the patent number
+    patentAttachment: null,          // File | null, stores uploaded file
+    patentGrantDate: '',             // string (YYYY-MM-DD), date picker value
+    rejectionReasonAttachment: null, // File | null, file explaining rejection reason
+
     patentPublished: '',
     publicationNumber: '',
     apopposed: '',
     oname: '',
+    attachments: null,                // Used for multiple files (can be overwritten if reused)
     cfbopposer: '',
     boaof: '',
     rffo: '',
     orpby: '',
     eagency: '',
     revby: '',
-    opposerAttachment: null,
-    responseAttachment: null,
-    reviewAttachment: null,
 
-    patentStatus: 'yes', // or 'no'
-    patentNumber: '',
-    patentAttachment: null,
-    patentGrantDate: '',
-    rejectionReasonAttachment: null
+    ferList: [{
+      ferReceived: "",
+      ferDate: "",
+      ferArgument: "",
+      examinerCitations: null,
+      relevancyDetails: "",
+      decisionPage: null,
+      ferPrepared: "",
+      ferPreparer: "",
+      ferFilingDate: "",
+      amendments: "",
+      patentProsecutor: "",
+      externalAgency: "",
+      agencyCost: "",
+      relevancyPreparer: "",
+    }],
 
+    hearingList: [{
+      noticeReceived: '',
+      hearingDate: '',
+      hearingType: '',
+      mainArgument: '',
+      references: '',
+      relevancy: '',
+      decisionPage: null,
+      responsePrepared: '',
+      appearance: '',
+      responsePreparer: '',
+      responseFilingDate: '',
+      amendments: '',
+      people: '',
+      hearingMinutes: null,
+      controllerName: '',
+      rejectionAfterFinal: '',
+      patentProsecutor: '',
+      externalAgency: '',
+      agencyCost: '',
+      relevancyPreparer: '',
+      hours: '',
+    }],
+
+    ipRecognizer: "",
+    hoursSpent: "",
+    agencyRecognizer: "",
+    agencyCost: "",
+    activityStatus:""
 
   },
   formData7: {
@@ -338,7 +382,7 @@ const useFormStore = create(devtools((set) => ({
     apopposed: '',                   // "yes" or "no"
 
     oname: '',                       // Opposer Name
-    opposerAttachment: '',           
+    opposerAttachment: '',
 
     boaof: '',                       // Brief Opinion About Opposition Findings
     rffo: '',                        // Response Filed for Opposition

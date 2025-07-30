@@ -52,7 +52,7 @@ const PatentFiling = () => {
     console.log('Patentability saved:', resultDB);
 
     if (resultDB.success) {
-      router.push('/assetForm7'); // Navigate to next page on success
+      router.push('/assetForm6'); // Navigate to next page on success
     }
 
   }

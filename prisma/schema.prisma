@@ -43,6 +43,7 @@ model Invention {
   PatentSpecificInformation PatentSpecificInformation[] @relation("PatentSpecificInfoToInvention")
   PatentFiling          PatentFiling[] @relation("PatentFiling")
   PostGrantOpposition PostGrantOpposition[] @relation("PostGrantOppositionToInvention")
+  PatentProsecution     PatentProsecution[] @relation("PatentProsecution")
 }
 
 model Extraction {
@@ -164,6 +165,40 @@ model PostGrantOpposition {
   invention               Invention @relation("PostGrantOppositionToInvention",fields: [asset_id], references: [asset_id], onDelete: Cascade)
 }
 
+
+model PatentProsecution {
+  id                      String   @id @default(uuid())
+  asset_id                String
+  rating                  Int?
+  patentApplicationNumber String?
+  patentStatus            String?
+  patentNumber            String?
+  patentAttachment        String?   // file path or URL
+  patentGrantDate         String? // use DateTime for dates
+  rejectionReasonAttachment String?
+  patentPublished         String?
+  publicationNumber       String?
+  apopposed               String?
+  oname                   String?
+  attachments             String?
+  cfbopposer              String?
+  boaof                   String?
+  rffo                    String?
+  orpby                   String?
+  eagency                 String?
+  revby                   String?
+
+  // Arrays/lists can be modeled as relations or JSON
+  ferList                 Json?
+  hearingList             Json?
+
+  ipRecognizer            String?
+  hoursSpent              String?
+  agencyRecognizer        String?
+  agencyCost              String?
+  activityStatus          String?
+  invention               Invention @relation("PatentProsecution",fields: [asset_id], references: [asset_id], onDelete: Cascade)
+}
 
 
 
