@@ -6,8 +6,12 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 //import React from 'react';
 
-const PatentMaintanceHistory = () => {
-  const { formData, updateFormData } = useFormStore();
+const PatentMaintanceHistory = ({formKey , updateFunction}) => {
+ // const { formData, updateFormData } = useFormStore();
+
+  const formData = useFormStore((state) => state[formKey]);
+  const updateFormData = useFormStore((state) => state[updateFunction]);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;

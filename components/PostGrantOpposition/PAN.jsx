@@ -6,9 +6,9 @@ import useFormStore from '@/store/store';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-const PAN = ({ formKey, storeKey, updateFunctionKey }) => {
-  const formData = useFormStore((state) => state[storeKey]);
-  const updateFormData = useFormStore((state) => state[updateFunctionKey]);
+const PAN = ({ formKey, updateFunction }) => {
+  const formData = useFormStore((state) => state[formKey]);
+  const updateFormData = useFormStore((state) => state[updateFunction]);
 
   const rating = formData?.[formKey] || 0;
   const patentAppNumber = formData?.patentApplicationNumber || '';

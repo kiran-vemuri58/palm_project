@@ -370,7 +370,7 @@ const useFormStore = create(devtools((set) => ({
     hoursSpent: "",
     agencyRecognizer: "",
     agencyCost: "",
-    activityStatus:""
+    activityStatus: ""
 
   },
   formData7: {
@@ -405,7 +405,31 @@ const useFormStore = create(devtools((set) => ({
   },
   formData8: {
 
+    patentApplicationNumber: '',
+    priorityDate: "",
+    grantDate: "",
+    yearsPaid: "",
+    nextDueDate: "",
+    maintenanceStopped: "",
+    decisionPageAttachment: null,
+    collaboration: "",
+    filingDate: "",
+    filingAttachment: null,
+    maintenanceFee: "",
+    externalAgency: "",
+    effortsSpent: "",
+    employeeId: "",
+    hoursSpent: "",
+    agencyManager: "",
+    agencyCost: "",
+    reviewEfforts: "",
+    managerResponsible: "",
+    activityStatus: '',
+
+
   },
+
+
   formData9: {
 
   },

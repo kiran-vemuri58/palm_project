@@ -13,16 +13,44 @@ import PatentMaintanceHistory from "@/components/PatentManagement/PatentMaintanc
 import PMEffortSheet from "@/components/PatentManagement/PMEffortSheet";
 import PatentProsectionDetails from "@/components/PatentProsecution/PatentProsectionDetails";
 import PSPInventionDetails from "@/components/PatentSpecificationPreparation/PSPInventionDetails";
+import PAN from "@/components/PostGrantOpposition/PAN";
+import useFormStore from "@/store/store";
+import { useRouter } from "next/navigation";
 
 const PatentManagement = () => {
 
-  const handleSave = () => {
-    
+  const assetId = useFormStore((state) => state.assetId);
+  const formData8= useFormStore((state) => state.formData8);
+  const router = useRouter();
+
+  const handleSave = async () => {
+    // Merge uploaded file paths into payload
+    const payload = {
+      ...formData8,
+      asset_id: assetId,
+    };
+
+    // Submit to invention API
+    const saveRes = await fetch('/api/pm', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const resultDB = await saveRes.json();
+    console.log('pm saved:', resultDB);
+
+    if (resultDB.success) {
+      router.push('/assetForm9'); // Navigate to next page on success
+    }
+
   }
 
-   return(
+  return (
     <div className="min-h-screen flex flex-col pt-24">
-    <CardWrapper
+      <CardWrapper
         label="8- Patent Management"
         title="Register"
         backButtonHref="/assetForm7"
@@ -30,18 +58,21 @@ const PatentManagement = () => {
         className="w-full max-w-[90%] mx-auto p-8"
         onSave={handleSave}
       >
-     <MiniHeader title="Invention Details"/>
-     <InventionDetails isPAN="true"/>
-     <MiniHeader title="Patent Maintance History"/>
-    <PatentMaintanceHistory />
-    <MiniHeader title="Effort Sheet - Number of Hours and Financial Efforts"/>
-    <PMEffortSheet formKey="formData8" updateFunction="updateFormData8"/>
-    <MiniHeader title="Activy Status"/>
-    <ActivityStatus formKey="formData8" updateFunction="updateFormData8"/>
-     
-    </CardWrapper>
-  </div>
-   ) 
+        <MiniHeader title="Invention Details" />
+        <InventionDetails />
+        <MiniHeader title="PAN Details" />
+        <PAN formKey="formData7" updateFunction="updateFormData7" />
+        <MiniHeader title="Patent Maintance History" />
+        <PatentMaintanceHistory
+        formKey="formData8"  updateFunction="updateFormData8" />
+        <MiniHeader title="Effort Sheet - Number of Hours and Financial Efforts" />
+        <PMEffortSheet formKey="formData8" updateFunction="updateFormData8" />
+        <MiniHeader title="Activy Status" />
+        <ActivityStatus formKey="formData8" updateFunction="updateFormData8" />
+
+      </CardWrapper>
+    </div>
+  )
 }
 
 export default PatentManagement;

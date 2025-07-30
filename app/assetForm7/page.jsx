@@ -63,7 +63,7 @@ const PostGrantOpposition = () => {
         <MiniHeader title="Invention Details" />
         <InventionDetails />
         <MiniHeader title="PAN Details" />
-        <PAN formKey="formData7" storeKey="formData7" updateFunctionKey="updateFormData7" />
+        <PAN formKey="formData7" updateFunction="updateFormData7" />
         <MiniHeader title="Post Grant Opposition" />
         <PatentProsectionDetails formKey="formData7" updateFunction="updateFormData7" />
         <MiniHeader title="Effort Sheet - Number of Hours and Financial Efforts" />
