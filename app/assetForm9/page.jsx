@@ -36,7 +36,7 @@ const PatentCommercialisation = () => {
     console.log('pc saved:', resultDB);
 
     if (resultDB.success) {
-      router.push('/assetForm9'); // Navigate to next page on success
+      router.push('/assets'); // Navigate to next page on success
     }
 
   }

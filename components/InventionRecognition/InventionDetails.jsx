@@ -20,7 +20,7 @@ const InventionDetails = ({
   const fields = [
     { id: "inventiontitle", label: "Invention Title" },
     { id: "commonName", label: "Common Name" },
-    { id: "InventorDetails", label: "Inventor Details" },
+    { id: "inventordetails", label: "Inventor Details" },
   ];
 
   // Conditionally add extra fields

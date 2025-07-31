@@ -3,6 +3,33 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+
+
+export async function GET(req) {
+  const { searchParams } = new URL(req.url);
+  const page = parseInt(searchParams.get('page') || '1');
+  const limit = parseInt(searchParams.get('limit') || '10');
+  const skip = (page - 1) * limit;
+
+  const data = await prisma.Invention.findMany({
+    skip,
+    take: limit,
+    select: {
+      asset_id: true,
+      inventiontitle: true,
+      commonname: true,
+      inventordetails: true,
+    },
+  });
+
+  const total = await prisma.invention.count();
+  return NextResponse.json({
+    data,
+    currentPage: page,
+    totalPages: Math.ceil(total / limit),
+  });
+}
+
 export async function POST(req) {
   try {
     const payload = await req.json(); // read body from POST request
@@ -25,7 +52,7 @@ export async function POST(req) {
       inventiontitle: payload.inventiontitle,
       commonname: payload.commonName,
       inventors:payload.inventors,
-      inventordetails: payload.inventorDetails,
+      inventordetails: payload.inventordetails,
       incrementalrenovation: payload.incrementalRenovation,
       patentnumbers: payload.patentNumbers,
       journalnumbers: payload.journalNumbers,

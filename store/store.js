@@ -8,7 +8,7 @@ const useFormStore = create(devtools((set) => ({
     // Invention Details
     inventiontitle: '',
     commonName: '',
-    inventorDetails: '',
+    inventordetails: '',
 
     // Inventors
     inventors: [],
