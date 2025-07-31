@@ -12,8 +12,11 @@ import {
   SelectItem,
 } from '@/components/ui/select';
 
-const PatentCommercializationChild = () => {
-  const { formData, updateFormData } = useFormStore();
+const PatentCommercializationChild = ({formKey,updateFunction}) => {
+
+  const formData = useFormStore((state) => state[formKey]);
+  const updateFormData = useFormStore((state) => state[updateFunction]);
+  //const { formData, updateFormData } = useFormStore();
 
   const handleChange = (e) => {
     const { name, value } = e.target;

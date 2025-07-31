@@ -1,24 +1,44 @@
 'use client'
 
 import CardWrapper from "@/components/CardWrapper";
-import ExtractorDetails from "@/components/InventionExtraction/ExtractorDetails";
 import ActivityStatus from "@/components/InventionRecognition/ActivityStatus";
-import EffortSheetDetails from "@/components/InventionRecognition/EffortSheet";
 import InventionDetails from "@/components/InventionRecognition/InventionDetails";
 import MiniHeader from "@/components/MiniHeader";
-import DecisionSheet from "@/components/PatentabilityAnalysis/DecisionSheet";
-import Innovation from "@/components/PatentabilityAnalysis/Innovation";
-import PAExtractor from "@/components/PatentabilityAnalysis/PAExtractor";
+import PAN from "@/components/PatentCommercialisation/PAN";
 import PatentCommercializationChild from "@/components/PatentCommercialisation/PatentCommercializationChild";
 import PCEfforts from "@/components/PatentCommercialisation/PCEfforts";
-
-import PatentProsectionDetails from "@/components/PatentProsecution/PatentProsectionDetails";
-import PSPInventionDetails from "@/components/PatentSpecificationPreparation/PSPInventionDetails";
+import useFormStore from "@/store/store";   
+import { useRouter } from "next/navigation";
 
 const PatentCommercialisation = () => {
 
-  const handleSave = () => {
-    
+  const assetId = useFormStore((state) => state.assetId);
+  const formData9 = useFormStore((state) => state.formData9); 
+  const router = useRouter();
+
+  const handleSave = async () => {
+    // Merge uploaded file paths into payload
+    const payload = {
+      ...formData9,
+      asset_id: assetId,
+    };
+
+    // Submit to invention API
+    const saveRes = await fetch('/api/pc', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const resultDB = await saveRes.json();
+    console.log('pc saved:', resultDB);
+
+    if (resultDB.success) {
+      router.push('/assetForm9'); // Navigate to next page on success
+    }
+
   }
 
    return(
@@ -32,7 +52,9 @@ const PatentCommercialisation = () => {
         onSave={handleSave}
       >
      <MiniHeader title="Invention Details"/>
-     <InventionDetails isPAN="true" patentNumber="true" />
+     <InventionDetails  />
+     <MiniHeader title="Patent Application Number and Patent Number"/>
+     <PAN formKey="formData9" updateFunction="updateFormData9"  />
      <MiniHeader title="Patent Commercialization"/>
      <PatentCommercializationChild formKey="formData9" updateFunction="updateFormData9" />
      <MiniHeader title="Efforts Sheet Section"/>

@@ -431,7 +431,33 @@ const useFormStore = create(devtools((set) => ({
 
 
   formData9: {
+    // InventionDetails (add/adjust fields as per your actual component)
+    inventionTitle: "",
+    inventorName: "",
+    inventorDepartment: "",
+    inventionSummary: "",
 
+    // PAN
+    patentApplicationNumber: "",
+    patentNumber: "",
+
+    // PatentCommercializationChild (adjust as per your actual fields)
+    commercializationType: "",
+    commercializationStatus: "",
+    commercializationDate: "",
+    commercializationRevenue: "",
+
+    // PCEfforts
+    effortsSpent: "",
+    employeeId: "",
+    hoursSpent: "",
+    agencyManager: "",
+    agencyCost: "",
+    reviewEfforts: "",
+    managerResponsible: "",
+
+    // ActivityStatus
+    activityStatus: ""
   },
 
 

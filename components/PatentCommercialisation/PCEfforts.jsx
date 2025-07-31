@@ -12,8 +12,10 @@ import {
   SelectItem,
 } from '@/components/ui/select';
 
-const PCEfforts = () => {
-  const { formData, updateFormData } = useFormStore();
+const PCEfforts = ({formKey,updateFuction}) => {
+  const formData = useFormStore((state) => state[formKey]);
+  const updateFormData = useFormStore((state) => state[updateFuction]);
+ // const { formData, updateFormData } = useFormStore();
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -45,6 +45,7 @@ model Invention {
   PostGrantOpposition PostGrantOpposition[] @relation("PostGrantOppositionToInvention")
   PatentProsecution     PatentProsecution[] @relation("PatentProsecution")
   PatentManagement      PatentManagement[] @relation("PatentManagement")
+  patentCommercialisation PatentCommercialisation[] @relation("PatentCommercialisation")
 }
 
 model Extraction {
@@ -229,6 +230,39 @@ model PatentManagement {
   activityStatus        String?
 
   invention             Invention @relation("PatentManagement",fields: [asset_id], references: [asset_id], onDelete: Cascade)
+}
+
+
+
+
+model PatentCommercialisation {
+  id                      String   @id @default(uuid())
+  asset_id                String
+
+  inventionTitle          String?
+  inventorName            String?
+  inventorDepartment      String?
+  inventionSummary        String?
+
+  patentApplicationNumber String?
+  patentNumber            String?
+
+  commercializationType   String?
+  commercializationStatus String?
+  commercializationDate   String?
+  commercializationRevenue String?
+
+  effortsSpent            String?
+  employeeId              String?
+  hoursSpent              String?
+  agencyManager           String?
+  agencyCost              String?
+  reviewEfforts           String?
+  managerResponsible      String?
+
+  activityStatus          String?
+
+  invention               Invention @relation("PatentCommercialisation",fields: [asset_id], references: [asset_id], onDelete: Cascade)
 }
 
 
