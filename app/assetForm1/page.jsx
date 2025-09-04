@@ -5,7 +5,7 @@ import InventionDetails from "@/components/InventionRecognition/InventionDetails
 import AddOrDeleteInventor from "@/components/InventionRecognition/AddOrDeleteInventor";
 import { validateInventionForm } from "@/lib/validateInventRecognitionForm";
 import useFormStore from "@/store/store";
-import React from "react";
+import React, { use } from "react";
 import EntityDetails from "@/components/InventionRecognition/EntityDetails";
 import TechnologyDetails from "@/components/InventionRecognition/TechnologyDetails";
 import TrainRunExperimentation from "@/components/InventionRecognition/TrainRunExperimentation";
@@ -14,9 +14,12 @@ import EffortSheetDetails from "@/components/InventionRecognition/EffortSheet";
 import ActivityStatus from "@/components/InventionRecognition/ActivityStatus";
 import { Router } from "next/router";
 import { useRouter } from "next/navigation";
+import { uploadDocuments } from "@/utils/FileUploadUI";
+import { fetchAssetIdFromDB } from "@/utils/assetUtils"; // Utility to fetch or generate asset ID
 
 const InventionRecognitionForm = () => {
   const { formData, setErrors, uploadedPaths } = useFormStore();
+  const updateFormData = useFormStore((state) => state.updateFormData);
   const setAssetId = useFormStore((state) => state.setAssetId);
   const router = useRouter();
   const handleSave = async () => {
@@ -27,37 +30,49 @@ const InventionRecognitionForm = () => {
     }
   
     try {
-      const fileFields = ['evidence', 'minuteOfMeeting', 'attachments'];
-      const uploadedPaths = {};
-  
-      // Upload files
-      for (const field of fileFields) {
-        const file = formData[field];
-        if (file) {
-          const uploadForm = new FormData();
-          uploadForm.append('file', file);
-          uploadForm.append('registerId', 'A0005'); // or generate dynamically
-  
-          const res = await fetch('/api/upload', {
-            method: 'POST',
-            body: uploadForm,
-          });
-  
-          const result = await res.json();
-          if (result.success) {
-            uploadedPaths[field] = result.path;
-          } else {
-            console.error(`Upload failed for ${field}:`, result.error);
-            return;
-          }
-        }
+      console.log('🚀 Starting form submission...');
+      console.log('📁 Current form data:', formData);
+      
+      // First, get the next asset ID that will be used
+      const assetId = await fetchAssetIdFromDB();
+      const componentName = 'InventionRecognitionForm';
+
+      console.log('🆔 Asset ID:', assetId);
+      console.log('🏷️ Component Name:', componentName);
+
+      // Extract only the file fields from formData
+      const files = {
+        evidence: formData.evidence || [],
+        minuteOfMeeting: formData.minuteOfMeeting || [],
+        attachments: formData.attachments || [],
+      };
+
+      console.log('📂 Files to upload:', files);
+
+      // Only upload if there are files
+      let uploadedPaths = {};
+      if (files.evidence.length > 0 || files.minuteOfMeeting.length > 0 || files.attachments.length > 0) {
+        console.log('📤 Starting file upload...');
+        // Upload and get file paths
+        uploadedPaths = await uploadDocuments({ files, assetId, componentName, updateFormData });
+        console.log('✅ File upload completed:', uploadedPaths);
+      } else {
+        console.log('ℹ️ No files to upload');
       }
   
-      // Merge uploaded file paths into payload
+      // Merge uploaded file paths into payload, but preserve the existing uploadedFilePaths structure
       const payload = {
         ...formData,
-        ...uploadedPaths,
+        asset_id: assetId, // Pass the asset ID to the API
+        uploadedFilePaths: {
+          ...formData.uploadedFilePaths,
+          evidence: uploadedPaths.evidencePaths || formData.uploadedFilePaths.evidence || [],
+          minuteOfMeeting: uploadedPaths.minuteOfMeetingPaths || formData.uploadedFilePaths.minuteOfMeeting || [],
+          attachments: uploadedPaths.attachmentsPaths || formData.uploadedFilePaths.attachments || [],
+        }
       };
+  
+      console.log('📦 Final payload to API:', payload);
   
       // Submit to invention API
       const saveRes = await fetch('/api/invention', {
@@ -68,13 +83,31 @@ const InventionRecognitionForm = () => {
         body: JSON.stringify(payload),
       });
   
+      // Check if the response is successful
+      if (!saveRes.ok) {
+        const errorData = await saveRes.json().catch(() => ({}));
+        throw new Error(`API call failed: ${saveRes.status} ${saveRes.statusText}. ${errorData.message || ''}`);
+      }
+  
       const resultDB = await saveRes.json();
-      setAssetId(resultDB && resultDB.data && resultDB.data.asset_id); // Set the asset ID in the store
+      
+      // Validate the response data
+      if (!resultDB || !resultDB.success) {
+        throw new Error(`API returned error: ${resultDB?.message || 'Unknown error'}`);
+      }
+      
+      if (!resultDB.data || !resultDB.data.asset_id) {
+        throw new Error('API response missing asset_id');
+      }
+  
+      setAssetId(resultDB.data.asset_id); // Set the asset ID in the store
       router.push('/assetForm2'); // Redirect to next page on success
      
-      console.log('Invention saved:', resultDB);
+      console.log('🎉 Invention saved successfully:', resultDB);
     } catch (error) {
-      console.error('Error saving invention:', error);
+      console.error('❌ Error saving invention:', error);
+      // You might want to show this error to the user via a toast or alert
+      alert(`Failed to save invention: ${error.message}`);
     }
   };
   

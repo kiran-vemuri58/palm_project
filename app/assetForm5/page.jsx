@@ -49,10 +49,13 @@ const PatentFiling = () => {
     });
 
     const resultDB = await saveRes.json();
-    console.log('Patentability saved:', resultDB);
+    console.log('Patent Filing saved:', resultDB);
 
     if (resultDB.success) {
       router.push('/assetForm6'); // Navigate to next page on success
+    } else {
+      console.error('❌ Failed to save Patent Filing:', resultDB.message);
+      alert(`Failed to save Patent Filing: ${resultDB.message}`);
     }
 
   }
@@ -77,7 +80,7 @@ const PatentFiling = () => {
         onSave={handleSave}
       >
         <MiniHeader title="Invention Details" />
-        <InventionDetails />
+        <InventionDetails disableCommon={true} />
         <MiniHeader title="Average Patentability Rating"
         storeKey="formData5"
         updateFunctionKey="updateFormData5" />

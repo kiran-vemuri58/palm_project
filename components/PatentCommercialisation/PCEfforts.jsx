@@ -3,6 +3,7 @@
 import React from 'react';
 import useFormStore from '@/store/store';
 import { Input } from '@/components/ui/input';
+import FileInput from '@/components/ui/file-input';
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -23,8 +24,8 @@ const PCEfforts = ({formKey,updateFuction}) => {
   };
 
   const handleFileUpload = (e) => {
-    const { name, files } = e.target;
-    updateFormData({ ...formData, [name]: files[0] || null });
+    const { name, value } = e.target; // array of File
+    updateFormData({ ...formData, [name]: value });
   };
 
   const handleSelectChange = (name, value) => {
@@ -36,10 +37,14 @@ const PCEfforts = ({formKey,updateFuction}) => {
       <div className="grid grid-cols-3 gap-4">
         <div>
           <Label>Sales (In case of MVP/Real scale)</Label>
-          <Input
-            type="file"
+          <FileInput
             name="salesFile"
+            multiple={true}
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx"
+            value={formData.salesFile || []}
             onChange={handleFileUpload}
+            maxFiles={20}
+            maxFileSize={20 * 1024 * 1024}
           />
         </div>
         <div>
@@ -54,10 +59,14 @@ const PCEfforts = ({formKey,updateFuction}) => {
         </div>
         <div>
           <Label>Invoices, Sales Sheets, etc.</Label>
-          <Input
-            type="file"
+          <FileInput
             name="invoiceFile"
+            multiple={true}
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx"
+            value={formData.invoiceFile || []}
             onChange={handleFileUpload}
+            maxFiles={20}
+            maxFileSize={20 * 1024 * 1024}
           />
         </div>
 

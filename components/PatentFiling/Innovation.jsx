@@ -2,6 +2,7 @@
 
 import useFormStore from '@/store/store';
 import { Input } from '@/components/ui/input';
+import FileInput from '@/components/ui/file-input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 
@@ -14,8 +15,8 @@ const Innovation = () => {
   };
 
   const handleFileUpload = (e) => {
-    const { name, files } = e.target;
-    updateFormData({ [name]: files[0] || null }); // Store only the first file or null
+    const { name, value } = e.target; // array of File
+    updateFormData({ [name]: value });
   };
 
   return (
@@ -47,22 +48,28 @@ const Innovation = () => {
         
             <div>
               <Label className="mb-1">Prior Art Documents</Label>
-              <Input
-                type="file"
+              <FileInput
                 id="minuteOfMeeting"
                 name="minuteOfMeeting"
-                className="grid w-full max-w-sm items-center gap-1.5"
+                multiple={true}
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.txt"
+                value={formData.minuteOfMeeting || []}
                 onChange={handleFileUpload}
+                maxFiles={10}
+                maxFileSize={20 * 1024 * 1024}
               />
             </div>
             <div>
-              <Label className="mb-1">NPL Documnets</Label>
-              <Input
-                type="file"
+              <Label className="mb-1">NPL Documents</Label>
+              <FileInput
                 id="attachments"
                 name="attachments"
-                className="grid w-full max-w-sm items-center gap-1.5"
+                multiple={true}
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.txt,.xls,.xlsx"
+                value={formData.attachments || []}
                 onChange={handleFileUpload}
+                maxFiles={20}
+                maxFileSize={20 * 1024 * 1024}
               />
             </div>
           

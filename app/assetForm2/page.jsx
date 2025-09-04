@@ -52,7 +52,7 @@ const InventionExtraction = () => {
       >
        
       <MiniHeader title="Invention Details"/>
-      <InventionDetails/>
+      <InventionDetails disableCommon={true}/>
       <MiniHeader title="Extractor Details"/>
       <ExtractorDetails formKey="formData2" updateFunction="updateFormData2"/>
       <MiniHeader title="Efforts Sheet"/>

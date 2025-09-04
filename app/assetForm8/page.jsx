@@ -40,10 +40,13 @@ const PatentManagement = () => {
     });
 
     const resultDB = await saveRes.json();
-    console.log('pm saved:', resultDB);
+    console.log('Patent Management saved:', resultDB);
 
     if (resultDB.success) {
       router.push('/assetForm9'); // Navigate to next page on success
+    } else {
+      console.error('❌ Failed to save Patent Management:', resultDB.message);
+      alert(`Failed to save Patent Management: ${resultDB.message}`);
     }
 
   }
@@ -59,7 +62,7 @@ const PatentManagement = () => {
         onSave={handleSave}
       >
         <MiniHeader title="Invention Details" />
-        <InventionDetails />
+        <InventionDetails disableCommon={true} />
         <MiniHeader title="PAN Details" />
         <PAN formKey="formData7" updateFunction="updateFormData7" />
         <MiniHeader title="Patent Maintance History" />

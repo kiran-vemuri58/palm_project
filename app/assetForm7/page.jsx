@@ -42,10 +42,13 @@ const PostGrantOpposition = () => {
     });
 
     const resultDB = await saveRes.json();
-    console.log('pgo saved:', resultDB);
+    console.log('Post Grant Opposition saved:', resultDB);
 
     if (resultDB.success) {
       router.push('/assetForm8'); // Navigate to next page on success
+    } else {
+      console.error('❌ Failed to save Post Grant Opposition:', resultDB.message);
+      alert(`Failed to save Post Grant Opposition: ${resultDB.message}`);
     }
 
   }
@@ -61,7 +64,7 @@ const PostGrantOpposition = () => {
         onSave={handleSave}
       >
         <MiniHeader title="Invention Details" />
-        <InventionDetails />
+        <InventionDetails disableCommon={true} />
         <MiniHeader title="PAN Details" />
         <PAN formKey="formData7" updateFunction="updateFormData7" />
         <MiniHeader title="Post Grant Opposition" />

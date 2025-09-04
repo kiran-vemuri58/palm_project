@@ -5,6 +5,7 @@ import useFormStore from '@/store/store';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
+import  FileInput  from '@/components/ui/file-input';
 
 const Provisional = () => {
   const { formData, updateFormData } = useFormStore();
@@ -37,18 +38,26 @@ const Provisional = () => {
         </div>
         <div>
           <Label>Submitted Provisional Patent Application</Label>
-          <Input
-            type="file"
+          <FileInput
             name="provisionalPatent"
-            onChange={handleFileUpload}
+            value={formData.provisionalPatent || []}
+            onChange={(files) => updateFormData({ ...formData, provisionalPatent: files })}
+            multiple={true}
+            accept=".pdf,.doc,.docx,.txt"
+            maxFileSize={10 * 1024 * 1024} // 10MB
+            maxFiles={5}
           />
         </div>
         <div>
           <Label>Attachment</Label>
-          <Input
-            type="file"
+          <FileInput
             name="attachment"
-            onChange={handleFileUpload}
+            value={formData.attachment || []}
+            onChange={(files) => updateFormData({ ...formData, attachment: files })}
+            multiple={true}
+            accept=".pdf,.doc,.docx,.txt"
+            maxFileSize={10 * 1024 * 1024} // 10MB
+            maxFiles={5}
           />
         </div>
 
@@ -103,10 +112,14 @@ const Provisional = () => {
         </div>
         <div>
           <Label>Claiming Any Startup?</Label>
-          <Input
-            type="file"
+          <FileInput
             name="claimingStartup"
-            onChange={handleFileUpload}
+            value={formData.claimingStartup || []}
+            onChange={(files) => updateFormData({ ...formData, claimingStartup: files })}
+            multiple={true}
+            accept=".pdf,.doc,.docx,.txt"
+            maxFileSize={10 * 1024 * 1024} // 10MB
+            maxFiles={5}
           />
         </div>
         <div>

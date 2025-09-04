@@ -28,7 +28,7 @@ export async function POST(req) {
       iawpl: payload.iawpl,
       nfeature: payload.nfeature,
       ifeature: payload.ifeature,
-      idattachments: payload.idattachments,
+      idattachments: Array.isArray(payload.idattachments) ? payload.idattachments : (payload.idattachments || []),
       scountry: payload.scountry,
       oextractor: payload.oextractor,
       ipRecognizer: payload.ipRecognizer,

@@ -3,6 +3,7 @@
 import React from 'react';
 import useFormStore from '@/store/store';
 import { Input } from '@/components/ui/input';
+import FileInput from '@/components/ui/file-input';
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -20,6 +21,11 @@ const NationalPhase = ({ formKey, updateFunction }) => {
     const { name, value, files, type } = e.target;
     const newValue = type === 'file' ? files[0] : value;
     updateFormDataByKey({ ...formData, [name]: newValue });
+  };
+
+  const handleFileArrayChange = (e) => {
+    const { name, value } = e.target; // value is array of File
+    updateFormDataByKey({ ...formData, [name]: value });
   };
 
   const handleSelectChange = (name, value) => {
@@ -64,7 +70,15 @@ const NationalPhase = ({ formKey, updateFunction }) => {
       <div className="grid grid-cols-3 gap-4">
         <div>
           <Label>PCT Search Report</Label>
-          <Input type="file" name="npSearchReport" onChange={handleChange} />
+          <FileInput
+            name="npSearchReport"
+            multiple={true}
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+            value={formData.npSearchReport || []}
+            onChange={handleFileArrayChange}
+            maxFiles={10}
+            maxFileSize={20 * 1024 * 1024}
+          />
         </div>
         <div>
           <Label>Date of PCT or Provisional Application Number</Label>
@@ -99,7 +113,15 @@ const NationalPhase = ({ formKey, updateFunction }) => {
         </div>
         <div>
           <Label>Claim Drafting Strategy Sheet</Label>
-          <Input type="file" name="npClaimSheet" onChange={handleChange} />
+          <FileInput
+            name="npClaimSheet"
+            multiple={true}
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+            value={formData.npClaimSheet || []}
+            onChange={handleFileArrayChange}
+            maxFiles={10}
+            maxFileSize={20 * 1024 * 1024}
+          />
         </div>
         <div>
           <Label>Forms Prepared</Label>
@@ -214,7 +236,15 @@ const NationalPhase = ({ formKey, updateFunction }) => {
         </div>
         <div>
           <Label>Versions Of All Drafts</Label>
-          <Input type="file" name="npAllDrafts" onChange={handleChange} />
+          <FileInput
+            name="npAllDrafts"
+            multiple={true}
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx"
+            value={formData.npAllDrafts || []}
+            onChange={handleFileArrayChange}
+            maxFiles={20}
+            maxFileSize={20 * 1024 * 1024}
+          />
         </div>
       </div>
 

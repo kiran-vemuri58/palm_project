@@ -4,6 +4,7 @@ import useFormStore from '@/store/store';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
+import FileInput from '@/components/ui/file-input';
 import React, { useState } from 'react';
 import { Star, Plus } from 'lucide-react';
 
@@ -18,7 +19,7 @@ const PAExtractor = ({formKey,updateFunction}) => {
     const { name, value } = e.target;
     updateFormDataByKey({ [name]: value });
   };
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(formData.rating || 0);
   const handleFileUpload = (e) => {
     const { name, files } = e.target;
     updateFormDataByKey({ [name]: files[0] || null }); // Store only the first file or null
@@ -32,12 +33,12 @@ const PAExtractor = ({formKey,updateFunction}) => {
       <div className="grid grid-cols-3 gap-4">
         <div>
           <Label className="mb-1">Name of Patent Searcher 1 </Label>
-          <Input className="p-2" placeholder="Enter the Name of Patent Searcher 1" id="entity" name="psone" value={formData.psone} onChange={handleChange} />
+          <Input className="p-2" placeholder="Enter the Name of Patent Searcher 1" id="entity" name="psone" value={formData.psone || ''} onChange={handleChange} />
         </div>
 
         <div>
           <Label className="mb-1">Name of Patent Searcher 2</Label>
-          <Input className="p-2" placeholder="Enter the Name of Patent Searcher 2" id="inventionCountry" name="pstwo" value={formData.pstwo} onChange={handleChange} />
+          <Input className="p-2" placeholder="Enter the Name of Patent Searcher 2" id="inventionCountry" name="pstwo" value={formData.pstwo || ''} onChange={handleChange} />
         </div>
         <div className="flex items-center gap-2">
           {[1, 2, 3, 4, 5].map((star) => (
@@ -64,7 +65,7 @@ const PAExtractor = ({formKey,updateFunction}) => {
       <div className="grid grid-cols-3 gap-4 mt-4">
         <div>
           <Label className="mb-1">is Invention Accordance with Patent Laws?</Label>
-          <Select className="w-full" onValueChange={(value) => updateFormDataByKey({ ...formData, collaboration: value })}>
+          <Select className="w-full" value={formData.collaboration || ''} onValueChange={(value) => updateFormDataByKey({ collaboration: value })}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select an option" />
             </SelectTrigger>
@@ -82,20 +83,22 @@ const PAExtractor = ({formKey,updateFunction}) => {
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div>
               <Label className="mb-1">Novel Feature(Assumed)</Label>
-              <Input className="p-2" placeholder="Enter Novel Feature" id="collaboratorName" name="nfeature" value={formData.nfeature} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter Novel Feature" id="collaboratorName" name="nfeature" value={formData.nfeature || ''} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Inventive Feature (Assumed)</Label>
-              <Input className="p-2" placeholder="Enter collaborator country..." id="collaboratorCountry" name="ifeature" value={formData.ifeature} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter collaborator country..." id="collaboratorCountry" name="ifeature" value={formData.ifeature || ''} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Invention Detail Attachment</Label>
-              <Input
-                type="file"
-                id="attachments"
-                name="attachments"
-                className="grid w-full max-w-sm items-center gap-1.5"
-                onChange={handleFileUpload}
+              <FileInput
+                name="attachment"
+                value={formData.attachment || []}
+                onChange={(files) => updateFormDataByKey({ attachment: files })}
+                multiple={true}
+                accept=".pdf,.doc,.docx,.txt"
+                maxFileSize={10 * 1024 * 1024} // 10MB
+                maxFiles={5}
               />
             </div>
           </div>
@@ -108,7 +111,7 @@ const PAExtractor = ({formKey,updateFunction}) => {
                 id="scountry"
                 name="scountry"
                 className="p-2 border rounded w-full"
-                value={formData.scountry}
+                value={formData.scountry || ''}
                 onChange={handleChange}
               >
                 <option value="">Select a country</option>
@@ -127,7 +130,7 @@ const PAExtractor = ({formKey,updateFunction}) => {
 
             <div>
               <Label className="mb-1">Opinion Of Extractor</Label>
-              <Input className="p-2" placeholder="Enter Opinion Of Extractor" id="productIdentity" name="ooextractor" value={formData.ooextractor} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter Opinion Of Extractor" id="productIdentity" name="ooextractor" value={formData.ooextractor || ''} onChange={handleChange} />
             </div>
           </div>
         </>

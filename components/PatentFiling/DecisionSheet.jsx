@@ -2,6 +2,7 @@
 
 import useFormStore from '@/store/store';
 import { Input } from '@/components/ui/input';
+import FileInput from '@/components/ui/file-input';
 import { Label } from '@/components/ui/label';
 import React from 'react';
 
@@ -13,8 +14,8 @@ const DecisionSheet = () => {
     updateFormData({ ...formData, [name]: value });
   };
   const handleFileUpload = (e) => {
-    const { name, files } = e.target;
-    updateFormData({ [name]: files[0] || null }); // Store only the first file or null
+    const { name, value } = e.target; // value is array of File
+    updateFormData({ [name]: value });
   };
 
   return (
@@ -46,15 +47,18 @@ const DecisionSheet = () => {
           />
         </div>
         <div>
-              <Label className="mb-1">Attachment</Label>
-              <Input
-                type="file"
-                id="attachments"
-                name="attachments"
-                className="grid w-full max-w-sm items-center gap-1.5"
-                onChange={handleFileUpload}
-              />
-            </div>
+          <Label className="mb-1">Attachment</Label>
+          <FileInput
+            id="attachments"
+            name="attachments"
+            multiple={true}
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.txt"
+            value={formData.attachments || []}
+            onChange={handleFileUpload}
+            maxFiles={10}
+            maxFileSize={20 * 1024 * 1024}
+          />
+        </div>
       </div>
 
       

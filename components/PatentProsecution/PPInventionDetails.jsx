@@ -7,7 +7,7 @@ import useFormStore from '@/store/store';
 import { Star } from 'lucide-react';
 
 
-const PPInventionDetails = ({ showRating = false ,formKey,updateFunction }) => {
+const PPInventionDetails = ({ showRating = false ,formKey,updateFunction, disableCommon = false }) => {
   const { formData, updateFormData, errors } = useFormStore();
   const [rating, setRating] = useState(0);
 
@@ -63,6 +63,7 @@ const PPInventionDetails = ({ showRating = false ,formKey,updateFunction }) => {
                 onChange={(e) => updateFormData({ [field.id]: e.target.value })}
                 className="border-gray-300 focus:border-blue-500 px-4 py-2 rounded-md"
                 placeholder={field.label}
+                disabled={disableCommon && ["inventiontitle", "commonName", "inventordetails", "InventorDetails"].includes(field.id)}
               />
             )}
 

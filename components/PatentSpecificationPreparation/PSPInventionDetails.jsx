@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import useFormStore from '@/store/store';
 
-const InventionDetails = () => {
+const InventionDetails = ({ disableCommon = false }) => {
   const { formData, updateFormData, errors } = useFormStore();
 
   const fields = [
@@ -30,6 +30,7 @@ const InventionDetails = () => {
             onChange={(e) => updateFormData({ [field.id]: e.target.value })}
             className="border-gray-300 focus:border-blue-500 px-4 py-2 rounded-md"
             placeholder={field.label}
+            disabled={disableCommon && ["inventiontitle", "commonName", "inventordetails", "InventorDetails"].includes(field.id)}
           />
           {errors[field.id] && (
             <p className="text-red-500 text-sm mt-1 px-1">{errors[field.id]}</p>

@@ -5,6 +5,7 @@ import useFormStore from '@/store/store';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import FileInput from '@/components/ui/file-input';
 import {
   Select,
   SelectTrigger,
@@ -28,9 +29,10 @@ const Hearing = ({ formKey, updateFunction }) => {
     });
   };
 
-  const handleFileChange = (index, name, file) => {
+  const handleFileChange = (index, e) => {
+    const { name, value } = e.target;
     const updatedList = [...hearingList];
-    updatedList[index][name] = file;
+    updatedList[index][name] = value; // value is an array of File objects
     updateFormData({
       ...formData,
       hearingList: updatedList,
@@ -79,7 +81,18 @@ const Hearing = ({ formKey, updateFunction }) => {
           </div>
 
           <div className="grid grid-cols-3 gap-4 mb-4">
-            <FileInputField label="Decision Page" name="decisionPage" onChange={(e) => handleFileChange(index, e.target.name, e.target.files[0])} />
+            <div>
+              <Label className="mb-1">Decision Page</Label>
+              <FileInput
+                name="decisionPage"
+                multiple={true}
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                value={hearingList[index]?.decisionPage || []}
+                onChange={(e) => handleFileChange(index, e)}
+                maxFiles={10}
+                maxFileSize={20 * 1024 * 1024}
+              />
+            </div>
             <SelectField label="Hearing Response Prepared" name="responsePrepared" value={item.responsePrepared} onChange={(name, value) => handleChange(index, name, value)} />
             <InputField label="Appearance Confirmation" name="appearance" value={item.appearance} onChange={(e) => handleChange(index, e.target.name, e.target.value)} />
           </div>
@@ -92,7 +105,18 @@ const Hearing = ({ formKey, updateFunction }) => {
 
           <div className="grid grid-cols-3 gap-4 mb-4">
             <InputField label="People Appeared for Hearing" name="people" value={item.people} onChange={(e) => handleChange(index, e.target.name, e.target.value)} />
-            <FileInputField label="Hearing Minutes of Meeting" name="hearingMinutes" onChange={(e) => handleFileChange(index, e.target.name, e.target.files[0])} />
+            <div>
+              <Label className="mb-1">Hearing Minutes of Meeting</Label>
+              <FileInput
+                name="hearingMinutes"
+                multiple={true}
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                value={hearingList[index]?.hearingMinutes || []}
+                onChange={(e) => handleFileChange(index, e)}
+                maxFiles={10}
+                maxFileSize={20 * 1024 * 1024}
+              />
+            </div>
             <InputField label="Name of Controller (From IPO) attended" name="controllerName" value={item.controllerName} onChange={(e) => handleChange(index, e.target.name, e.target.value)} />
           </div>
 
@@ -135,7 +159,7 @@ const InputField = ({ label, name, value, onChange, type = 'text' }) => (
 const FileInputField = ({ label, name, onChange }) => (
   <div>
     <Label className="mb-1">{label}</Label>
-    <Input type="file" name={name} onChange={onChange} />
+    <FileInput name={name} multiple={true} onChange={onChange} />
   </div>
 );
 
@@ -164,14 +188,14 @@ const createEmptyHearing = () => ({
   mainArgument: '',
   references: '',
   relevancy: '',
-  decisionPage: null,
+  decisionPage: [],
   responsePrepared: '',
   appearance: '',
   responsePreparer: '',
   responseFilingDate: '',
   amendments: '',
   people: '',
-  hearingMinutes: null,
+  hearingMinutes: [],
   controllerName: '',
   rejectionAfterFinal: '',
   patentProsecutor: '',

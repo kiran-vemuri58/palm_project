@@ -23,9 +23,9 @@ const useFormStore = create(devtools((set) => ({
     //  Experiments
     trainRun: '',                   // Yes/No
     experimentResults: '',
-    evidence: null,
-    minuteOfMeeting: null,
-    attachments: null,
+    evidence: [],
+    minuteOfMeeting: [],
+    attachments: [],
 
     // IP Review Section
     ipRecognizer: '',
@@ -58,6 +58,12 @@ const useFormStore = create(devtools((set) => ({
     // Activity Status
     activityStatus: '',
 
+    uploadedFilePaths: {
+      evidence: [],
+      minuteOfMeeting: [],
+      attachments: []
+    }
+
   },
 
   formData2: {
@@ -69,7 +75,7 @@ const useFormStore = create(devtools((set) => ({
     iawpl: '',
     nfeature: '',
     ifeature: '',
-    idattachments: '',
+    idattachments: [],
     scountry: '',
     oextractor: '',
 
@@ -93,7 +99,7 @@ const useFormStore = create(devtools((set) => ({
     // Extractor Details
     psone: '',
     pstwo: '',
-    rating: null,
+    rating: 0,
     nfeature: '',
     ifeature: '',
     scountry: '',
@@ -105,14 +111,14 @@ const useFormStore = create(devtools((set) => ({
     // Decission sheet
     nodc: '',
     dibrief: '',
-    attachment: '',
+    attachment: [],
 
     // Effort Sheet-6
     esfsearcher: '',
     ipRecognizer: '',
-    hoursSpent: undefined,
+    hoursSpent: '',
     agencyRecognizer: '',
-    agencyCost: undefined,
+    agencyCost: '',
     reviewEffort: '',
     managerEmpId: '',
 
@@ -131,11 +137,11 @@ const useFormStore = create(devtools((set) => ({
     npPCTDate: '',
     npApplicationNumber: '',
     npPCTPublication: '',
-    npSearchReport: null,
+    npSearchReport: [],
     npPCTOrProvisionalDate: '',
     npApplicationCountry: '',
     npDrafterName: '',
-    npClaimSheet: null,
+    npClaimSheet: [],
     npFormsPrepared: 'No',
     npCountryFiling: '',
     npReviewBy: '',
@@ -145,7 +151,7 @@ const useFormStore = create(devtools((set) => ({
     npBroadenedFeature: '',
     npIsProfit: 'No',
     npIsDefensive: 'No',
-    npAllDrafts: null,
+    npAllDrafts: [],
     npDraftingEffort: '',
     npDrafterEmpId: '',
     npHoursSpent: '',
@@ -155,15 +161,23 @@ const useFormStore = create(devtools((set) => ({
     npManagerEmpId: '',
     npActivityStatus: 'Initiated',
 
+    // File attachments
+    npSearchReport: [],
+    npClaimSheet: [],
+    npAllDrafts: [],
+    pctParentPermission: [],
+    pctClaimSheet: [],
+    pctAllDrafts: [],
+    draftVersions: [],
 
     // PCT
 
     isDirectPCT: 'No', // default No or empty string as fits your app
-    pctParentPermission: null, // file type - null initially
+    pctParentPermission: [], // file type - empty array initially
     pctProvisionalDate: '',
     pctApplicationNumber: '',
     pctDrafterName: '',
-    pctClaimSheet: null,
+    pctClaimSheet: [],
     pctFormsPrepared: 'No',
     pctCountryFiling: '',
     pctReviewBy: '',
@@ -173,7 +187,7 @@ const useFormStore = create(devtools((set) => ({
     pctBroadenedFeature: '',
     pctIsProfit: 'No',
     pctIsDefensive: 'No',
-    pctAllDrafts: null,
+    pctAllDrafts: [],
     pctDraftingEffort: '',
     pctDrafterEmpId: '',
     pctHoursSpent: '',
@@ -197,7 +211,7 @@ const useFormStore = create(devtools((set) => ({
     broadenedFeature: '',
     isProfitPatent: '',
     isDefensivePatent: '',
-    draftVersions: null,             // file or null initially
+    draftVersions: [],             // file or empty array initially
     draftingEffort: '',
     drafterEmpId: '',
     hoursSpent: '',
@@ -211,7 +225,7 @@ const useFormStore = create(devtools((set) => ({
 
     nodrafter: '',
     noreviewer: '',
-    attachments: null,         // files initialized as null
+    attachments: [],         // files initialized as empty array
     bned: '',
     ifdescribed: '',
     toinvention: '',
@@ -233,13 +247,13 @@ const useFormStore = create(devtools((set) => ({
     // provisional
 
     "patentFilingName": "",
-    "provisionalPatent": null,
-    "attachment": null,
+    "provisionalPatent": [],
+    "attachment": [],
     "dateProvision": "",
     "applicantName": "",
     "isProfilePatent": "",
     "isDefensivePatent": "",
-    "claimingStartup": null,
+    "claimingStartup": [],
     "poaOffice": "",
     "effortsSpent": "",
     "patentFiler": "",
@@ -271,7 +285,7 @@ const useFormStore = create(devtools((set) => ({
     "dateCompletePatentApplication": "",
     "datePCTPatentApplication": "",
     "finalSubmitted": "",
-    "filedForms": null,
+    "filedForms": [],
     "dateProvision": "",
     "effortsSpent": "",
     "patentFiler": "",
@@ -296,8 +310,15 @@ const useFormStore = create(devtools((set) => ({
     "hoursSpent": "",
     "agencyRecognizer": "",
     "agencyCost": "",
-    "managerResponsible": ""
+    "managerResponsible": "",
 
+    // File attachments
+    "provisionalPatent": [],
+    "attachment": [],
+    "claimingStartup": [],
+    "filedForms": [],
+    "filedDraft": [],
+    "filedFormsComplete": []
 
   },
 
@@ -309,15 +330,15 @@ const useFormStore = create(devtools((set) => ({
 
     patentStatus: 'yes',              // string, either 'yes' or 'no'
     patentNumber: '',                 // string, for entering the patent number
-    patentAttachment: null,          // File | null, stores uploaded file
+    patentAttachment: [],          // File | null, stores uploaded file
     patentGrantDate: '',             // string (YYYY-MM-DD), date picker value
-    rejectionReasonAttachment: null, // File | null, file explaining rejection reason
+    rejectionReasonAttachment: [], // File | null, file explaining rejection reason
 
     patentPublished: '',
     publicationNumber: '',
     apopposed: '',
     oname: '',
-    attachments: null,                // Used for multiple files (can be overwritten if reused)
+    attachments: [],                // Used for multiple files (can be overwritten if reused)
     cfbopposer: '',
     boaof: '',
     rffo: '',
@@ -329,9 +350,9 @@ const useFormStore = create(devtools((set) => ({
       ferReceived: "",
       ferDate: "",
       ferArgument: "",
-      examinerCitations: null,
+      examinerCitations: [],
       relevancyDetails: "",
-      decisionPage: null,
+      decisionPage: [],
       ferPrepared: "",
       ferPreparer: "",
       ferFilingDate: "",
@@ -349,14 +370,14 @@ const useFormStore = create(devtools((set) => ({
       mainArgument: '',
       references: '',
       relevancy: '',
-      decisionPage: null,
+      decisionPage: [],
       responsePrepared: '',
       appearance: '',
       responsePreparer: '',
       responseFilingDate: '',
       amendments: '',
       people: '',
-      hearingMinutes: null,
+      hearingMinutes: [],
       controllerName: '',
       rejectionAfterFinal: '',
       patentProsecutor: '',
@@ -382,16 +403,16 @@ const useFormStore = create(devtools((set) => ({
     apopposed: '',                   // "yes" or "no"
 
     oname: '',                       // Opposer Name
-    opposerAttachment: '',
+    opposerAttachment: [],
 
     boaof: '',                       // Brief Opinion About Opposition Findings
     rffo: '',                        // Response Filed for Opposition
-    responseAttachment: '',         // File path for Response Attachment
+    responseAttachment: [],         // File path for Response Attachment
 
     orpby: '',                       // Opposition Response Prepared By
     eagency: '',                     // External Agency (if prepared by them)
     revby: '',                       // Reviewed By
-    reviewAttachment: '',
+    reviewAttachment: [],
 
     ipRecognizer: '',       // Efforts Spent for opposition of Invention
     hoursSpent: '',         // Employee ID
@@ -411,10 +432,10 @@ const useFormStore = create(devtools((set) => ({
     yearsPaid: "",
     nextDueDate: "",
     maintenanceStopped: "",
-    decisionPageAttachment: null,
+    decisionPageAttachment: [],
     collaboration: "",
     filingDate: "",
-    filingAttachment: null,
+    filingAttachment: [],
     maintenanceFee: "",
     externalAgency: "",
     effortsSpent: "",
@@ -426,6 +447,9 @@ const useFormStore = create(devtools((set) => ({
     managerResponsible: "",
     activityStatus: '',
 
+    // File attachments
+    decisionPageAttachment: [],
+    filingAttachment: []
 
   },
 
@@ -457,7 +481,12 @@ const useFormStore = create(devtools((set) => ({
     managerResponsible: "",
 
     // ActivityStatus
-    activityStatus: ""
+    activityStatus: "",
+
+    // File attachments
+    salesFile: [],
+    invoiceFile: [],
+    implementationFile: []
   },
 
 

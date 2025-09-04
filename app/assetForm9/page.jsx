@@ -33,10 +33,13 @@ const PatentCommercialisation = () => {
     });
 
     const resultDB = await saveRes.json();
-    console.log('pc saved:', resultDB);
+    console.log('Patent Commercialisation saved:', resultDB);
 
     if (resultDB.success) {
       router.push('/assets'); // Navigate to next page on success
+    } else {
+      console.error('❌ Failed to save Patent Commercialisation:', resultDB.message);
+      alert(`Failed to save Patent Commercialisation: ${resultDB.message}`);
     }
 
   }
@@ -52,7 +55,7 @@ const PatentCommercialisation = () => {
         onSave={handleSave}
       >
      <MiniHeader title="Invention Details"/>
-     <InventionDetails  />
+     <InventionDetails disableCommon={true} />
      <MiniHeader title="Patent Application Number and Patent Number"/>
      <PAN formKey="formData9" updateFunction="updateFormData9"  />
      <MiniHeader title="Patent Commercialization"/>

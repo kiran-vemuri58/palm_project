@@ -2,6 +2,7 @@
 
 import useFormStore from '@/store/store';
 import { Input } from '@/components/ui/input';
+import FileInput from '@/components/ui/file-input';
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -23,8 +24,8 @@ const PatentProsectionDetails = ({ formKey, updateFunction }) => {
   };
 
   const handleFileUpload = (e) => {
-    const { name, files } = e.target;
-    updateFormData({ ...formData, [name]: files[0] || null });
+    const { name, value } = e.target; // array of File
+    updateFormData({ ...formData, [name]: value });
   };
 
   return (
@@ -105,11 +106,14 @@ const PatentProsectionDetails = ({ formKey, updateFunction }) => {
             </div>
             <div>
               <Label className="mb-1">Opposer Attachment</Label>
-              <Input
-                type="file"
+              <FileInput
                 name="attachments"
-                className="grid w-full max-w-sm items-center gap-1.5"
+                multiple={true}
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                value={formData.attachments || []}
                 onChange={handleFileUpload}
+                maxFiles={10}
+                maxFileSize={20 * 1024 * 1024}
               />
             </div>
             <div>
@@ -150,11 +154,14 @@ const PatentProsectionDetails = ({ formKey, updateFunction }) => {
             </div>
             <div>
               <Label className="mb-1">Attachment</Label>
-              <Input
-                type="file"
+              <FileInput
                 name="attachments"
-                className="grid w-full max-w-sm items-center gap-1.5"
+                multiple={true}
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                value={formData.attachments || []}
                 onChange={handleFileUpload}
+                maxFiles={10}
+                maxFileSize={20 * 1024 * 1024}
               />
             </div>
             <div>
@@ -193,11 +200,14 @@ const PatentProsectionDetails = ({ formKey, updateFunction }) => {
               <Label className="mb-1">
                 Review Attachment (Versions of Response with Reviews)
               </Label>
-              <Input
-                type="file"
+              <FileInput
                 name="attachments"
-                className="grid w-full max-w-sm items-center gap-1.5"
+                multiple={true}
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                value={formData.attachments || []}
                 onChange={handleFileUpload}
+                maxFiles={10}
+                maxFileSize={20 * 1024 * 1024}
               />
             </div>
           </div>

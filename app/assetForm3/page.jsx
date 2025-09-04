@@ -39,6 +39,9 @@ const Patentability_Analysis = () => {
 
     if (resultDB.success) {
       router.push('/assetForm4'); // Navigate to next page on success
+    } else {
+      console.error('❌ Failed to save patentability:', resultDB.message);
+      alert(`Failed to save patentability: ${resultDB.message}`);
     }
 
   }
@@ -54,15 +57,15 @@ const Patentability_Analysis = () => {
         onSave={handleSave}
       >
         <MiniHeader title="Invention Details" />
-        <InventionDetails />
+        <InventionDetails disableCommon={true} />
         <MiniHeader title="Extractor Details" />
         <PAExtractor formKey="formData3" updateFunction="updateFormData3" />
         <MiniHeader title="Innovation" />
-        <Innovation />
+        <Innovation formKey="formData3" updateFunction="updateFormData3" />
         <MiniHeader title="Decision Sheet" />
-        <DecisionSheet />
+        <DecisionSheet formKey="formData3" updateFunction="updateFormData3" />
         <MiniHeader title="Efforts Sheet" />
-        <PAEffortSheetDetails />
+        <PAEffortSheetDetails formKey="formData3" updateFunction="updateFormData3" />
         <MiniHeader title="Activity Status" />
         <ActivityStatus formKey="formData3" updateFunction="updateFormData3" />
 

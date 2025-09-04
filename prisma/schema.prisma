@@ -8,57 +8,57 @@ datasource db {
 }
 
 model Invention {
-  asset_id              String       @id
-  inventiontitle        String
-  commonname            String
-  inventordetails       String
-  incrementalrenovation String?
-  patentnumbers         String?
-  journalnumbers        String?
-  productidentity       String?
-  problemaddressed      String?
-  trainrun              String?
-  experimentresults     String?
-  evidence              String?
-  minuteofmeeting       String?
-  attachments           String?
-  iprecognizer          String?
-  hoursspent            String?
-  agencyrecognizer      String?
-  agencycost            String?
-  revieweffort          String?
-  managerempid          String?
-  entity                String?
-  date                  DateTime
-  inventioncountry      String?
-  creationcountry       String?
-  collaboration         String?
-  collaboratorname      String?
-  collaboratorcountry   String? 
-  stakeholders          String?
-  created_at            DateTime     @default(now())
-  inventors             Json?
-  extractions           Extraction[]    @relation("InventionExtraction")
-  patentabilities       Patentability[] @relation("InventionPatentabilities")
+  asset_id                  String                      @id
+  inventiontitle            String
+  commonname                String
+  inventordetails           String
+  incrementalrenovation     String?
+  patentnumbers             String?
+  journalnumbers            String?
+  productidentity           String?
+  problemaddressed          String?
+  trainrun                  String?
+  experimentresults         String?
+  evidence                  String[]                    @default([])
+  minuteofmeeting           String[]                    @default([])
+  attachments               String[]                    @default([])
+  iprecognizer              String?
+  hoursspent                String?
+  agencyrecognizer          String?
+  agencycost                String?
+  revieweffort              String?
+  managerempid              String?
+  entity                    String?
+  date                      DateTime                    @default(now())
+  inventioncountry          String?
+  creationcountry           String?
+  collaboration             String?
+  collaboratorname          String?
+  collaboratorcountry       String?
+  stakeholders              String?
+  created_at                DateTime                    @default(now())
+  inventors                 Json?
+  extractions               Extraction[]                @relation("InventionExtraction")
+  patentabilities           Patentability[]             @relation("InventionPatentabilities")
   PatentSpecificInformation PatentSpecificInformation[] @relation("PatentSpecificInfoToInvention")
-  PatentFiling          PatentFiling[] @relation("PatentFiling")
-  PostGrantOpposition PostGrantOpposition[] @relation("PostGrantOppositionToInvention")
-  PatentProsecution     PatentProsecution[] @relation("PatentProsecution")
-  PatentManagement      PatentManagement[] @relation("PatentManagement")
-  patentCommercialisation PatentCommercialisation[] @relation("PatentCommercialisation")
+  PatentFiling              PatentFiling[]              @relation("PatentFiling")
+  PostGrantOpposition       PostGrantOpposition[]       @relation("PostGrantOppositionToInvention")
+  PatentProsecution         PatentProsecution[]         @relation("PatentProsecution")
+  PatentManagement          PatentManagement[]          @relation("PatentManagement")
+  patentCommercialisation   PatentCommercialisation[]   @relation("PatentCommercialisation")
 }
 
 model Extraction {
   id               Int        @id @default(autoincrement())
   asset_id         String?
-  invention        Invention? @relation("InventionExtraction",fields: [asset_id], references: [asset_id],onDelete: Cascade)
+  invention        Invention? @relation("InventionExtraction", fields: [asset_id], references: [asset_id], onDelete: Cascade)
   extractorOne     String
   extractortwo     String
   iEDate           DateTime
   iawpl            String
   nfeature         String
   ifeature         String
-  idattachments    String
+  idattachments    String[] @default([])
   scountry         String
   oextractor       String
   ipRecognizer     String
@@ -74,184 +74,286 @@ model Extraction {
 }
 
 model Patentability {
-  id                Int      @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
   // Foreign key to Invention
-  asset_id          String
-  invention         Invention @relation("InventionPatentabilities",fields: [asset_id], references: [asset_id], onDelete: Cascade)
+  asset_id  String
+  invention Invention @relation("InventionPatentabilities", fields: [asset_id], references: [asset_id], onDelete: Cascade)
 
   // Extractor Details
-  psone             String
-  pstwo             String
-  rating            Int?
-  nfeature          String
-  ifeature          String
-  scountry          String
-  ooextractor       String
+  psone       String?
+  pstwo       String?
+  rating      Int?
+  nfeature    String?
+  ifeature    String?
+  scountry    String?
+  ooextractor String?
 
   // Invention Details
-  trainRun          String
+  trainRun String?
 
   // Decision Sheet
-  nodc              String
-  dibrief           String
-  attachment        String
+  nodc       String?
+  dibrief    String?
+  attachment String[] @default([])
 
   // Effort Sheet-6
-  esfsearcher       String
-  ipRecognizer      String
-  hoursSpent        Float?
-  agencyRecognizer  String
-  agencyCost        Float?
-  reviewEffort      String
-  managerEmpId      String
+  esfsearcher      String?
+  ipRecognizer     String?
+  hoursSpent       String?
+  agencyRecognizer String?
+  agencyCost       String?
+  reviewEffort     String?
+  managerEmpId     String?
 
   // Activity Status
-  activityStatus    String
+  activityStatus String?
 
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-
 model PatentSpecificInformation {
-  id             String   @id @default(cuid())         // Primary key
-  asset_id       String                                 // Foreign key
+  id             String    @id @default(cuid()) // Primary key
+  asset_id       String // Foreign key
   activityStatus String?
   rating         Int?
-  draftType    String?
+  draftType      String?
   data           Json?
+  
+  // National Phase fields
+  npPCTDate                    String?
+  npApplicationNumber          String?
+  npPCTPublication            String?
+  npSearchReport              String[] @default([])
+  npPCTOrProvisionalDate      String?
+  npApplicationCountry        String?
+  npDrafterName               String?
+  npClaimSheet                String[] @default([])
+  npFormsPrepared             String?
+  npCountryFiling             String?
+  npReviewBy                  String?
+  npCitedPatent               String?
+  npIndependentClaim          String?
+  npDependentClaim            String?
+  npBroadenedFeature          String?
+  npIsProfit                  String?
+  npIsDefensive               String?
+  npAllDrafts                 String[] @default([])
+  npDraftingEffort            String?
+  npDrafterEmpId              String?
+  npHoursSpent                String?
+  npAgencyRecognizer          String?
+  npAgencyCost                String?
+  npReviewEffort              String?
+  npManagerEmpId              String?
+  npActivityStatus            String?
+
+  // PCT fields
+  isDirectPCT                 String?
+  pctParentPermission         String[] @default([])
+  pctProvisionalDate          String?
+  pctApplicationNumber        String?
+  pctDrafterName              String?
+  pctClaimSheet               String[] @default([])
+  pctFormsPrepared            String?
+  pctCountryFiling            String?
+  pctReviewBy                 String?
+  pctCitedPatent              String?
+  pctIndependentClaim         String?
+  pctDependentClaim           String?
+  pctBroadenedFeature         String?
+  pctIsProfit                 String?
+  pctIsDefensive              String?
+  pctAllDrafts                String[] @default([])
+  pctDraftingEffort           String?
+  pctDrafterEmpId             String?
+  pctHoursSpent               String?
+  pctAgencyRecognizer         String?
+  pctAgencyCost               String?
+  pctReviewEffort             String?
+  pctManagerEmpId             String?
+  pctActivityStatus           String?
+
+  // Complete fields
+  isProvisionalFiled          String?
+  provisionalSpecDate         String?
+  applicationNumber           String?
+  isPCTFiled                  String?
+  pctFilingDate               String?
+  isPCTPublished              String?
+  citedPatent                 String?
+  independentClaim            String?
+  dependentClaim              String?
+  broadenedFeature            String?
+  isProfitPatent              String?
+  isDefensivePatent           String?
+  draftVersions               String[] @default([])
+  draftingEffort              String?
+  drafterEmpId                String?
+  hoursSpent                  String?
+  agencyRecognizer            String?
+  agencyCost                  String?
+  reviewEffort                String?
+  managerEmpId                String?
+
+  // Provisional fields
+  nodrafter                   String?
+  noreviewer                  String?
+  attachments                 String[] @default([])
+  bned                        String?
+  ifdescribed                 String?
+  toinvention                 String?
+  esfd                        String?
+  pdrafter                    String?
+  nohspent                    String?
+  eafd                        String?
+  csoagency                   String?
+  eihfr                       String?
+  mres                        String?
+
   invention      Invention @relation("PatentSpecificInfoToInvention", fields: [asset_id], references: [asset_id], onDelete: Cascade)
 }
 
-
 model PatentFiling {
-  id             String   @id @default(cuid())         // Primary key
-  asset_id       String                                 // Foreign key
+  id             String    @id @default(cuid()) // Primary key
+  asset_id       String // Foreign key
   activityStatus String?
   rating         Int?
-  draftType    String?
-  data           Json?
+  draftType      String?
+  
+  // Provisional fields
+  patentFilingName           String?
+  provisionalPatent          String[] @default([])
+  attachment                 String[] @default([])
+  dateProvision              String?
+  applicantName              String?
+  isProfilePatent            String?
+  isDefensivePatent          String?
+  claimingStartup            String[] @default([])
+  poaOffice                  String?
+  effortsSpent               String?
+  patentFiler                String?
+  hoursSpent                 String?
+  agencyRecognizer           String?
+  agencyCost                 String?
+  managerResponsible         String?
+
+  // PCT fields
+  postDated                  String?
+  applicationProvisionalNumber String?
+  datePatentApplication      String?
+  pctFilingPermission        String?
+
+  // National Phase fields
+  dateProvisionalPatent      String?
+  dateCompletePatentApplication String?
+  datePCTPatentApplication   String?
+  finalSubmitted             String?
+  filedForms                 String[] @default([])
+
+  // Complete fields
+  dateOfPatent               String?
+  provisionalNumber          String?
+  specificationFiling        String?
+  agentFiling                String?
+  filedDraft                 String[] @default([])
+  filedFormsComplete         String[] @default([])
+  dateOfComplete             String?
+  isPostDated                String?
+
   invention      Invention @relation("PatentFiling", fields: [asset_id], references: [asset_id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-
 model PostGrantOpposition {
-  id             String   @id @default(cuid())    
+  id                      String  @id @default(cuid())
   asset_id                String
   patentApplicationNumber String?
   patentPublished         String? // "yes" or "no"
   publicationNumber       String?
   apopposed               String? // "yes" or "no"
   oname                   String?
-  opposerAttachment       String?
+  opposerAttachment       String[] @default([])
 
-  boaof                   String? // Brief Opinion About Opposition Findings
-  rffo                    String? // Response Filed for Opposition
-  responseAttachment      String?
+  boaof              String? // Brief Opinion About Opposition Findings
+  rffo               String? // Response Filed for Opposition
+  responseAttachment String[] @default([])
 
-  orpby                   String? // Opposition Response Prepared By
-  eagency                 String? // External Agency
-  revby                   String? // Reviewed By
-  reviewAttachment        String?
+  orpby            String? // Opposition Response Prepared By
+  eagency          String? // External Agency
+  revby            String? // Reviewed By
+  reviewAttachment String[] @default([])
 
-  ipRecognizer            String?
-  hoursSpent              String?
-  agencyRecognizer        String?
-  agencyCost              String?
-  reviewEffort            String?
-  managerEmpId            String?
+  ipRecognizer     String?
+  hoursSpent       String?
+  agencyRecognizer String?
+  agencyCost       String?
+  reviewEffort     String?
+  managerEmpId     String?
 
-  activityStatus          String?
+  activityStatus String?
 
-  invention               Invention @relation("PostGrantOppositionToInvention",fields: [asset_id], references: [asset_id], onDelete: Cascade)
+  invention Invention @relation("PostGrantOppositionToInvention", fields: [asset_id], references: [asset_id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
-
 
 model PatentProsecution {
-  id                      String   @id @default(uuid())
-  asset_id                String
-  rating                  Int?
-  patentApplicationNumber String?
-  patentStatus            String?
-  patentNumber            String?
-  patentAttachment        String?   // file path or URL
-  patentGrantDate         String? // use DateTime for dates
-  rejectionReasonAttachment String?
-  patentPublished         String?
-  publicationNumber       String?
-  apopposed               String?
-  oname                   String?
-  attachments             String?
-  cfbopposer              String?
-  boaof                   String?
-  rffo                    String?
-  orpby                   String?
-  eagency                 String?
-  revby                   String?
+  id                        String  @id @default(uuid())
+  asset_id                  String
+  rating                    Int?
+  patentApplicationNumber   String?
+  patentStatus              String?
+  patentNumber              String?
+  patentAttachment          String[] @default([]) // file paths
+  patentGrantDate           String? // use DateTime for dates
+  rejectionReasonAttachment String[] @default([])
+  patentPublished           String?
+  publicationNumber         String?
+  apopposed                 String?
+  oname                     String?
+  attachments               String[] @default([])
+  cfbopposer                String?
+  boaof                     String?
+  rffo                      String?
+  orpby                     String?
+  eagency                   String?
+  revby                     String?
 
   // Arrays/lists can be modeled as relations or JSON
-  ferList                 Json?
-  hearingList             Json?
+  ferList     Json?
+  hearingList Json?
 
-  ipRecognizer            String?
-  hoursSpent              String?
-  agencyRecognizer        String?
-  agencyCost              String?
-  activityStatus          String?
-  invention               Invention @relation("PatentProsecution",fields: [asset_id], references: [asset_id], onDelete: Cascade)
+  ipRecognizer     String?
+  hoursSpent       String?
+  agencyRecognizer String?
+  agencyCost       String?
+  activityStatus   String?
+  invention        Invention @relation("PatentProsecution", fields: [asset_id], references: [asset_id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
-
-
-
 
 model PatentManagement {
-  id                    String   @id @default(uuid())
-  asset_id              String
-  patentApplicationNumber String
-  priorityDate          String?
-  grantDate             String?
-  yearsPaid             String?
-  nextDueDate           String?
-  maintenanceStopped    String?
-  decisionPageAttachment String?
-  collaboration         String?
-  filingDate            String?
-  filingAttachment      String?
-  maintenanceFee        String?
-  externalAgency        String?
-  effortsSpent          String?
-  employeeId            String?
-  hoursSpent            String?
-  agencyManager         String?
-  agencyCost            String?
-  reviewEfforts         String?
-  managerResponsible    String?
-  activityStatus        String?
-
-  invention             Invention @relation("PatentManagement",fields: [asset_id], references: [asset_id], onDelete: Cascade)
-}
-
-
-
-
-model PatentCommercialisation {
-  id                      String   @id @default(uuid())
+  id                      String  @id @default(uuid())
   asset_id                String
-
-  inventionTitle          String?
-  inventorName            String?
-  inventorDepartment      String?
-  inventionSummary        String?
-
-  patentApplicationNumber String?
-  patentNumber            String?
-
-  commercializationType   String?
-  commercializationStatus String?
-  commercializationDate   String?
-  commercializationRevenue String?
-
+  patentApplicationNumber String
+  priorityDate            String?
+  grantDate               String?
+  yearsPaid               String?
+  nextDueDate             String?
+  maintenanceStopped      String?
+  decisionPageAttachment  String[] @default([])
+  collaboration           String?
+  filingDate              String?
+  filingAttachment        String[] @default([])
+  maintenanceFee          String?
+  externalAgency          String?
   effortsSpent            String?
   employeeId              String?
   hoursSpent              String?
@@ -259,11 +361,48 @@ model PatentCommercialisation {
   agencyCost              String?
   reviewEfforts           String?
   managerResponsible      String?
-
   activityStatus          String?
 
-  invention               Invention @relation("PatentCommercialisation",fields: [asset_id], references: [asset_id], onDelete: Cascade)
+  invention Invention @relation("PatentManagement", fields: [asset_id], references: [asset_id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
+model PatentCommercialisation {
+  id       String @id @default(uuid())
+  asset_id String
 
+  inventionTitle     String?
+  inventorName       String?
+  inventorDepartment String?
+  inventionSummary   String?
 
+  patentApplicationNumber String?
+  patentNumber            String?
+
+  commercializationType    String?
+  commercializationStatus  String?
+  commercializationDate    String?
+  commercializationRevenue String?
+
+  effortsSpent       String?
+  employeeId         String?
+  hoursSpent         String?
+  agencyManager      String?
+  agencyCost         String?
+  reviewEfforts      String?
+  managerResponsible String?
+
+  activityStatus String?
+
+  // File attachments
+  salesFile        String[] @default([])
+  invoiceFile      String[] @default([])
+  implementationFile String[] @default([])
+
+  invention Invention @relation("PatentCommercialisation", fields: [asset_id], references: [asset_id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

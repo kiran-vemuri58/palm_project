@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Input } from "@/components/ui/input";
+import FileInput from "@/components/ui/file-input";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -17,9 +18,9 @@ const emptyFER = {
   ferReceived: "",
   ferDate: "",
   ferArgument: "",
-  examinerCitations: null,
+  examinerCitations: [],
   relevancyDetails: "",
-  decisionPage: null,
+  decisionPage: [],
   ferPrepared: "",
   ferPreparer: "",
   ferFilingDate: "",
@@ -44,9 +45,9 @@ const FER = ({ formKey, updateFunction }) => {
   };
 
   const handleFileUpload = (index, e) => {
-    const { name, files } = e.target;
+    const { name, value } = e.target; // value is array of File
     const updatedList = [...ferList];
-    updatedList[index][name] = files[0] || null;
+    updatedList[index][name] = value;
     updateFormData({ ...formData, ferList: updatedList });
   };
 
@@ -122,10 +123,14 @@ const FER = ({ formKey, updateFunction }) => {
           <div className="grid grid-cols-3 gap-4 mb-4">
             <div>
               <Label>References cited by examiner</Label>
-              <Input
-                type="file"
+              <FileInput
                 name="examinerCitations"
+                multiple={true}
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                value={fer.examinerCitations || []}
                 onChange={(e) => handleFileUpload(index, e)}
+                maxFiles={10}
+                maxFileSize={20 * 1024 * 1024}
               />
             </div>
             <div>
@@ -139,10 +144,14 @@ const FER = ({ formKey, updateFunction }) => {
             </div>
             <div>
               <Label>Decision page</Label>
-              <Input
-                type="file"
+              <FileInput
                 name="decisionPage"
+                multiple={true}
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                value={fer.decisionPage || []}
                 onChange={(e) => handleFileUpload(index, e)}
+                maxFiles={10}
+                maxFileSize={20 * 1024 * 1024}
               />
             </div>
           </div>

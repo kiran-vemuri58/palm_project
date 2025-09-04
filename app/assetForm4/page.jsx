@@ -43,10 +43,13 @@ const PatentSpecificationPreparation = () => {
     });
 
     const resultDB = await saveRes.json();
-    console.log('Patentability saved:', resultDB);
+    console.log('PSP saved:', resultDB);
 
     if (resultDB.success) {
       router.push('/assetForm5'); // Navigate to next page on success
+    } else {
+      console.error('❌ Failed to save PSP:', resultDB.message);
+      alert(`Failed to save PSP: ${resultDB.message}`);
     }
 
 
@@ -74,7 +77,7 @@ const PatentSpecificationPreparation = () => {
       >
 
         <MiniHeader title="Invention Details" />
-        <InventionDetails  />
+        <InventionDetails disableCommon={true} />
         <MiniHeader title="Average Patentability Rating "
         storeKey="formData4"
         updateFunctionKey="updateFormData4" />

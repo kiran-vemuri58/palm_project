@@ -3,6 +3,7 @@
 import React from 'react';
 import useFormStore from '@/store/store';
 import { Input } from '@/components/ui/input';
+import FileInput from '@/components/ui/file-input';
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -24,8 +25,8 @@ const PatentCommercializationChild = ({formKey,updateFunction}) => {
   };
 
   const handleFileUpload = (e) => {
-    const { name, files } = e.target;
-    updateFormData({ ...formData, [name]: files[0] || null });
+    const { name, value } = e.target; // array of File
+    updateFormData({ ...formData, [name]: value });
   };
 
   const handleSelectChange = (name, value) => {
@@ -69,10 +70,14 @@ const PatentCommercializationChild = ({formKey,updateFunction}) => {
         {/* File Upload for Stage Details */}
         <div>
           <Label>Brief details of stage of Implementation</Label>
-          <Input
-            type="file"
+          <FileInput
             name="implementationFile"
+            multiple={true}
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx"
+            value={formData.implementationFile || []}
             onChange={handleFileUpload}
+            maxFiles={20}
+            maxFileSize={20 * 1024 * 1024}
           />
         </div>
 

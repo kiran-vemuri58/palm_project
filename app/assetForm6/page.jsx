@@ -45,10 +45,13 @@ const PatentProsecution = () => {
     });
 
     const resultDB = await saveRes.json();
-    console.log('ps saved:', resultDB);
+    console.log('Patent Prosecution saved:', resultDB);
 
     if (resultDB.success) {
       router.push('/assetForm7'); // Navigate to next page on success
+    } else {
+      console.error('❌ Failed to save Patent Prosecution:', resultDB.message);
+      alert(`Failed to save Patent Prosecution: ${resultDB.message}`);
     }
 
   }
@@ -64,7 +67,7 @@ const PatentProsecution = () => {
         onSave={handleSave}
       >
         <MiniHeader title="Invention Details" />
-        <InventionDetails />
+        <InventionDetails disableCommon={true} />
         <MiniHeader title="Rating and PAN Number" />
         <AveragePatentabilityRating formKey="formData6" storeKey="formData6" updateFunctionKey="updateFormData6" />
         <MiniHeader title="Patent Prosecution" />

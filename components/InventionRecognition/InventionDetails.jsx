@@ -11,7 +11,8 @@ const InventionDetails = ({
   showRating = false,
   patentNumber = false,  // ✅ New flag
   formKey,
-  updateFunction
+  updateFunction,
+  disableCommon = false,
 }) => {
   const { formData, updateFormData, errors } = useFormStore();
   const [rating, setRating] = useState(formData.rating || 0);
@@ -76,6 +77,7 @@ const InventionDetails = ({
                 onChange={handleChange}
                 className="border-gray-300 focus:border-blue-500 px-4 py-2 rounded-md"
                 placeholder={field.label}
+                disabled={disableCommon && ["inventiontitle", "commonName", "inventordetails"].includes(field.id)}
               />
             )}
 

@@ -2,19 +2,21 @@
 
 import useFormStore from '@/store/store';
 import { Input } from '@/components/ui/input';
+import FileInput from '@/components/ui/file-input';
 import { Label } from '@/components/ui/label';
 import React from 'react';
 
-const DecisionSheet = () => {
-  const { formData, updateFormData } = useFormStore();
+const DecisionSheet = ({formKey, updateFunction}) => {
+  const formData = useFormStore((state) => state[formKey]);
+  const updateFormDataByKey = useFormStore((state) => state[updateFunction]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    updateFormData({ ...formData, [name]: value });
+    updateFormDataByKey({ [name]: value });
   };
   const handleFileUpload = (e) => {
-    const { name, files } = e.target;
-    updateFormData({ [name]: files[0] || null }); // Store only the first file or null
+    const { name, value } = e.target; // value is array of File
+    updateFormDataByKey({ [name]: value });
   };
 
   return (
@@ -29,7 +31,7 @@ const DecisionSheet = () => {
             placeholder="Enter Name of Decision Maker"
             id="ipRecognizer"
             name="nodc"
-            value={formData.nodc}
+            value={formData.nodc || ''}
             onChange={handleChange}
           />
         </div>
@@ -41,20 +43,23 @@ const DecisionSheet = () => {
             id="hoursSpent"
             name="dibrief"
             type="number"
-            value={formData.dibrief}
+            value={formData.dibrief || ''}
             onChange={handleChange}
           />
         </div>
         <div>
-              <Label className="mb-1">Attachment</Label>
-              <Input
-                type="file"
-                id="attachments"
-                name="attachments"
-                className="grid w-full max-w-sm items-center gap-1.5"
-                onChange={handleFileUpload}
-              />
-            </div>
+          <Label className="mb-1">Attachment</Label>
+          <FileInput
+            id="attachments"
+            name="attachments"
+            multiple={true}
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.txt"
+            value={formData.attachments || []}
+            onChange={handleFileUpload}
+            maxFiles={10}
+            maxFileSize={20 * 1024 * 1024}
+          />
+        </div>
       </div>
 
       

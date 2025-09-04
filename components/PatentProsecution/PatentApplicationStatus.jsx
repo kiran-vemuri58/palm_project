@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import useFormStore from '@/store/store';
 import { Input } from '@/components/ui/input';
+import FileInput from '@/components/ui/file-input';
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -29,8 +30,8 @@ const PatentStatusSection = ({formKey,updateFunction}) => {
   };
 
   const handleFileUpload = (e) => {
-    const { name, files } = e.target;
-    updateFormData({ ...formData, [name]: files[0] || null });
+    const { name, value } = e.target; // array of File
+    updateFormData({ ...formData, [name]: value });
   };
 
   return (
@@ -67,10 +68,14 @@ const PatentStatusSection = ({formKey,updateFunction}) => {
 
         <div>
           <Label className="mb-1">Patent Attachment</Label>
-          <Input
-            type="file"
+          <FileInput
             name="patentAttachment"
+            multiple={true}
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+            value={formData.patentAttachment || []}
             onChange={handleFileUpload}
+            maxFiles={10}
+            maxFileSize={20 * 1024 * 1024}
           />
         </div>
       </div>
@@ -90,10 +95,14 @@ const PatentStatusSection = ({formKey,updateFunction}) => {
 
           <div className="col-span-2">
             <Label className="mb-1">Why Patent is Rejected</Label>
-            <Input
-              type="file"
+            <FileInput
               name="rejectionReasonAttachment"
+              multiple={true}
+              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+              value={formData.rejectionReasonAttachment || []}
               onChange={handleFileUpload}
+              maxFiles={10}
+              maxFileSize={20 * 1024 * 1024}
             />
           </div>
         </div>

@@ -3,6 +3,7 @@
 import React from 'react';
 import useFormStore from '@/store/store';
 import { Input } from '@/components/ui/input';
+import FileInput from '@/components/ui/file-input';
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -20,6 +21,11 @@ const PCT = ({ formKey, updateFunction }) => {
     const { name, value, files, type } = e.target;
     const newValue = type === 'file' ? files[0] : value;
     updateFormDataByKey({ ...formData, [name]: newValue });
+  };
+
+  const handleFileArrayChange = (e) => {
+    const { name, value } = e.target; // value is array of File
+    updateFormDataByKey({ ...formData, [name]: value });
   };
 
   const handleSelectChange = (name, value) => {
@@ -51,7 +57,15 @@ const PCT = ({ formKey, updateFunction }) => {
         {isDirectPCTYes ? (
           <div>
             <Label>Permission from Parent Patent Office</Label>
-            <Input type="file" name="pctParentPermission" onChange={handleChange} />
+            <FileInput
+              name="pctParentPermission"
+              multiple={true}
+              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+              value={formData.pctParentPermission || []}
+              onChange={handleFileArrayChange}
+              maxFiles={10}
+              maxFileSize={20 * 1024 * 1024}
+            />
           </div>
         ) : (
           <>
@@ -91,7 +105,15 @@ const PCT = ({ formKey, updateFunction }) => {
           </div>
           <div>
             <Label>Claim Drafting Strategy Sheet</Label>
-            <Input type="file" name="pctClaimSheet" onChange={handleChange} />
+            <FileInput
+              name="pctClaimSheet"
+              multiple={true}
+              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+              value={formData.pctClaimSheet || []}
+              onChange={handleFileArrayChange}
+              maxFiles={10}
+              maxFileSize={20 * 1024 * 1024}
+            />
           </div>
           <div>
             <Label>Forms Prepared</Label>
@@ -209,7 +231,15 @@ const PCT = ({ formKey, updateFunction }) => {
         </div>
         <div>
           <Label>Versions Of All Drafts</Label>
-          <Input type="file" name="pctAllDrafts" onChange={handleChange} />
+          <FileInput
+            name="pctAllDrafts"
+            multiple={true}
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx"
+            value={formData.pctAllDrafts || []}
+            onChange={handleFileArrayChange}
+            maxFiles={20}
+            maxFileSize={20 * 1024 * 1024}
+          />
         </div>
       </div>
 

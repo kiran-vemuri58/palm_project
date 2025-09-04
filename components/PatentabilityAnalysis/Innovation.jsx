@@ -5,17 +5,18 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 
-const Innovation = () => {
-  const { formData, updateFormData } = useFormStore();
+const Innovation = ({formKey, updateFunction}) => {
+  const formData = useFormStore((state) => state[formKey]);
+  const updateFormDataByKey = useFormStore((state) => state[updateFunction]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    updateFormData({ [name]: value });
+    updateFormDataByKey({ [name]: value });
   };
 
   const handleFileUpload = (e) => {
     const { name, files } = e.target;
-    updateFormData({ [name]: files[0] || null }); // Store only the first file or null
+    updateFormDataByKey({ [name]: files[0] || null }); // Store only the first file or null
   };
 
   return (
@@ -27,7 +28,7 @@ const Innovation = () => {
           <Select
             className="w-full"
             value={formData.trainRun ?? ''} // ✅ Fix uncontrolled issue
-            onValueChange={(value) => updateFormData({ trainRun: value })}
+            onValueChange={(value) => updateFormDataByKey({ trainRun: value })}
           >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select an option" />
