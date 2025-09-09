@@ -3,6 +3,47 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+export async function GET(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const assetId = searchParams.get('assetId');
+    
+    await prisma.$connect();
+    console.log('✅ Database connection successful');
+
+    if (assetId) {
+      const data = await prisma.PatentManagement.findFirst({
+        where: { asset_id: assetId },
+      });
+
+      if (!data) {
+        return NextResponse.json({ 
+          success: false, 
+          message: 'Patent Management not found' 
+        }, { status: 404 });
+      }
+
+      return NextResponse.json({ 
+        success: true, 
+        data 
+      });
+    }
+
+    return NextResponse.json({ 
+      success: false, 
+      message: 'Asset ID is required' 
+    }, { status: 400 });
+  } catch (error) {
+    console.error('❌ GET request error:', error);
+    return NextResponse.json({ 
+      success: false, 
+      message: error.message 
+    }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
 export async function POST(req) {
   try {
     console.log('🔄 POST /api/pgo called',req.json);
@@ -49,12 +90,52 @@ export async function POST(req) {
 
     console.log('📊 Data being sent to Prisma:', JSON.stringify(data, null, 2));
     
-    const result = await prisma.PatentManagement.create({
-      data,
+    // Check if record exists, then create or update
+    const existingRecord = await prisma.PatentManagement.findFirst({
+      where: { asset_id: payload.asset_id }
     });
 
-    console.log('✅ PatentManagement created successfully:', result);
-    return NextResponse.json({ success: true, data: result }, { status: 200 });
+    let result;
+    if (existingRecord) {
+      // Update existing record
+      result = await prisma.PatentManagement.update({
+        where: { id: existingRecord.id },
+        data: {
+          patentApplicationNumber: data.patentApplicationNumber,
+          priorityDate: data.priorityDate,
+          grantDate: data.grantDate,
+          yearsPaid: data.yearsPaid,
+          nextDueDate: data.nextDueDate,
+          maintenanceStopped: data.maintenanceStopped,
+          decisionPageAttachment: data.decisionPageAttachment,
+          collaboration: data.collaboration,
+          filingDate: data.filingDate,
+          filingAttachment: data.filingAttachment,
+          maintenanceFee: data.maintenanceFee,
+          externalAgency: data.externalAgency,
+          effortsSpent: data.effortsSpent,
+          employeeId: data.employeeId,
+          hoursSpent: data.hoursSpent,
+          agencyManager: data.agencyManager,
+          agencyCost: data.agencyCost,
+          reviewEfforts: data.reviewEfforts,
+          managerResponsible: data.managerResponsible,
+          activityStatus: data.activityStatus,
+        },
+      });
+    } else {
+      // Create new record
+      result = await prisma.PatentManagement.create({
+        data,
+      });
+    }
+
+    console.log('✅ PatentManagement upserted successfully:', result);
+    return NextResponse.json({ 
+      success: true, 
+      data: result,
+      message: result.createdAt === result.updatedAt ? 'Patent Management created successfully' : 'Patent Management updated successfully'
+    }, { status: 200 });
   } catch (err) {
     console.error('❌ Error inserting PatentManagement:', err);
     console.error('❌ Error stack:', err.stack);

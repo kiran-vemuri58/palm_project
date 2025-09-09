@@ -3,6 +3,47 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+export async function GET(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const assetId = searchParams.get('assetId');
+    
+    await prisma.$connect();
+    console.log('✅ Database connection successful');
+
+    if (assetId) {
+      const data = await prisma.PatentProsecution.findFirst({
+        where: { asset_id: assetId },
+      });
+
+      if (!data) {
+        return NextResponse.json({ 
+          success: false, 
+          message: 'Patent Prosecution not found' 
+        }, { status: 404 });
+      }
+
+      return NextResponse.json({ 
+        success: true, 
+        data 
+      });
+    }
+
+    return NextResponse.json({ 
+      success: false, 
+      message: 'Asset ID is required' 
+    }, { status: 400 });
+  } catch (error) {
+    console.error('❌ GET request error:', error);
+    return NextResponse.json({ 
+      success: false, 
+      message: error.message 
+    }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
 export async function POST(req) {
   try {
     console.log('🔄 POST /api/ps called');
@@ -55,12 +96,57 @@ export async function POST(req) {
 
     console.log('📊 Data being sent to Prisma:', JSON.stringify(data, null, 2));
     
-    const result = await prisma.PatentProsecution.create({
-      data,
+    // Check if record exists, then create or update
+    const existingRecord = await prisma.PatentProsecution.findFirst({
+      where: { asset_id: payload.asset_id }
     });
 
-    console.log('✅ PatentProsecution created successfully:', result);
-    return NextResponse.json({ success: true, data: result }, { status: 200 });
+    let result;
+    if (existingRecord) {
+      // Update existing record
+      result = await prisma.PatentProsecution.update({
+        where: { id: existingRecord.id },
+        data: {
+          rating: data.rating,
+          patentApplicationNumber: data.patentApplicationNumber,
+          patentStatus: data.patentStatus,
+          patentNumber: data.patentNumber,
+          patentAttachment: data.patentAttachment,
+          patentGrantDate: data.patentGrantDate,
+          rejectionReasonAttachment: data.rejectionReasonAttachment,
+          patentPublished: data.patentPublished,
+          publicationNumber: data.publicationNumber,
+          apopposed: data.apopposed,
+          oname: data.oname,
+          attachments: data.attachments,
+          cfbopposer: data.cfbopposer,
+          boaof: data.boaof,
+          rffo: data.rffo,
+          orpby: data.orpby,
+          eagency: data.eagency,
+          revby: data.revby,
+          ferList: data.ferList,
+          hearingList: data.hearingList,
+          ipRecognizer: data.ipRecognizer,
+          hoursSpent: data.hoursSpent,
+          agencyRecognizer: data.agencyRecognizer,
+          agencyCost: data.agencyCost,
+          activityStatus: data.activityStatus,
+        },
+      });
+    } else {
+      // Create new record
+      result = await prisma.PatentProsecution.create({
+        data,
+      });
+    }
+
+    console.log('✅ PatentProsecution upserted successfully:', result);
+    return NextResponse.json({ 
+      success: true, 
+      data: result,
+      message: result.createdAt === result.updatedAt ? 'Patent Prosecution created successfully' : 'Patent Prosecution updated successfully'
+    }, { status: 200 });
   } catch (err) {
     console.error('❌ Error inserting PatentProsecution:', err);
     console.error('❌ Error stack:', err.stack);

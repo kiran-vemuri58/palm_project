@@ -5,7 +5,7 @@ import InventionDetails from "@/components/InventionRecognition/InventionDetails
 import AddOrDeleteInventor from "@/components/InventionRecognition/AddOrDeleteInventor";
 import { validateInventionForm } from "@/lib/validateInventRecognitionForm";
 import useFormStore from "@/store/store";
-import React, { use } from "react";
+import React, { use, useEffect } from "react";
 import EntityDetails from "@/components/InventionRecognition/EntityDetails";
 import TechnologyDetails from "@/components/InventionRecognition/TechnologyDetails";
 import TrainRunExperimentation from "@/components/InventionRecognition/TrainRunExperimentation";
@@ -18,10 +18,65 @@ import { uploadDocuments } from "@/utils/FileUploadUI";
 import { fetchAssetIdFromDB } from "@/utils/assetUtils"; // Utility to fetch or generate asset ID
 
 const InventionRecognitionForm = () => {
-  const { formData, setErrors, uploadedPaths } = useFormStore();
+  const { formData, setErrors, uploadedPaths, assetId } = useFormStore();
   const updateFormData = useFormStore((state) => state.updateFormData);
   const setAssetId = useFormStore((state) => state.setAssetId);
   const router = useRouter();
+
+  // Load existing data if assetId exists
+  const loadExistingData = async () => {
+    if (assetId) {
+      try {
+        const response = await fetch(`/api/invention?assetId=${assetId}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.data) {
+            // Map the data back to form format
+            const formData = {
+              inventiontitle: data.data.inventiontitle || '',
+              commonName: data.data.commonname || '',
+              inventordetails: data.data.inventordetails || '',
+              incrementalRenovation: data.data.incrementalrenovation || '',
+              patentNumbers: data.data.patentnumbers || '',
+              journalNumbers: data.data.journalnumbers || '',
+              productIdentity: data.data.productidentity || '',
+              problemAddressed: data.data.problemaddressed || '',
+              trainRun: data.data.trainrun || '',
+              experimentResults: data.data.experimentresults || '',
+              evidence: data.data.evidence || [],
+              minuteOfMeeting: data.data.minuteofmeeting || [],
+              attachments: data.data.attachments || [],
+              ipRecognizer: data.data.iprecognizer || '',
+              hoursSpent: data.data.hoursspent || '',
+              agencyRecognizer: data.data.agencyrecognizer || '',
+              agencyCost: data.data.agencycost || '',
+              reviewEffort: data.data.revieweffort || '',
+              managerEmpId: data.data.managerempid || '',
+              entity: data.data.entity || '',
+              date: data.data.date || '',
+              inventionCountry: data.data.inventioncountry || '',
+              creationCountry: data.data.creationcountry || '',
+              collaboration: data.data.collaboration || '',
+              collaboratorName: data.data.collaboratorname || '',
+              collaboratorCountry: data.data.collaboratorcountry || '',
+              stakeholders: data.data.stakeholders || '',
+              inventors: data.data.inventors || [],
+            };
+            updateFormData(formData);
+            console.log('✅ Existing data loaded:', formData);
+          }
+        }
+      } catch (error) {
+        console.error('❌ Error loading existing data:', error);
+      }
+    }
+  };
+
+  // Load data on component mount
+  useEffect(() => {
+    loadExistingData();
+  }, [assetId]);
+
   const handleSave = async () => {
     const errors = validateInventionForm(formData);
     if (Object.keys(errors).length > 0) {
@@ -33,11 +88,11 @@ const InventionRecognitionForm = () => {
       console.log('🚀 Starting form submission...');
       console.log('📁 Current form data:', formData);
       
-      // First, get the next asset ID that will be used
-      const assetId = await fetchAssetIdFromDB();
+      // Use existing assetId if available, otherwise get a new one
+      const currentAssetId = assetId || await fetchAssetIdFromDB();
       const componentName = 'InventionRecognitionForm';
 
-      console.log('🆔 Asset ID:', assetId);
+      console.log('🆔 Asset ID:', currentAssetId);
       console.log('🏷️ Component Name:', componentName);
 
       // Extract only the file fields from formData
@@ -54,7 +109,7 @@ const InventionRecognitionForm = () => {
       if (files.evidence.length > 0 || files.minuteOfMeeting.length > 0 || files.attachments.length > 0) {
         console.log('📤 Starting file upload...');
         // Upload and get file paths
-        uploadedPaths = await uploadDocuments({ files, assetId, componentName, updateFormData });
+        uploadedPaths = await uploadDocuments({ files, assetId: currentAssetId, componentName, updateFormData });
         console.log('✅ File upload completed:', uploadedPaths);
       } else {
         console.log('ℹ️ No files to upload');
@@ -63,7 +118,7 @@ const InventionRecognitionForm = () => {
       // Merge uploaded file paths into payload, but preserve the existing uploadedFilePaths structure
       const payload = {
         ...formData,
-        asset_id: assetId, // Pass the asset ID to the API
+        asset_id: currentAssetId, // Pass the asset ID to the API
         uploadedFilePaths: {
           ...formData.uploadedFilePaths,
           evidence: uploadedPaths.evidencePaths || formData.uploadedFilePaths.evidence || [],
@@ -101,6 +156,7 @@ const InventionRecognitionForm = () => {
       }
   
       setAssetId(resultDB.data.asset_id); // Set the asset ID in the store
+      console.log('🎉 Operation completed:', resultDB.message);
       router.push('/assetForm2'); // Redirect to next page on success
      
       console.log('🎉 Invention saved successfully:', resultDB);

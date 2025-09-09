@@ -3,6 +3,47 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+export async function GET(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const assetId = searchParams.get('assetId');
+    
+    await prisma.$connect();
+    console.log('✅ Database connection successful');
+
+    if (assetId) {
+      const data = await prisma.PatentFiling.findFirst({
+        where: { asset_id: assetId },
+      });
+
+      if (!data) {
+        return NextResponse.json({ 
+          success: false, 
+          message: 'Patent Filing not found' 
+        }, { status: 404 });
+      }
+
+      return NextResponse.json({ 
+        success: true, 
+        data 
+      });
+    }
+
+    return NextResponse.json({ 
+      success: false, 
+      message: 'Asset ID is required' 
+    }, { status: 400 });
+  } catch (error) {
+    console.error('❌ GET request error:', error);
+    return NextResponse.json({ 
+      success: false, 
+      message: error.message 
+    }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
 export async function POST(req) {
   try {
     console.log('🔄 POST /api/patentFiling called');
@@ -59,12 +100,67 @@ export async function POST(req) {
 
     console.log('📊 Data being sent to Prisma:', JSON.stringify(data, null, 2));
     
-    const result = await prisma.PatentFiling.create({
-      data,
+    // Check if record exists, then create or update
+    const existingRecord = await prisma.PatentFiling.findFirst({
+      where: { asset_id: payload.asset_id }
     });
 
-    console.log('✅ PatentFiling created successfully:', result);
-    return NextResponse.json({ success: true, data: result }, { status: 200 });
+    let result;
+    if (existingRecord) {
+      // Update existing record
+      result = await prisma.PatentFiling.update({
+        where: { id: existingRecord.id },
+        data: {
+          activityStatus: data.activityStatus,
+          rating: data.rating,
+          draftType: data.draftType,
+          patentFilingName: data.patentFilingName,
+          provisionalPatent: data.provisionalPatent,
+          attachment: data.attachment,
+          dateProvision: data.dateProvision,
+          applicantName: data.applicantName,
+          isProfilePatent: data.isProfilePatent,
+          isDefensivePatent: data.isDefensivePatent,
+          claimingStartup: data.claimingStartup,
+          poaOffice: data.poaOffice,
+          effortsSpent: data.effortsSpent,
+          patentFiler: data.patentFiler,
+          hoursSpent: data.hoursSpent,
+          agencyRecognizer: data.agencyRecognizer,
+          agencyCost: data.agencyCost,
+          managerResponsible: data.managerResponsible,
+          postDated: data.postDated,
+          applicationProvisionalNumber: data.applicationProvisionalNumber,
+          datePatentApplication: data.datePatentApplication,
+          pctFilingPermission: data.pctFilingPermission,
+          dateProvisionalPatent: data.dateProvisionalPatent,
+          dateCompletePatentApplication: data.dateCompletePatentApplication,
+          datePCTPatentApplication: data.datePCTPatentApplication,
+          finalSubmitted: data.finalSubmitted,
+          filedForms: data.filedForms,
+          dateOfPatent: data.dateOfPatent,
+          provisionalNumber: data.provisionalNumber,
+          specificationFiling: data.specificationFiling,
+          agentFiling: data.agentFiling,
+          filedDraft: data.filedDraft,
+          filedFormsComplete: data.filedFormsComplete,
+          dateOfComplete: data.dateOfComplete,
+          isPostDated: data.isPostDated,
+        },
+      });
+    } else {
+      // Create new record
+      result = await prisma.PatentFiling.create({
+        data,
+      });
+    }
+
+    console.log('✅ PatentFiling upserted successfully:', result);
+    return NextResponse.json({ 
+      success: true, 
+      data: result,
+      message: result.createdAt === result.updatedAt ? 'Patent Filing created successfully' : 'Patent Filing updated successfully'
+    }, { status: 200 });
   } catch (err) {
     console.error('❌ Error inserting PatentFiling:', err);
     console.error('❌ Error stack:', err.stack);

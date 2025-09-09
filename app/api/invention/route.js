@@ -8,13 +8,35 @@ const prisma = new PrismaClient();
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '10');
-    const skip = (page - 1) * limit;
-
+    const assetId = searchParams.get('assetId');
+    
     // Test database connection
     await prisma.$connect();
     console.log('✅ Database connection successful');
+
+    // If assetId is provided, fetch specific record
+    if (assetId) {
+      const data = await prisma.Invention.findUnique({
+        where: { asset_id: assetId },
+      });
+
+      if (!data) {
+        return NextResponse.json({ 
+          success: false, 
+          message: 'Invention not found' 
+        }, { status: 404 });
+      }
+
+      return NextResponse.json({ 
+        success: true, 
+        data 
+      });
+    }
+
+    // Otherwise, fetch paginated list
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '10');
+    const skip = (page - 1) * limit;
 
     const data = await prisma.Invention.findMany({
       skip,
@@ -29,6 +51,7 @@ export async function GET(req) {
 
     const total = await prisma.Invention.count();
     return NextResponse.json({
+      success: true,
       data,
       currentPage: page,
       totalPages: Math.ceil(total / limit),
@@ -115,13 +138,49 @@ export async function POST(req) {
     await prisma.$connect();
     console.log('✅ Database connection successful before insert');
 
-    const result = await prisma.Invention.create({
-      data,
+    // Use upsert to handle both create and update
+    const result = await prisma.Invention.upsert({
+      where: { asset_id: newAssetId },
+      update: {
+        inventiontitle: data.inventiontitle,
+        commonname: data.commonname,
+        inventors: data.inventors,
+        inventordetails: data.inventordetails,
+        incrementalrenovation: data.incrementalrenovation,
+        patentnumbers: data.patentnumbers,
+        journalnumbers: data.journalnumbers,
+        productidentity: data.productidentity,
+        problemaddressed: data.problemaddressed,
+        trainrun: data.trainrun,
+        experimentresults: data.experimentresults,
+        evidence: data.evidence,
+        minuteofmeeting: data.minuteofmeeting,
+        attachments: data.attachments,
+        iprecognizer: data.iprecognizer,
+        hoursspent: data.hoursspent,
+        agencyrecognizer: data.agencyrecognizer,
+        agencycost: data.agencycost,
+        revieweffort: data.revieweffort,
+        managerempid: data.managerempid,
+        entity: data.entity,
+        date: data.date,
+        inventioncountry: data.inventioncountry,
+        creationcountry: data.creationcountry,
+        collaboration: data.collaboration,
+        collaboratorname: data.collaboratorname,
+        collaboratorcountry: data.collaboratorcountry,
+        stakeholders: data.stakeholders,
+      },
+      create: data,
     });
 
-    console.log('✅ Invention created successfully:', result);
+    console.log('✅ Invention upserted successfully:', result);
 
-    return NextResponse.json({ success: true, data: result }, { status: 200 });
+    return NextResponse.json({ 
+      success: true, 
+      data: result,
+      message: result.created_at === result.updated_at ? 'Invention created successfully' : 'Invention updated successfully'
+    }, { status: 200 });
   } catch (err) {
     console.error('❌ Error inserting invention:', err);
     console.error('❌ Error details:', {

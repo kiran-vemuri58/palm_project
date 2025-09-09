@@ -4,6 +4,7 @@ import useFormStore from '@/store/store';
 import { Input } from '@/components/ui/input';
 import FileInput from '@/components/ui/file-input';
 import { Label } from '@/components/ui/label';
+import { createPredefinedHandler } from '@/utils/conditionalFieldUtils';
 import {
   Select,
   SelectTrigger,
@@ -23,6 +24,10 @@ const PatentProsectionDetails = ({ formKey, updateFunction }) => {
     updateFormData({ ...formData, [name]: value });
   };
 
+  // Use utility functions for conditional field handling
+  const handlePatentPublishedChange = createPredefinedHandler(formData, updateFormData, 'patentPublished');
+  const handleApopposedChange = createPredefinedHandler(formData, updateFormData, 'apopposed');
+
   const handleFileUpload = (e) => {
     const { name, value } = e.target; // array of File
     updateFormData({ ...formData, [name]: value });
@@ -36,9 +41,7 @@ const PatentProsectionDetails = ({ formKey, updateFunction }) => {
           <Label className="mb-1">Patent Published?</Label>
           <Select
             value={formData.patentPublished}
-            onValueChange={(value) =>
-              updateFormData({ ...formData, patentPublished: value })
-            }
+            onValueChange={handlePatentPublishedChange}
           >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select an option" />
@@ -74,9 +77,7 @@ const PatentProsectionDetails = ({ formKey, updateFunction }) => {
           <Select
             className="w-full"
             value={formData.apopposed}
-            onValueChange={(value) =>
-              updateFormData({ ...formData, apopposed: value })
-            }
+            onValueChange={handleApopposedChange}
           >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select an option" />

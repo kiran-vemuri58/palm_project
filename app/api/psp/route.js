@@ -3,6 +3,47 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+export async function GET(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const assetId = searchParams.get('assetId');
+    
+    await prisma.$connect();
+    console.log('✅ Database connection successful');
+
+    if (assetId) {
+      const data = await prisma.PatentSpecificInformation.findFirst({
+        where: { asset_id: assetId },
+      });
+
+      if (!data) {
+        return NextResponse.json({ 
+          success: false, 
+          message: 'Patent Specific Information not found' 
+        }, { status: 404 });
+      }
+
+      return NextResponse.json({ 
+        success: true, 
+        data 
+      });
+    }
+
+    return NextResponse.json({ 
+      success: false, 
+      message: 'Asset ID is required' 
+    }, { status: 400 });
+  } catch (error) {
+    console.error('❌ GET request error:', error);
+    return NextResponse.json({ 
+      success: false, 
+      message: error.message 
+    }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
 export async function POST(req) {
   try {
     console.log('🔄 POST /api/psp called');
@@ -110,12 +151,118 @@ export async function POST(req) {
 
     console.log('📊 Data being sent to Prisma:', JSON.stringify(data, null, 2));
     
-    const result = await prisma.PatentSpecificInformation.create({
-      data,
+    // Check if record exists, then create or update
+    const existingRecord = await prisma.PatentSpecificInformation.findFirst({
+      where: { asset_id: payload.asset_id }
     });
 
-    console.log('✅ PatentSpecificInformation created successfully:', result);
-    return NextResponse.json({ success: true, data: result }, { status: 200 });
+    let result;
+    if (existingRecord) {
+      // Update existing record
+      result = await prisma.PatentSpecificInformation.update({
+        where: { id: existingRecord.id },
+        data: {
+          activityStatus: data.activityStatus,
+          rating: data.rating,
+          draftType: data.draftType,
+          npPCTDate: data.npPCTDate,
+          npApplicationNumber: data.npApplicationNumber,
+          npPCTPublication: data.npPCTPublication,
+          npSearchReport: data.npSearchReport,
+          npPCTOrProvisionalDate: data.npPCTOrProvisionalDate,
+          npApplicationCountry: data.npApplicationCountry,
+          npDrafterName: data.npDrafterName,
+          npClaimSheet: data.npClaimSheet,
+          npFormsPrepared: data.npFormsPrepared,
+          npCountryFiling: data.npCountryFiling,
+          npReviewBy: data.npReviewBy,
+          npCitedPatent: data.npCitedPatent,
+          npIndependentClaim: data.npIndependentClaim,
+          npDependentClaim: data.npDependentClaim,
+          npBroadenedFeature: data.npBroadenedFeature,
+          npIsProfit: data.npIsProfit,
+          npIsDefensive: data.npIsDefensive,
+          npAllDrafts: data.npAllDrafts,
+          npDraftingEffort: data.npDraftingEffort,
+          npDrafterEmpId: data.npDrafterEmpId,
+          npHoursSpent: data.npHoursSpent,
+          npAgencyRecognizer: data.npAgencyRecognizer,
+          npAgencyCost: data.npAgencyCost,
+          npReviewEffort: data.npReviewEffort,
+          npManagerEmpId: data.npManagerEmpId,
+          npActivityStatus: data.npActivityStatus,
+          isDirectPCT: data.isDirectPCT,
+          pctParentPermission: data.pctParentPermission,
+          pctProvisionalDate: data.pctProvisionalDate,
+          pctApplicationNumber: data.pctApplicationNumber,
+          pctDrafterName: data.pctDrafterName,
+          pctClaimSheet: data.pctClaimSheet,
+          pctFormsPrepared: data.pctFormsPrepared,
+          pctCountryFiling: data.pctCountryFiling,
+          pctReviewBy: data.pctReviewBy,
+          pctCitedPatent: data.pctCitedPatent,
+          pctIndependentClaim: data.pctIndependentClaim,
+          pctDependentClaim: data.pctDependentClaim,
+          pctBroadenedFeature: data.pctBroadenedFeature,
+          pctIsProfit: data.pctIsProfit,
+          pctIsDefensive: data.pctIsDefensive,
+          pctAllDrafts: data.pctAllDrafts,
+          pctDraftingEffort: data.pctDraftingEffort,
+          pctDrafterEmpId: data.pctDrafterEmpId,
+          pctHoursSpent: data.pctHoursSpent,
+          pctAgencyRecognizer: data.pctAgencyRecognizer,
+          pctAgencyCost: data.pctAgencyCost,
+          pctReviewEffort: data.pctReviewEffort,
+          pctManagerEmpId: data.pctManagerEmpId,
+          pctActivityStatus: data.pctActivityStatus,
+          isProvisionalFiled: data.isProvisionalFiled,
+          provisionalSpecDate: data.provisionalSpecDate,
+          applicationNumber: data.applicationNumber,
+          isPCTFiled: data.isPCTFiled,
+          pctFilingDate: data.pctFilingDate,
+          isPCTPublished: data.isPCTPublished,
+          citedPatent: data.citedPatent,
+          independentClaim: data.independentClaim,
+          dependentClaim: data.dependentClaim,
+          broadenedFeature: data.broadenedFeature,
+          isProfitPatent: data.isProfitPatent,
+          isDefensivePatent: data.isDefensivePatent,
+          draftVersions: data.draftVersions,
+          draftingEffort: data.draftingEffort,
+          drafterEmpId: data.drafterEmpId,
+          hoursSpent: data.hoursSpent,
+          agencyRecognizer: data.agencyRecognizer,
+          agencyCost: data.agencyCost,
+          reviewEffort: data.reviewEffort,
+          managerEmpId: data.managerEmpId,
+          nodrafter: data.nodrafter,
+          noreviewer: data.noreviewer,
+          attachments: data.attachments,
+          bned: data.bned,
+          ifdescribed: data.ifdescribed,
+          toinvention: data.toinvention,
+          esfd: data.esfd,
+          pdrafter: data.pdrafter,
+          nohspent: data.nohspent,
+          eafd: data.eafd,
+          csoagency: data.csoagency,
+          eihfr: data.eihfr,
+          mres: data.mres,
+        },
+      });
+    } else {
+      // Create new record
+      result = await prisma.PatentSpecificInformation.create({
+        data,
+      });
+    }
+
+    console.log('✅ PatentSpecificInformation upserted successfully:', result);
+    return NextResponse.json({ 
+      success: true, 
+      data: result,
+      message: result.createdAt === result.updatedAt ? 'Patent Specific Information created successfully' : 'Patent Specific Information updated successfully'
+    }, { status: 200 });
   } catch (err) {
     console.error('❌ Error inserting PatentSpecificInformation:', err);
     console.error('❌ Error stack:', err.stack);

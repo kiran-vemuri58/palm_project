@@ -3,6 +3,47 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+export async function GET(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const assetId = searchParams.get('assetId');
+    
+    await prisma.$connect();
+    console.log('✅ Database connection successful');
+
+    if (assetId) {
+      const data = await prisma.Extraction.findFirst({
+        where: { asset_id: assetId },
+      });
+
+      if (!data) {
+        return NextResponse.json({ 
+          success: false, 
+          message: 'Extraction not found' 
+        }, { status: 404 });
+      }
+
+      return NextResponse.json({ 
+        success: true, 
+        data 
+      });
+    }
+
+    return NextResponse.json({ 
+      success: false, 
+      message: 'Asset ID is required' 
+    }, { status: 400 });
+  } catch (error) {
+    console.error('❌ GET request error:', error);
+    return NextResponse.json({ 
+      success: false, 
+      message: error.message 
+    }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
 export async function POST(req) {
   try {
     const payload = await req.json(); // read body from POST request
@@ -41,9 +82,48 @@ export async function POST(req) {
       updatenba: payload.updatenba,
 
     };
-    const result = await prisma.Extraction.create({data});
+    // Check if record exists, then create or update
+    const existingRecord = await prisma.Extraction.findFirst({
+      where: { asset_id: payload.asset_id }
+    });
 
-    return NextResponse.json({ success: true, data: result }, { status: 200 });
+    let result;
+    if (existingRecord) {
+      // Update existing record
+      result = await prisma.Extraction.update({
+        where: { id: existingRecord.id },
+        data: {
+          extractorOne: data.extractorOne,
+          extractortwo: data.extractortwo,
+          iEDate: data.iEDate,
+          iawpl: data.iawpl,
+          nfeature: data.nfeature,
+          ifeature: data.ifeature,
+          idattachments: data.idattachments,
+          scountry: data.scountry,
+          oextractor: data.oextractor,
+          ipRecognizer: data.ipRecognizer,
+          hoursSpent: data.hoursSpent,
+          agencyRecognizer: data.agencyRecognizer,
+          agencyCost: data.agencyCost,
+          reviewEffort: data.reviewEffort,
+          managerEmpId: data.managerEmpId,
+          activityStatus: data.activityStatus,
+          updatenba: data.updatenba,
+        },
+      });
+    } else {
+      // Create new record
+      result = await prisma.Extraction.create({
+        data,
+      });
+    }
+
+    return NextResponse.json({ 
+      success: true, 
+      data: result,
+      message: result.createdAt === result.updatedAt ? 'Extraction created successfully' : 'Extraction updated successfully'
+    }, { status: 200 });
   } catch (err) {
     console.error('❌ Error inserting extraction:', err);
     return NextResponse.json({ success: false, message: err.message }, { status: 500 });

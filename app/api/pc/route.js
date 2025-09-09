@@ -3,6 +3,47 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+export async function GET(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const assetId = searchParams.get('assetId');
+    
+    await prisma.$connect();
+    console.log('✅ Database connection successful');
+
+    if (assetId) {
+      const data = await prisma.PatentCommercialisation.findFirst({
+        where: { asset_id: assetId },
+      });
+
+      if (!data) {
+        return NextResponse.json({ 
+          success: false, 
+          message: 'Patent Commercialisation not found' 
+        }, { status: 404 });
+      }
+
+      return NextResponse.json({ 
+        success: true, 
+        data 
+      });
+    }
+
+    return NextResponse.json({ 
+      success: false, 
+      message: 'Asset ID is required' 
+    }, { status: 400 });
+  } catch (error) {
+    console.error('❌ GET request error:', error);
+    return NextResponse.json({ 
+      success: false, 
+      message: error.message 
+    }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
 export async function POST(req) {
   try {
     console.log('🔄 POST /api/pc called',req.json);
@@ -51,12 +92,53 @@ export async function POST(req) {
 
     console.log('📊 Data being sent to Prisma:', JSON.stringify(data, null, 2));
     
-    const result = await prisma.PatentCommercialisation.create({
-      data,
+    // Check if record exists, then create or update
+    const existingRecord = await prisma.PatentCommercialisation.findFirst({
+      where: { asset_id: payload.asset_id }
     });
 
-    console.log('✅ PatentCommercialisation created successfully:', result);
-    return NextResponse.json({ success: true, data: result }, { status: 200 });
+    let result;
+    if (existingRecord) {
+      // Update existing record
+      result = await prisma.PatentCommercialisation.update({
+        where: { id: existingRecord.id },
+        data: {
+          inventionTitle: data.inventionTitle,
+          inventorName: data.inventorName,
+          inventorDepartment: data.inventorDepartment,
+          inventionSummary: data.inventionSummary,
+          patentApplicationNumber: data.patentApplicationNumber,
+          patentNumber: data.patentNumber,
+          commercializationType: data.commercializationType,
+          commercializationStatus: data.commercializationStatus,
+          commercializationDate: data.commercializationDate,
+          commercializationRevenue: data.commercializationRevenue,
+          effortsSpent: data.effortsSpent,
+          employeeId: data.employeeId,
+          hoursSpent: data.hoursSpent,
+          agencyManager: data.agencyManager,
+          agencyCost: data.agencyCost,
+          reviewEfforts: data.reviewEfforts,
+          managerResponsible: data.managerResponsible,
+          activityStatus: data.activityStatus,
+          salesFile: data.salesFile,
+          invoiceFile: data.invoiceFile,
+          implementationFile: data.implementationFile,
+        },
+      });
+    } else {
+      // Create new record
+      result = await prisma.PatentCommercialisation.create({
+        data,
+      });
+    }
+
+    console.log('✅ PatentCommercialisation upserted successfully:', result);
+    return NextResponse.json({ 
+      success: true, 
+      data: result,
+      message: result.createdAt === result.updatedAt ? 'Patent Commercialisation created successfully' : 'Patent Commercialisation updated successfully'
+    }, { status: 200 });
   } catch (err) {
     console.error('❌ Error inserting PatentCommercialisation:', err);
     console.error('❌ Error stack:', err.stack);

@@ -3,6 +3,47 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+export async function GET(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const assetId = searchParams.get('assetId');
+    
+    await prisma.$connect();
+    console.log('✅ Database connection successful');
+
+    if (assetId) {
+      const data = await prisma.PostGrantOpposition.findFirst({
+        where: { asset_id: assetId },
+      });
+
+      if (!data) {
+        return NextResponse.json({ 
+          success: false, 
+          message: 'Post Grant Opposition not found' 
+        }, { status: 404 });
+      }
+
+      return NextResponse.json({ 
+        success: true, 
+        data 
+      });
+    }
+
+    return NextResponse.json({ 
+      success: false, 
+      message: 'Asset ID is required' 
+    }, { status: 400 });
+  } catch (error) {
+    console.error('❌ GET request error:', error);
+    return NextResponse.json({ 
+      success: false, 
+      message: error.message 
+    }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
 export async function POST(req) {
   try {
     console.log('🔄 POST /api/pgo called',req.json);
@@ -49,12 +90,52 @@ export async function POST(req) {
 
     console.log('📊 Data being sent to Prisma:', JSON.stringify(data, null, 2));
     
-    const result = await prisma.PostGrantOpposition.create({
-      data,
+    // Check if record exists, then create or update
+    const existingRecord = await prisma.PostGrantOpposition.findFirst({
+      where: { asset_id: payload.asset_id }
     });
 
-    console.log('✅ PostGrantOpposition created successfully:', result);
-    return NextResponse.json({ success: true, data: result }, { status: 200 });
+    let result;
+    if (existingRecord) {
+      // Update existing record
+      result = await prisma.PostGrantOpposition.update({
+        where: { id: existingRecord.id },
+        data: {
+          patentApplicationNumber: data.patentApplicationNumber,
+          patentPublished: data.patentPublished,
+          publicationNumber: data.publicationNumber,
+          apopposed: data.apopposed,
+          oname: data.oname,
+          opposerAttachment: data.opposerAttachment,
+          boaof: data.boaof,
+          rffo: data.rffo,
+          responseAttachment: data.responseAttachment,
+          orpby: data.orpby,
+          eagency: data.eagency,
+          revby: data.revby,
+          reviewAttachment: data.reviewAttachment,
+          ipRecognizer: data.ipRecognizer,
+          hoursSpent: data.hoursSpent,
+          agencyRecognizer: data.agencyRecognizer,
+          agencyCost: data.agencyCost,
+          reviewEffort: data.reviewEffort,
+          managerEmpId: data.managerEmpId,
+          activityStatus: data.activityStatus,
+        },
+      });
+    } else {
+      // Create new record
+      result = await prisma.PostGrantOpposition.create({
+        data,
+      });
+    }
+
+    console.log('✅ PostGrantOpposition upserted successfully:', result);
+    return NextResponse.json({ 
+      success: true, 
+      data: result,
+      message: result.createdAt === result.updatedAt ? 'Post Grant Opposition created successfully' : 'Post Grant Opposition updated successfully'
+    }, { status: 200 });
   } catch (err) {
     console.error('❌ Error inserting PostGrantOpposition:', err);
     console.error('❌ Error stack:', err.stack);

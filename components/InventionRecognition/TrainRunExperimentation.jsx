@@ -4,6 +4,7 @@ import useFormStore from '@/store/store';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
+import { createPredefinedHandler } from '@/utils/conditionalFieldUtils';
 import FileInput from '@/components/ui/file-input';
 
 const TrainRunExperimentation = () => {
@@ -23,6 +24,9 @@ const TrainRunExperimentation = () => {
     });
   };
 
+  // Use utility function for conditional field handling
+  const handleTrainRunChange = createPredefinedHandler(formData, updateFormData, 'trainRun');
+
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
       {/* First Row */}
@@ -31,7 +35,7 @@ const TrainRunExperimentation = () => {
         <Select
           className="w-full max-w-xs"
           value={formData.trainRun ?? ''} // ✅ Fix uncontrolled issue
-          onValueChange={(value) => updateFormData({ trainRun: value })}
+          onValueChange={handleTrainRunChange}
         >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Select an option" />

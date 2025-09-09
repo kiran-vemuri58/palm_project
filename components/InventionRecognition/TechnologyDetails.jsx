@@ -4,6 +4,7 @@ import useFormStore from '@/store/store';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
+import { createPredefinedHandler } from '@/utils/conditionalFieldUtils';
 import React from 'react';
 
 const TechnologyDetails = () => {
@@ -14,6 +15,9 @@ const TechnologyDetails = () => {
     updateFormData({ [name]: value });
   };
 
+  // Use utility function for conditional field handling
+  const handleIncrementalRenovationChange = createPredefinedHandler(formData, updateFormData, 'incrementalRenovation');
+
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
       {/* First Row */}
@@ -22,7 +26,8 @@ const TechnologyDetails = () => {
           <Label className="mb-1">Is Technology Incremental Renovation?</Label>
           <Select
             className="w-full"
-            onValueChange={(value) => updateFormData({ incrementalRenovation: value })}
+            value={formData.incrementalRenovation || ''}
+            onValueChange={handleIncrementalRenovationChange}
           >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select an option" />
