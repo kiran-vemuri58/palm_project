@@ -86,11 +86,11 @@ const ExtractorDetails = ({formKey, updateFunction}) => {
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div>
               <Label className="mb-1">Specific Country</Label>
-              <Input className="p-2" placeholder="Enter journal numbers..." id="journalNumbers" name="scountry" value={formData.scountry} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter specific country..." id="scountry" name="scountry" value={formData.scountry} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Opinion Of Extractor</Label>
-              <Input className="p-2" placeholder="Enter Opinion Of Extractor" id="productIdentity" name="oextractor" value={formData.oextractor} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter Opinion Of Extractor" id="oextractor" name="oextractor" value={formData.oextractor} onChange={handleChange} />
             </div>
           </div>
         </>

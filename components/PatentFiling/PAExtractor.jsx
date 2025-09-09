@@ -83,11 +83,11 @@ const PAExtractor = () => {
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div>
               <Label className="mb-1">Specific Country</Label>
-              <Input className="p-2" placeholder="Enter journal numbers..." id="journalNumbers" name="journalNumbers" value={formData.journalNumbers} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter specific country..." id="scountry" name="scountry" value={formData.scountry} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Opinion Of Extractor</Label>
-              <Input className="p-2" placeholder="Enter Opinion Of Extractor" id="productIdentity" name="productIdentity" value={formData.productIdentity} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter Opinion Of Extractor" id="ooextractor" name="ooextractor" value={formData.ooextractor} onChange={handleChange} />
             </div>
           </div>
         </>

@@ -97,7 +97,7 @@ const PatentMaintanceHistory = ({formKey , updateFunction}) => {
             </div>
             <div>
               <Label className="mb-1">maintance Fee</Label>
-              <Input className="p-2" placeholder="Enter journal numbers..." id="journalNumbers" name="journalNumbers" value={formData.journalNumbers} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter maintenance fee..." id="maintenanceFee" name="maintenanceFee" value={formData.maintenanceFee} onChange={handleChange} />
             </div>
           </div>
           
@@ -106,7 +106,7 @@ const PatentMaintanceHistory = ({formKey , updateFunction}) => {
             
             <div>
               <Label className="mb-1">external Agency</Label>
-              <Input className="p-2" placeholder="Enter Opinion Of Extractor" id="productIdentity" name="productIdentity" value={formData.productIdentity} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter external agency..." id="externalAgency" name="externalAgency" value={formData.externalAgency} onChange={handleChange} />
             </div>
           </div>
         </>

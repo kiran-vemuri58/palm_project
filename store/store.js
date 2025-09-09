@@ -44,16 +44,8 @@ const useFormStore = create(devtools((set) => ({
     collaboratorName: '',
     collaboratorCountry: '',
     stakeholders: '',
-    journalNumbers: '',          // 💡 Required for collaboration: 'yes'
-    productIdentity: '',
-
-    // Effort Sheet
-    ipRecognizer: '',
-    hoursSpent: '',
-    agencyRecognizer: '',
-    agencyCost: '',
-    reviewEffort: '',
-    managerEmpId: '',
+    entityJournalNumbers: '',       // Entity-specific journal numbers
+    entityProductIdentity: '',      // Entity-specific product identity
 
     // Activity Status
     activityStatus: '',
@@ -470,6 +462,11 @@ const useFormStore = create(devtools((set) => ({
     commercializationStatus: "",
     commercializationDate: "",
     commercializationRevenue: "",
+    
+    // PatentCommercializationChild specific fields
+    inventionStage: "",
+    isWorkingFiled: "",
+    firstWorkingDate: "",
 
     // PCEfforts
     effortsSpent: "",
@@ -479,6 +476,13 @@ const useFormStore = create(devtools((set) => ({
     agencyCost: "",
     reviewEfforts: "",
     managerResponsible: "",
+    
+    // PCEfforts specific fields
+    periodicSales: "",
+    productId: "",
+    isLicensed: "",
+    isCrossLicensed: "",
+    isCompulsoryLicenseFiled: "",
 
     // ActivityStatus
     activityStatus: "",

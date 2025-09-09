@@ -10,15 +10,15 @@ const PAN = ({ formKey, updateFunction }) => {
   const formData = useFormStore((state) => state[formKey]);
   const updateFormData = useFormStore((state) => state[updateFunction]);
 
-
   const patentAppNumber = formData?.patentApplicationNumber || '';
-
-  const handleRating = (value) => {
-    updateFormData({ [formKey]: value });
-  };
+  const patentNumber = formData?.patentNumber || '';
 
   const handlePatentAppChange = (e) => {
     updateFormData({ patentApplicationNumber: e.target.value });
+  };
+
+  const handlePatentNumberChange = (e) => {
+    updateFormData({ patentNumber: e.target.value });
   };
 
   return (
@@ -41,15 +41,15 @@ const PAN = ({ formKey, updateFunction }) => {
         </div>
 
         <div className="flex flex-col">
-          <label htmlFor="patentApplicationNumber" className="mb-1 text-sm font-medium text-gray-700">
+          <label htmlFor="patentNumber" className="mb-1 text-sm font-medium text-gray-700">
             Patent Number
           </label>
           <input
             id="patentNumber"
             type="text"
             placeholder="Enter Number"
-            value={patentAppNumber}
-            onChange={handlePatentAppChange}
+            value={patentNumber}
+            onChange={handlePatentNumberChange}
             className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 w-64"
           />
         </div>

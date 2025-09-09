@@ -11,7 +11,7 @@ const EntityDetails = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    updateFormData({ ...formData, [name]: value });
+    updateFormData({ [name]: value });
   };
 
   return (
@@ -76,11 +76,11 @@ const EntityDetails = () => {
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div>
               <Label className="mb-1">Journal Numbers</Label>
-              <Input className="p-2" placeholder="Enter journal numbers..." id="journalNumbers" name="journalNumbers" value={formData.journalNumbers} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter journal numbers..." id="entityJournalNumbers" name="entityJournalNumbers" value={formData.entityJournalNumbers} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Product Identity Number</Label>
-              <Input className="p-2" placeholder="Enter product identity number..." id="productIdentity" name="productIdentity" value={formData.productIdentity} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter product identity number..." id="entityProductIdentity" name="entityProductIdentity" value={formData.entityProductIdentity} onChange={handleChange} />
             </div>
           </div>
         </>

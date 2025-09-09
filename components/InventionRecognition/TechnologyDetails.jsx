@@ -11,7 +11,7 @@ const TechnologyDetails = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    updateFormData({ ...formData, [name]: value });
+    updateFormData({ [name]: value });
   };
 
   return (
@@ -22,7 +22,7 @@ const TechnologyDetails = () => {
           <Label className="mb-1">Is Technology Incremental Renovation?</Label>
           <Select
             className="w-full"
-            onValueChange={(value) => updateFormData({ ...formData, incrementalRenovation: value })}
+            onValueChange={(value) => updateFormData({ incrementalRenovation: value })}
           >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select an option" />

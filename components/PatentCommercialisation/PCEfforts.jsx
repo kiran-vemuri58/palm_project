@@ -13,9 +13,9 @@ import {
   SelectItem,
 } from '@/components/ui/select';
 
-const PCEfforts = ({formKey,updateFuction}) => {
+const PCEfforts = ({formKey,updateFunction}) => {
   const formData = useFormStore((state) => state[formKey]);
-  const updateFormData = useFormStore((state) => state[updateFuction]);
+  const updateFormData = useFormStore((state) => state[updateFunction]);
  // const { formData, updateFormData } = useFormStore();
 
   const handleChange = (e) => {

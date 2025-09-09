@@ -10,11 +10,11 @@ const AveragePatentabilityRating = ({ formKey, storeKey, updateFunctionKey }) =>
   const formData = useFormStore((state) => state[storeKey]);
   const updateFormData = useFormStore((state) => state[updateFunctionKey]);
 
-  const rating = formData?.[formKey] || 0;
+  const rating = formData?.rating || 0;
   const patentAppNumber = formData?.patentApplicationNumber || '';
 
   const handleRating = (value) => {
-    updateFormData({ [formKey]: value });
+    updateFormData({ rating: value });
   };
 
   const handlePatentAppChange = (e) => {
