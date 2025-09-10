@@ -12,36 +12,39 @@ import PAExtractor from "@/components/PatentabilityAnalysis/PAExtractor";
 import useFormStore from "@/store/store";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Patentability_Analysis = () => {
   const { formData3, assetId } = useFormStore();
   const router = useRouter();
-  const [shouldRedirect, setShouldRedirect] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
   const { isLoaded, isSignedIn, user } = useUser();
 
-  // Authentication check - only redirect if definitely not signed in
+  // Authentication check with proper timing
   useEffect(() => {
-    if (isLoaded && !isSignedIn && !user) {
-      // Only redirect if we're sure the user is not signed in
-      setShouldRedirect(true);
-    }
-  }, [isLoaded, isSignedIn, user]);
+    if (isLoaded) {
+      // Add a small delay to ensure all auth state is properly loaded
+      const timeoutId = setTimeout(() => {
+        if (!isSignedIn) {
+          router.push('/');
+        } else {
+          setAuthChecked(true);
+        }
+      }, 200); // 200ms delay to ensure auth state is stable
 
-  // Handle redirect
-  useEffect(() => {
-    if (shouldRedirect) {
-      router.push('/');
+      return () => clearTimeout(timeoutId);
     }
-  }, [shouldRedirect, router]);
+  }, [isLoaded, isSignedIn, router]);
 
   // Show loading while checking authentication
-  if (!isLoaded) {
+  if (!isLoaded || !authChecked) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-gray-600">
+            {!isLoaded ? 'Loading...' : 'Verifying authentication...'}
+          </p>
         </div>
       </div>
     );
