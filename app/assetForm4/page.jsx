@@ -16,7 +16,6 @@ import useFormStore from '@/store/store';
 import { buildPatentSpecificPayload } from '@/utils/PageField4Payload'; // Assuming this utility function exists
 import AveragePatentabilityRating from '@/components/PatentSpecificationPreparation/AveragePatentabilityRating';
 import { useUser } from "@clerk/nextjs";
-import { useEffect } from "react";
 
 
 const PatentSpecificationPreparation = () => {

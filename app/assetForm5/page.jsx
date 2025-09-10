@@ -20,7 +20,6 @@ import { buildPatentSpecificPayloadPage5 } from '@/utils/PageField5Payload'; // 
 import { Average } from 'next/font/google';
 import AveragePatentabilityRating from '@/components/PatentProsecution/AveragePatentabilityRating';
 import { useUser } from "@clerk/nextjs";
-import { useEffect } from "react";
 
 
 //import PSPInventionDetails from "@/components/PatentSpecificationPreparation/PSPInventionDetails";
