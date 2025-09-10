@@ -14,6 +14,17 @@ export default function InventionTable() {
   const { isLoaded, isSignedIn, user } = useUser();
   const router = useRouter();
 
+  // Data loading useEffect - moved to top level
+  useEffect(() => {
+    fetch(`/api/invention?page=${currentPage}`)
+      .then((res) => res.json())
+      .then((response) => {
+        setData(response.data || []);
+        setTotalPages(response.totalPages || 1);
+      })
+      .catch((err) => console.error('Error fetching inventions:', err));
+  }, [currentPage]);
+
   // Authentication check with proper timing
   useEffect(() => {
     if (isLoaded) {
@@ -55,16 +66,6 @@ export default function InventionTable() {
       </div>
     );
   }
-
-  useEffect(() => {
-    fetch(`/api/invention?page=${currentPage}`)
-      .then((res) => res.json())
-      .then((response) => {
-        setData(response.data || []);
-        setTotalPages(response.totalPages || 1);
-      })
-      .catch((err) => console.error('Error fetching inventions:', err));
-  }, [currentPage]);
 
   const handlePrev = () => {
     setCurrentPage((prev) => Math.max(prev - 1, 1));

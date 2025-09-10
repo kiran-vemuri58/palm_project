@@ -28,49 +28,7 @@ const InventionRecognitionForm = () => {
   const [authChecked, setAuthChecked] = useState(false);
   const { isLoaded, isSignedIn, user } = useUser();
 
-  // Authentication check with proper timing
-  useEffect(() => {
-    if (isLoaded) {
-      // Add a small delay to ensure all auth state is properly loaded
-      const timeoutId = setTimeout(() => {
-        if (!isSignedIn) {
-          router.push('/');
-        } else {
-          setAuthChecked(true);
-        }
-      }, 200); // 200ms delay to ensure auth state is stable
-
-      return () => clearTimeout(timeoutId);
-    }
-  }, [isLoaded, isSignedIn, router]);
-
-  // Show loading while checking authentication
-  if (!isLoaded || !authChecked) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">
-            {!isLoaded ? 'Loading...' : 'Verifying authentication...'}
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  // Show loading if not signed in (while redirecting)
-  if (!isSignedIn) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Redirecting...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Load existing data if assetId exists
+  // Load existing data if assetId exists - moved to top level
   const loadExistingData = async () => {
     if (assetId) {
       try {
@@ -119,10 +77,52 @@ const InventionRecognitionForm = () => {
     }
   };
 
-  // Load data on component mount
+  // Load data on component mount - moved to top level
   useEffect(() => {
     loadExistingData();
   }, [assetId]);
+
+  // Authentication check with proper timing
+  useEffect(() => {
+    if (isLoaded) {
+      // Add a small delay to ensure all auth state is properly loaded
+      const timeoutId = setTimeout(() => {
+        if (!isSignedIn) {
+          router.push('/');
+        } else {
+          setAuthChecked(true);
+        }
+      }, 200); // 200ms delay to ensure auth state is stable
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isLoaded, isSignedIn, router]);
+
+  // Show loading while checking authentication
+  if (!isLoaded || !authChecked) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">
+            {!isLoaded ? 'Loading...' : 'Verifying authentication...'}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show loading if not signed in (while redirecting)
+  if (!isSignedIn) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Redirecting...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleSave = async () => {
     // Prevent double API calls
