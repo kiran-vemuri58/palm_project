@@ -5,7 +5,7 @@ import InventionDetails from "@/components/InventionRecognition/InventionDetails
 import AddOrDeleteInventor from "@/components/InventionRecognition/AddOrDeleteInventor";
 import { validateInventionForm } from "@/lib/validateInventRecognitionForm";
 import useFormStore from "@/store/store";
-import React, { use, useEffect, useState } from "react";
+import React, { use, useEffect, useState, Suspense } from "react";
 import EntityDetails from "@/components/InventionRecognition/EntityDetails";
 import TechnologyDetails from "@/components/InventionRecognition/TechnologyDetails";
 import TrainRunExperimentation from "@/components/InventionRecognition/TrainRunExperimentation";
@@ -19,7 +19,8 @@ import { fetchAssetIdFromDB } from "@/utils/assetUtils"; // Utility to fetch or 
 import { toast } from "sonner";
 import { useUser } from "@clerk/nextjs";
 
-const InventionRecognitionForm = () => {
+// Component that uses useSearchParams - needs to be wrapped in Suspense
+const InventionRecognitionFormContent = () => {
   const { formData, setErrors, uploadedPaths, assetId } = useFormStore();
   const updateFormData = useFormStore((state) => state.updateFormData);
   const setAssetId = useFormStore((state) => state.setAssetId);
@@ -275,6 +276,22 @@ const InventionRecognitionForm = () => {
         <ActivityStatus formKey="formData" updateFunction="updateFormData" />
       </CardWrapper>
     </div>
+  );
+};
+
+// Main component with Suspense boundary
+const InventionRecognitionForm = () => {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    }>
+      <InventionRecognitionFormContent />
+    </Suspense>
   );
 };
 
