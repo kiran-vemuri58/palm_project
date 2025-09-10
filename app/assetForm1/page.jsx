@@ -5,7 +5,7 @@ import InventionDetails from "@/components/InventionRecognition/InventionDetails
 import AddOrDeleteInventor from "@/components/InventionRecognition/AddOrDeleteInventor";
 import { validateInventionForm } from "@/lib/validateInventRecognitionForm";
 import useFormStore from "@/store/store";
-import React, { use, useEffect } from "react";
+import React, { use, useEffect, useState } from "react";
 import EntityDetails from "@/components/InventionRecognition/EntityDetails";
 import TechnologyDetails from "@/components/InventionRecognition/TechnologyDetails";
 import TrainRunExperimentation from "@/components/InventionRecognition/TrainRunExperimentation";
@@ -16,12 +16,14 @@ import { Router } from "next/router";
 import { useRouter } from "next/navigation";
 import { uploadDocuments } from "@/utils/FileUploadUI";
 import { fetchAssetIdFromDB } from "@/utils/assetUtils"; // Utility to fetch or generate asset ID
+import { toast } from "sonner";
 
 const InventionRecognitionForm = () => {
   const { formData, setErrors, uploadedPaths, assetId } = useFormStore();
   const updateFormData = useFormStore((state) => state.updateFormData);
   const setAssetId = useFormStore((state) => state.setAssetId);
   const router = useRouter();
+  const [isSaving, setIsSaving] = useState(false);
 
   // Load existing data if assetId exists
   const loadExistingData = async () => {
@@ -78,13 +80,25 @@ const InventionRecognitionForm = () => {
   }, [assetId]);
 
   const handleSave = async () => {
+    // Prevent double API calls
+    if (isSaving) {
+      console.log('⚠️ Save already in progress, ignoring duplicate call');
+      return false;
+    }
+
     const errors = validateInventionForm(formData);
+    console.log('🔍 Validation errors:', errors);
+    console.log('🔍 Form data:', formData);
     if (Object.keys(errors).length > 0) {
+      // Show specific toast for missing mandatory fields
+      console.log('🔍 Showing validation error toast');
+      toast.error('Please enter those three fields: Invention Title, Common Name, and Inventor Details');
       setErrors(errors);
-      return;
+      return false; // Return false to indicate validation failed
     }
   
     try {
+      setIsSaving(true);
       console.log('🚀 Starting form submission...');
       console.log('📁 Current form data:', formData);
       
@@ -157,13 +171,15 @@ const InventionRecognitionForm = () => {
   
       setAssetId(resultDB.data.asset_id); // Set the asset ID in the store
       console.log('🎉 Operation completed:', resultDB.message);
-      router.push('/assetForm2'); // Redirect to next page on success
-     
       console.log('🎉 Invention saved successfully:', resultDB);
+      toast.success('Data saved successfully!');
+      return true; // Return true to indicate successful save
     } catch (error) {
       console.error('❌ Error saving invention:', error);
-      // You might want to show this error to the user via a toast or alert
-      alert(`Failed to save invention: ${error.message}`);
+      toast.error(`Failed to save invention: ${error.message}`);
+      return false; // Return false to indicate save failed
+    } finally {
+      setIsSaving(false);
     }
   };
   
@@ -177,6 +193,9 @@ const InventionRecognitionForm = () => {
         nextButtonHref="/assetForm2"
         className="w-full max-w-[90%] mx-auto p-8"
         onSave={handleSave}
+        requireSave={true}
+        formData={formData}
+        validateForm={validateInventionForm}
       >
         <MiniHeader title="Invention Details" />
 

@@ -38,6 +38,14 @@ const InventionDetails = ({
   const handleChange = (e) => {
     const { name, value } = e.target;
     updateFormData({ [name]: value });
+    
+    // Clear error for this field when user starts typing
+    if (errors[name]) {
+      const { setErrors } = useFormStore.getState();
+      const newErrors = { ...errors };
+      delete newErrors[name];
+      setErrors(newErrors);
+    }
   };
 
   return (

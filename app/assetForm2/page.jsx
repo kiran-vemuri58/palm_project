@@ -9,6 +9,7 @@ import InventionDetails from "@/components/InventionRecognition/InventionDetails
 import MiniHeader from "@/components/MiniHeader";
 import useFormStore from "@/store/store";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 
 const InventionExtraction = () => {
@@ -35,7 +36,9 @@ const InventionExtraction = () => {
       console.log('Invention saved:', resultDB);
 
       if(resultDB.success){
-        router.push('/assetForm3'); // Navigate to next page on success
+        toast.success('Data saved successfully!');
+      } else {
+        toast.error('Failed to save data');
       }
     
    }
