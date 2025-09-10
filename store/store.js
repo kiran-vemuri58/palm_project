@@ -235,6 +235,7 @@ const useFormStore = create(devtools((set) => ({
     draftType: '',
     activityStatus: '',
     rating: 0,
+    patentApplicationNumber: '',
 
     // provisional
 

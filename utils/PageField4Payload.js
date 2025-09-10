@@ -10,13 +10,21 @@ export function buildPatentSpecificPayload({ assetId, formData4, activityStatus,
             data[key] = formData4[key];
         });
 
-        // Compose the payload for Prisma
+        // Compose the payload for Prisma - spread the data fields at top level
         return {
             asset_id: assetId,
-            activityStatus: activityStatus ?? null, // Or however you want to set these top-level fields
-            draftType: draftType ?? draftType,
-            data, // Only the picked fields are present here!
+            activityStatus: activityStatus ?? '',
+            draftType: draftType ?? '',
+            rating: formData4.rating || 0,
+            ...data, // Spread the selected fields at top level
         }
-
     }
+    
+    // If no draftType, return basic payload
+    return {
+        asset_id: assetId,
+        activityStatus: activityStatus ?? '',
+        draftType: draftType ?? '',
+        rating: formData4.rating || 0,
+    };
 }

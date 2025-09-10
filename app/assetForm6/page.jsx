@@ -69,7 +69,10 @@ const PatentProsecution = () => {
         <MiniHeader title="Invention Details" />
         <InventionDetails disableCommon={true} />
         <MiniHeader title="Rating and PAN Number" />
-        <AveragePatentabilityRating formKey="formData6" storeKey="formData6" updateFunctionKey="updateFormData6" />
+        <AveragePatentabilityRating 
+          storeKey="formData6" 
+          updateFunctionKey="updateFormData6" 
+        />
         <MiniHeader title="Patent Prosecution" />
         <PatentProsectionDetails formKey="formData6" updateFunction="updateFormData6" />
         <MiniHeader title="Patent Application Status" />

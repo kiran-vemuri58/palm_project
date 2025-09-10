@@ -78,10 +78,12 @@ const PatentSpecificationPreparation = () => {
 
         <MiniHeader title="Invention Details" />
         <InventionDetails disableCommon={true} />
-        <MiniHeader title="Average Patentability Rating "
-        storeKey="formData4"
-        updateFunctionKey="updateFormData4" />
-        <AveragePatentabilityRating formKey="rating" />
+        <MiniHeader title="Average Patentability Rating" />
+        <AveragePatentabilityRating 
+          formKey="rating" 
+          storeKey="formData4" 
+          updateFunctionKey="updateFormData4" 
+        />
         <MiniHeader title="Activity Status" />
         <ActivityStatus formKey="formData4" updateFunction="updateFormData4" />
         <MiniHeader title="Patent Specific information" />

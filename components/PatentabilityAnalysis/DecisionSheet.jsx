@@ -40,9 +40,8 @@ const DecisionSheet = ({formKey, updateFunction}) => {
           <Input
             className="p-2"
             placeholder="Enter decision in brief"
-            id="hoursSpent"
+            id="dibrief"
             name="dibrief"
-            type="number"
             value={formData.dibrief || ''}
             onChange={handleChange}
           />

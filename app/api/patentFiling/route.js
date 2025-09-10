@@ -47,7 +47,27 @@ export async function GET(req) {
 export async function POST(req) {
   try {
     console.log('🔄 POST /api/patentFiling called');
-    const payload = await req.json(); // read body from POST request
+    
+    // Check if request has body
+    const contentType = req.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      return NextResponse.json({ 
+        success: false, 
+        message: 'Content-Type must be application/json' 
+      }, { status: 400 });
+    }
+
+    let payload;
+    try {
+      payload = await req.json(); // read body from POST request
+    } catch (jsonError) {
+      console.error('❌ JSON parsing error:', jsonError);
+      return NextResponse.json({ 
+        success: false, 
+        message: 'Invalid JSON in request body' 
+      }, { status: 400 });
+    }
+    
     console.log('📦 PatentFiling payload received:', JSON.stringify(payload, null, 2));
 
     // Map payload to Prisma-compatible field names and ensure array fields are arrays
