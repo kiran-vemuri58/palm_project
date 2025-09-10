@@ -11,15 +11,16 @@ export default function InventionTable() {
   const [totalPages, setTotalPages] = useState(1);
   const rowsPerPage = 10;
   const [shouldRedirect, setShouldRedirect] = useState(false);
-  const { isLoaded, isSignedIn } = useUser();
+  const { isLoaded, isSignedIn, user } = useUser();
   const router = useRouter();
 
-  // Authentication check
+  // Authentication check - only redirect if definitely not signed in
   useEffect(() => {
-    if (isLoaded && !isSignedIn) {
+    if (isLoaded && !isSignedIn && !user) {
+      // Only redirect if we're sure the user is not signed in
       setShouldRedirect(true);
     }
-  }, [isLoaded, isSignedIn]);
+  }, [isLoaded, isSignedIn, user]);
 
   // Handle redirect
   useEffect(() => {
