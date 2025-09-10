@@ -30,9 +30,47 @@ const PatentFiling = () => {
   const assetId = useFormStore((state) => state.assetId);
   const draftType = useFormStore((state) => state.formData5.draftType);
   const formData5 = useFormStore((state) => state.formData5);
+  const updateFormData5 = useFormStore((state) => state.updateFormData5);
   const router = useRouter();
   const [authChecked, setAuthChecked] = useState(false);
   const { isLoaded, isSignedIn, user } = useUser();
+
+  // Load existing data if assetId exists
+  const loadExistingData = async () => {
+    if (assetId) {
+      try {
+        const response = await fetch(`/api/patentFiling?assetId=${assetId}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.data) {
+            // Map the data back to form format
+            const formData = {
+              activityStatus: data.data.activityStatus || '',
+              rating: data.data.rating || '',
+              patentApplicationNumber: data.data.patentApplicationNumber || '',
+              draftType: data.data.draftType || '',
+              // Add other fields based on the API response structure
+            };
+            updateFormData5(formData);
+            console.log('✅ Existing patent filing data loaded:', formData);
+          } else {
+            console.log('ℹ️ No patent filing data found for assetId:', assetId);
+          }
+        } else if (response.status === 404) {
+          console.log('ℹ️ No patent filing data found for assetId:', assetId);
+        } else {
+          console.error('❌ Error loading patent filing data:', response.status);
+        }
+      } catch (error) {
+        console.error('❌ Error loading existing patent filing data:', error);
+      }
+    }
+  };
+
+  // Load data on component mount
+  useEffect(() => {
+    loadExistingData();
+  }, [assetId]);
 
   // Authentication check with proper timing
   useEffect(() => {
@@ -118,10 +156,11 @@ const PatentFiling = () => {
       <CardWrapper
         label={`5- PatentFiling${assetId ? ` ${assetId}` : ''}`}
         title="Register"
-        backButtonHref="/assetForm4"
-        nextButtonHref="/assetForm6"
+        backButtonHref={assetId ? `/assetForm4?assetId=${assetId}` : "/assetForm4"}
+        nextButtonHref={assetId ? `/assetForm6?assetId=${assetId}` : "/assetForm6"}
         className="w-full max-w-[90%] mx-auto p-8"
         onSave={handleSave}
+        nextButtonEnabled={!!assetId}
       >
         <MiniHeader title="Invention Details" />
         <InventionDetails disableCommon={true} />

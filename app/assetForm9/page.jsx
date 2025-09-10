@@ -14,10 +14,47 @@ import { useEffect, useState } from "react";
 
 const PatentCommercialisation = () => {
   const assetId = useFormStore((state) => state.assetId);
-  const formData9 = useFormStore((state) => state.formData9); 
+  const formData9 = useFormStore((state) => state.formData9);
+  const updateFormData9 = useFormStore((state) => state.updateFormData9);
   const router = useRouter();
   const [authChecked, setAuthChecked] = useState(false);
   const { isLoaded, isSignedIn, user } = useUser();
+
+  // Load existing data if assetId exists
+  const loadExistingData = async () => {
+    if (assetId) {
+      try {
+        const response = await fetch(`/api/pc?assetId=${assetId}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.data) {
+            // Map the data back to form format
+            const formData = {
+              activityStatus: data.data.activityStatus || '',
+              patentApplicationNumber: data.data.patentApplicationNumber || '',
+              patentNumber: data.data.patentNumber || '',
+              // Add other fields based on the API response structure
+            };
+            updateFormData9(formData);
+            console.log('✅ Existing patent commercialisation data loaded:', formData);
+          } else {
+            console.log('ℹ️ No patent commercialisation data found for assetId:', assetId);
+          }
+        } else if (response.status === 404) {
+          console.log('ℹ️ No patent commercialisation data found for assetId:', assetId);
+        } else {
+          console.error('❌ Error loading patent commercialisation data:', response.status);
+        }
+      } catch (error) {
+        console.error('❌ Error loading existing patent commercialisation data:', error);
+      }
+    }
+  };
+
+  // Load data on component mount
+  useEffect(() => {
+    loadExistingData();
+  }, [assetId]);
 
   // Authentication check with proper timing
   useEffect(() => {
@@ -94,10 +131,11 @@ const PatentCommercialisation = () => {
     <CardWrapper
         label="9- Patent Commercialisation"
         title="Register"
-        backButtonHref="/assetForm8"
-        nextButtonHref="/assetForm1"
+        backButtonHref={assetId ? `/assetForm8?assetId=${assetId}` : "/assetForm8"}
+        nextButtonHref={assetId ? `/assetForm1?assetId=${assetId}` : "/assetForm1"}
         className="w-full max-w-[90%] mx-auto p-8"
         onSave={handleSave}
+        nextButtonEnabled={!!assetId}
       >
      <MiniHeader title="Invention Details"/>
      <InventionDetails disableCommon={true} />

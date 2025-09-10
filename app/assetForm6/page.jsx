@@ -27,9 +27,46 @@ import { useEffect, useState } from "react";
 const PatentProsecution = () => {
   const assetId = useFormStore((state) => state.assetId);
   const formData6 = useFormStore((state) => state.formData6);
+  const updateFormData6 = useFormStore((state) => state.updateFormData6);
   const router = useRouter();
   const [authChecked, setAuthChecked] = useState(false);
   const { isLoaded, isSignedIn, user } = useUser();
+
+  // Load existing data if assetId exists
+  const loadExistingData = async () => {
+    if (assetId) {
+      try {
+        const response = await fetch(`/api/ps?assetId=${assetId}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.data) {
+            // Map the data back to form format
+            const formData = {
+              activityStatus: data.data.activityStatus || '',
+              rating: data.data.rating || '',
+              patentApplicationNumber: data.data.patentApplicationNumber || '',
+              // Add other fields based on the API response structure
+            };
+            updateFormData6(formData);
+            console.log('✅ Existing patent prosecution data loaded:', formData);
+          } else {
+            console.log('ℹ️ No patent prosecution data found for assetId:', assetId);
+          }
+        } else if (response.status === 404) {
+          console.log('ℹ️ No patent prosecution data found for assetId:', assetId);
+        } else {
+          console.error('❌ Error loading patent prosecution data:', response.status);
+        }
+      } catch (error) {
+        console.error('❌ Error loading existing patent prosecution data:', error);
+      }
+    }
+  };
+
+  // Load data on component mount
+  useEffect(() => {
+    loadExistingData();
+  }, [assetId]);
 
   // Authentication check with proper timing
   useEffect(() => {
@@ -106,10 +143,11 @@ const PatentProsecution = () => {
       <CardWrapper
         label={`6- Patent Prosecution` + (assetId ? ` - Asset ID: ${assetId}` : '')}
         title="Register"
-        backButtonHref="/assetForm5"
-        nextButtonHref="/assetForm7"
+        backButtonHref={assetId ? `/assetForm5?assetId=${assetId}` : "/assetForm5"}
+        nextButtonHref={assetId ? `/assetForm7?assetId=${assetId}` : "/assetForm7"}
         className="w-full max-w-[90%] mx-auto p-8"
         onSave={handleSave}
+        nextButtonEnabled={!!assetId}
       >
         <MiniHeader title="Invention Details" />
         <InventionDetails disableCommon={true} />

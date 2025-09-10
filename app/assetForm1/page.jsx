@@ -245,12 +245,13 @@ const InventionRecognitionFormContent = () => {
         label="1- Invention Recognition"
         title="Register" 
         backButtonHref="/previous-page"
-        nextButtonHref="/assetForm2"
+        nextButtonHref={assetId ? `/assetForm2?assetId=${assetId}` : "/assetForm2"}
         className="w-full max-w-[90%] mx-auto p-8"
         onSave={handleSave}
-        requireSave={true}
+        requireSave={false}
         formData={formData}
         validateForm={validateInventionForm}
+        nextButtonEnabled={!!assetId}
       >
         <MiniHeader title="Invention Details" />
 

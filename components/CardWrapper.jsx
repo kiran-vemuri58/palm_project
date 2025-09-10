@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
-const CardWrapper = ({ label, title, backButtonHref, nextButtonHref, onSave, children, requireSave = false, formData = null, validateForm = null }) => {
+const CardWrapper = ({ label, title, backButtonHref, nextButtonHref, onSave, children, requireSave = false, formData = null, validateForm = null, nextButtonEnabled = true }) => {
   const router = useRouter();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -19,9 +19,9 @@ const CardWrapper = ({ label, title, backButtonHref, nextButtonHref, onSave, chi
       setIsSaving(true);
       const success = await onSave();
       if (success) {
-        toast.success("Saved successfully");
+      toast.success("Saved successfully");
         setValidationError(false);
-        return true;
+      return true;
       } else {
         return false;
       }
@@ -85,12 +85,22 @@ const CardWrapper = ({ label, title, backButtonHref, nextButtonHref, onSave, chi
             </button>
           )}
           {nextButtonHref && (
-            <button
-              onClick={handleNext}
-              className="bg-green-500 text-white px-6 py-2 rounded-lg text-base hover:bg-green-600 transition min-w-[120px]"
-            >
-              Next
-            </button>
+            <div className="flex flex-col items-end">
+              <button
+                onClick={handleNext}
+                disabled={!nextButtonEnabled}
+                className={`px-6 py-2 rounded-lg text-base transition min-w-[120px] ${
+                  nextButtonEnabled 
+                    ? 'bg-green-500 text-white hover:bg-green-600' 
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
+              >
+                Next
+              </button>
+              {!nextButtonEnabled && (
+                <p className="text-xs text-gray-500 mt-1">Save first to enable</p>
+              )}
+            </div>
           )}
         </div>
       </div>

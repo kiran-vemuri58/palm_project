@@ -15,10 +15,60 @@ import { useEffect, useState } from "react";
 
 
 const InventionExtraction = () => {
-  const { formData2, uploadedPaths , assetId } = useFormStore();
+  const { formData2, uploadedPaths, assetId } = useFormStore();
+  const updateFormData2 = useFormStore((state) => state.updateFormData2);
   const router = useRouter();
   const [authChecked, setAuthChecked] = useState(false);
   const { isLoaded, isSignedIn, user } = useUser();
+
+  // Load existing data if assetId exists
+  const loadExistingData = async () => {
+    if (assetId) {
+      try {
+        const response = await fetch(`/api/extraction?assetId=${assetId}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.data) {
+            // Map the data back to form format
+            const formData = {
+              extractorOne: data.data.extractorOne || '',
+              extractortwo: data.data.extractortwo || '',
+              iEDate: data.data.iEDate || '',
+              iawpl: data.data.iawpl || '',
+              nfeature: data.data.nfeature || '',
+              ifeature: data.data.ifeature || '',
+              idattachments: data.data.idattachments || [],
+              scountry: data.data.scountry || '',
+              oextractor: data.data.oextractor || '',
+              ipRecognizer: data.data.ipRecognizer || '',
+              hoursSpent: data.data.hoursSpent || '',
+              agencyRecognizer: data.data.agencyRecognizer || '',
+              agencyCost: data.data.agencyCost || '',
+              reviewEffort: data.data.reviewEffort || '',
+              managerEmpId: data.data.managerEmpId || '',
+              activityStatus: data.data.activityStatus || '',
+              updatenba: data.data.updatenba || '',
+            };
+            updateFormData2(formData);
+            console.log('✅ Existing extraction data loaded:', formData);
+          } else {
+            console.log('ℹ️ No extraction data found for assetId:', assetId);
+          }
+        } else if (response.status === 404) {
+          console.log('ℹ️ No extraction data found for assetId:', assetId);
+        } else {
+          console.error('❌ Error loading extraction data:', response.status);
+        }
+      } catch (error) {
+        console.error('❌ Error loading existing extraction data:', error);
+      }
+    }
+  };
+
+  // Load data on component mount
+  useEffect(() => {
+    loadExistingData();
+  }, [assetId]);
 
   // Authentication check with proper timing
   useEffect(() => {
@@ -82,7 +132,7 @@ const InventionExtraction = () => {
       console.log('Invention saved:', resultDB);
 
       if(resultDB.success){
-        toast.success('Data saved successfully!');
+      toast.success('Data saved successfully!');
       } else {
         toast.error('Failed to save data');
       }
@@ -94,10 +144,11 @@ const InventionExtraction = () => {
     <CardWrapper
         label={`2 - Invention Extraction${assetId ? ` - ${assetId}` : ''}`}
         title="Register"
-        backButtonHref="/assetForm1"
-        nextButtonHref="/assetForm3"
+        backButtonHref={assetId ? `/assetForm1?assetId=${assetId}` : "/assetForm1"}
+        nextButtonHref={assetId ? `/assetForm3?assetId=${assetId}` : "/assetForm3"}
         className="w-full max-w-[90%] mx-auto p-8"
         onSave={handleSave}
+        nextButtonEnabled={!!assetId}
       >
        
       <MiniHeader title="Invention Details"/>

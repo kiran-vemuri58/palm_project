@@ -22,9 +22,51 @@ import { useEffect, useState } from "react";
 const PatentManagement = () => {
   const assetId = useFormStore((state) => state.assetId);
   const formData8= useFormStore((state) => state.formData8);
+  const updateFormData8 = useFormStore((state) => state.updateFormData8);
   const router = useRouter();
   const [authChecked, setAuthChecked] = useState(false);
   const { isLoaded, isSignedIn, user } = useUser();
+
+  // Load existing data if assetId exists
+  const loadExistingData = async () => {
+    if (assetId) {
+      try {
+        const response = await fetch(`/api/pm?assetId=${assetId}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.data) {
+            // Map the data back to form format
+            const formData = {
+              activityStatus: data.data.activityStatus || '',
+              patentApplicationNumber: data.data.patentApplicationNumber || '',
+              patentNumber: data.data.patentNumber || '',
+              priorityDate: data.data.priorityDate || '',
+              grantDate: data.data.grantDate || '',
+              nextDueDate: data.data.nextDueDate || '',
+              maintenanceStopped: data.data.maintenanceStopped || '',
+              filingDate: data.data.filingDate || '',
+              // Add other fields based on the API response structure
+            };
+            updateFormData8(formData);
+            console.log('✅ Existing patent management data loaded:', formData);
+          } else {
+            console.log('ℹ️ No patent management data found for assetId:', assetId);
+          }
+        } else if (response.status === 404) {
+          console.log('ℹ️ No patent management data found for assetId:', assetId);
+        } else {
+          console.error('❌ Error loading patent management data:', response.status);
+        }
+      } catch (error) {
+        console.error('❌ Error loading existing patent management data:', error);
+      }
+    }
+  };
+
+  // Load data on component mount
+  useEffect(() => {
+    loadExistingData();
+  }, [assetId]);
 
   // Authentication check with proper timing
   useEffect(() => {
@@ -101,10 +143,11 @@ const PatentManagement = () => {
       <CardWrapper
         label="8- Patent Management"
         title="Register"
-        backButtonHref="/assetForm7"
-        nextButtonHref="/assetForm9"
+        backButtonHref={assetId ? `/assetForm7?assetId=${assetId}` : "/assetForm7"}
+        nextButtonHref={assetId ? `/assetForm9?assetId=${assetId}` : "/assetForm9"}
         className="w-full max-w-[90%] mx-auto p-8"
         onSave={handleSave}
+        nextButtonEnabled={!!assetId}
       >
         <MiniHeader title="Invention Details" />
         <InventionDetails disableCommon={true} />
