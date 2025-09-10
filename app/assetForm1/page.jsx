@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { uploadDocuments } from "@/utils/FileUploadUI";
 import { fetchAssetIdFromDB } from "@/utils/assetUtils"; // Utility to fetch or generate asset ID
 import { toast } from "sonner";
+import { useUser } from "@clerk/nextjs";
 
 const InventionRecognitionForm = () => {
   const { formData, setErrors, uploadedPaths, assetId } = useFormStore();
@@ -24,6 +25,44 @@ const InventionRecognitionForm = () => {
   const setAssetId = useFormStore((state) => state.setAssetId);
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
+  const { isLoaded, isSignedIn, user } = useUser();
+
+  // Authentication check
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      router.push('/sign-in');
+    }
+  }, [isLoaded, isSignedIn, router]);
+
+  // Show loading while checking authentication
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show access denied if not signed in
+  if (!isSignedIn) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-red-600 mb-4">Access Denied</h1>
+          <p className="text-gray-600 mb-4">You must be signed in to access this page.</p>
+          <button 
+            onClick={() => router.push('/sign-in')}
+            className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600"
+          >
+            Sign In
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   // Load existing data if assetId exists
   const loadExistingData = async () => {

@@ -11,12 +11,50 @@ import PAEffortSheetDetails from "@/components/PatentabilityAnalysis/PAEffortShe
 import PAExtractor from "@/components/PatentabilityAnalysis/PAExtractor";
 import useFormStore from "@/store/store";
 import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
+import { useEffect } from "react";
 
 const Patentability_Analysis = () => {
-
   const { formData3, assetId } = useFormStore();
-
   const router = useRouter();
+  const { isLoaded, isSignedIn } = useUser();
+
+  // Authentication check
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      router.push('/sign-in');
+    }
+  }, [isLoaded, isSignedIn, router]);
+
+  // Show loading while checking authentication
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show access denied if not signed in
+  if (!isSignedIn) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-red-600 mb-4">Access Denied</h1>
+          <p className="text-gray-600 mb-4">You must be signed in to access this page.</p>
+          <button 
+            onClick={() => router.push('/sign-in')}
+            className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600"
+          >
+            Sign In
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const handleSave = async () => {
     // Merge uploaded file paths into payload
