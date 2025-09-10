@@ -1,0 +1,32 @@
+<svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="200" height="60" fill="#1e40af" rx="8"/>
+  
+  <!-- Patent Symbol (Document with Checkmark) -->
+  <g transform="translate(15, 12)">
+    <!-- Document -->
+    <rect x="0" y="0" width="24" height="32" fill="white" rx="2"/>
+    <rect x="4" y="6" width="16" height="1.5" fill="#1e40af"/>
+    <rect x="4" y="10" width="12" height="1.5" fill="#1e40af"/>
+    <rect x="4" y="14" width="14" height="1.5" fill="#1e40af"/>
+    <rect x="4" y="18" width="10" height="1.5" fill="#1e40af"/>
+    
+    <!-- Checkmark -->
+    <path d="M18 22 L20 24 L24 18" stroke="#10b981" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Company Name -->
+  <text x="50" y="25" fill="white" font-family="Arial, sans-serif" font-size="18" font-weight="bold">
+    Patent Manager
+  </text>
+  
+  <!-- Tagline -->
+  <text x="50" y="42" fill="#93c5fd" font-family="Arial, sans-serif" font-size="10" font-weight="normal">
+    Innovation Protection
+  </text>
+  
+  <!-- Decorative Element -->
+  <circle cx="170" cy="20" r="3" fill="#10b981"/>
+  <circle cx="180" cy="25" r="2" fill="#60a5fa"/>
+  <circle cx="175" cy="35" r="2.5" fill="#f59e0b"/>
+</svg>

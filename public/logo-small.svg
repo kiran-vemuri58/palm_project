@@ -1,0 +1,27 @@
+<svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="120" height="40" fill="#1e40af" rx="6"/>
+  
+  <!-- Patent Symbol (Document with Checkmark) -->
+  <g transform="translate(8, 6)">
+    <!-- Document -->
+    <rect x="0" y="0" width="16" height="22" fill="white" rx="1.5"/>
+    <rect x="3" y="4" width="10" height="1" fill="#1e40af"/>
+    <rect x="3" y="7" width="8" height="1" fill="#1e40af"/>
+    <rect x="3" y="10" width="9" height="1" fill="#1e40af"/>
+    <rect x="3" y="13" width="7" height="1" fill="#1e40af"/>
+    
+    <!-- Checkmark -->
+    <path d="M12 15 L13 16 L16 12" stroke="#10b981" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Company Name -->
+  <text x="32" y="18" fill="white" font-family="Arial, sans-serif" font-size="12" font-weight="bold">
+    Patent Manager
+  </text>
+  
+  <!-- Tagline -->
+  <text x="32" y="30" fill="#93c5fd" font-family="Arial, sans-serif" font-size="7" font-weight="normal">
+    Innovation Protection
+  </text>
+</svg>

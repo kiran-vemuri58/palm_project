@@ -12,10 +12,14 @@ const isAdmin = false
     <header className='fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 h-16 border-b'>
         <nav className="mx-auto px-4 py-4 flex items-center justify-between">
             <Link href={isAdminPage ? "/admin":'/'}>
-                <Image src={"/projectimage.jpg"} alt="palm logo"
-                width={200}
-                height={60}
-                className='h12 w-auto object-contain'/>
+                <Image 
+                  src={"/logo.svg"} 
+                  alt="Patent Manager Logo"
+                  width={200}
+                  height={60}
+                  className='h-12 w-auto object-contain pb-2'
+                  priority
+                />
                 {isAdminPage && <span className="text-xs font-extralight">admin</span>}
             </Link>
 
