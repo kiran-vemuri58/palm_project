@@ -138,4 +138,237 @@
   .card {
     @apply bg-card text-card-foreground rounded-lg border border-border shadow-sm;
   }
+
+  /* Enhanced Form Input Styles */
+  .form-input-enhanced {
+    @apply relative transition-all duration-300 ease-in-out;
+  }
+
+  .form-input-enhanced input,
+  .form-input-enhanced textarea,
+  .form-input-enhanced select {
+    @apply w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 
+           focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 
+           hover:border-gray-300 transition-all duration-300 ease-in-out
+           shadow-sm hover:shadow-md focus:shadow-lg;
+  }
+
+  .form-input-enhanced input:focus,
+  .form-input-enhanced textarea:focus,
+  .form-input-enhanced select:focus {
+    @apply transform scale-[1.02] border-blue-500;
+  }
+
+  .form-input-enhanced input:invalid,
+  .form-input-enhanced textarea:invalid,
+  .form-input-enhanced select:invalid {
+    @apply border-red-300 focus:border-red-500 focus:ring-red-100;
+  }
+
+  .form-input-enhanced input:valid,
+  .form-input-enhanced textarea:valid,
+  .form-input-enhanced select:valid {
+    @apply border-green-300 focus:border-green-500 focus:ring-green-100;
+  }
+
+  /* Label Styles */
+  .form-label-enhanced {
+    @apply block text-sm font-semibold text-gray-700 mb-2 transition-colors duration-200;
+  }
+
+  .form-label-enhanced.required::after {
+    content: " *";
+    @apply text-red-500;
+  }
+
+  /* Input Group Styles */
+  .form-group-enhanced {
+    @apply space-y-2 mb-6;
+  }
+
+  .form-group-enhanced label {
+    @apply block text-sm font-semibold text-gray-700 mb-2 transition-colors duration-200;
+  }
+
+  .form-group-enhanced input,
+  .form-group-enhanced textarea,
+  .form-group-enhanced select {
+    @apply w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 
+           focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 
+           hover:border-gray-300 transition-all duration-300 ease-in-out
+           shadow-sm hover:shadow-md focus:shadow-lg;
+  }
+
+  /* Special Input Variants */
+  .form-input-primary {
+    @apply border-blue-200 focus:border-blue-500 focus:ring-blue-100;
+  }
+
+  .form-input-success {
+    @apply border-green-200 focus:border-green-500 focus:ring-green-100;
+  }
+
+  .form-input-warning {
+    @apply border-yellow-200 focus:border-yellow-500 focus:ring-yellow-100;
+  }
+
+  .form-input-error {
+    @apply border-red-200 focus:border-red-500 focus:ring-red-100;
+  }
+
+  /* Floating Label Effect */
+  .form-floating-label {
+    @apply relative;
+  }
+
+  .form-floating-label input,
+  .form-floating-label textarea {
+    @apply w-full pt-6 pb-2 px-4 border-2 border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-500
+           focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500
+           hover:border-gray-300 transition-all duration-300 ease-in-out
+           shadow-sm hover:shadow-md focus:shadow-lg;
+  }
+
+  .form-floating-label label {
+    @apply absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 
+           transition-all duration-300 ease-in-out pointer-events-none;
+  }
+
+  .form-floating-label input:focus + label,
+  .form-floating-label input:not(:placeholder-shown) + label,
+  .form-floating-label textarea:focus + label,
+  .form-floating-label textarea:not(:placeholder-shown) + label {
+    @apply -top-2 left-3 text-xs text-blue-600 bg-white px-1;
+  }
+
+  /* File Input Styles */
+  .form-file-enhanced {
+    @apply relative overflow-hidden;
+  }
+
+  .form-file-enhanced input[type="file"] {
+    @apply absolute inset-0 w-full h-full opacity-0 cursor-pointer;
+  }
+
+  .form-file-enhanced .file-label {
+    @apply flex items-center justify-center w-full px-4 py-3 bg-gray-50 border-2 border-dashed border-gray-300 
+           rounded-xl text-gray-600 hover:bg-gray-100 hover:border-gray-400 
+           transition-all duration-300 ease-in-out cursor-pointer;
+  }
+
+  .form-file-enhanced:hover .file-label {
+    @apply border-blue-300 bg-blue-50 text-blue-600;
+  }
+
+  /* Checkbox and Radio Styles */
+  .form-checkbox-enhanced,
+  .form-radio-enhanced {
+    @apply relative flex items-center space-x-3 cursor-pointer;
+  }
+
+  .form-checkbox-enhanced input[type="checkbox"],
+  .form-radio-enhanced input[type="radio"] {
+    @apply w-5 h-5 text-blue-600 bg-white border-2 border-gray-300 rounded 
+           focus:ring-4 focus:ring-blue-100 focus:ring-offset-0
+           transition-all duration-200 ease-in-out;
+  }
+
+  .form-checkbox-enhanced input[type="checkbox"]:checked,
+  .form-radio-enhanced input[type="radio"]:checked {
+    @apply bg-blue-600 border-blue-600;
+  }
+
+  .form-checkbox-enhanced label,
+  .form-radio-enhanced label {
+    @apply text-sm font-medium text-gray-700 cursor-pointer;
+  }
+
+  /* Select Dropdown Styles */
+  .form-select-enhanced {
+    @apply relative;
+  }
+
+  .form-select-enhanced select {
+    @apply appearance-none pr-10 bg-white border-2 border-gray-200 rounded-xl px-4 py-3
+           focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500
+           transition-all duration-300 ease-in-out cursor-pointer;
+  }
+
+  .form-select-enhanced::after {
+    content: "▼";
+    @apply absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none;
+  }
+
+  /* Textarea Specific Styles */
+  .form-textarea-enhanced textarea {
+    @apply resize-none min-h-[120px] leading-relaxed;
+  }
+
+  /* Input with Icon */
+  .form-input-with-icon {
+    @apply relative;
+  }
+
+  .form-input-with-icon input {
+    @apply w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-500
+           focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500
+           hover:border-gray-300 transition-all duration-300 ease-in-out
+           shadow-sm hover:shadow-md focus:shadow-lg;
+  }
+
+  .form-input-with-icon .input-icon {
+    @apply absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none;
+  }
+
+  .form-input-with-icon input:focus + .input-icon {
+    @apply text-blue-500;
+  }
+
+  /* Error and Success States */
+  .form-error {
+    @apply text-red-600 text-sm mt-1 flex items-center space-x-1;
+  }
+
+  .form-success {
+    @apply text-green-600 text-sm mt-1 flex items-center space-x-1;
+  }
+
+  .form-help {
+    @apply text-gray-500 text-sm mt-1;
+  }
+
+  /* Form Section Styling */
+  .form-section {
+    @apply bg-white rounded-2xl border border-gray-200 p-8 shadow-sm;
+  }
+
+  .form-section-header {
+    @apply border-b border-gray-200 pb-4 mb-6;
+  }
+
+  .form-section-title {
+    @apply text-xl font-semibold text-gray-900 mb-2;
+  }
+
+  .form-section-description {
+    @apply text-gray-600 text-sm;
+  }
+
+  /* Responsive Form Grid */
+  .form-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+  }
+
+  .form-grid-full {
+    @apply col-span-1 md:col-span-2;
+  }
+
+  /* Animation Classes */
+  .form-animate-in {
+    @apply animate-in fade-in-0 slide-in-from-bottom-4 duration-300;
+  }
+
+  .form-animate-out {
+    @apply animate-out fade-out-0 slide-out-to-bottom-4 duration-200;
+  }
 }
