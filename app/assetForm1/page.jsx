@@ -13,7 +13,7 @@ import MiniHeader from "@/components/MiniHeader";
 import EffortSheetDetails from "@/components/InventionRecognition/EffortSheet";
 import ActivityStatus from "@/components/InventionRecognition/ActivityStatus";
 import { Router } from "next/router";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { uploadDocuments } from "@/utils/FileUploadUI";
 import { fetchAssetIdFromDB } from "@/utils/assetUtils"; // Utility to fetch or generate asset ID
 import { toast } from "sonner";
@@ -24,9 +24,18 @@ const InventionRecognitionForm = () => {
   const updateFormData = useFormStore((state) => state.updateFormData);
   const setAssetId = useFormStore((state) => state.setAssetId);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isSaving, setIsSaving] = useState(false);
   const [authChecked, setAuthChecked] = useState(false);
   const { isLoaded, isSignedIn, user } = useUser();
+
+  // Handle assetId from query parameter
+  useEffect(() => {
+    const queryAssetId = searchParams.get('assetId');
+    if (queryAssetId && queryAssetId !== assetId) {
+      setAssetId(queryAssetId);
+    }
+  }, [searchParams, assetId, setAssetId]);
 
   // Load existing data if assetId exists - moved to top level
   const loadExistingData = async () => {

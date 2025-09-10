@@ -92,7 +92,7 @@ export default function InventionTable() {
           {data.map((item) => (
             <tr key={item.asset_id}>
               <td className="px-6 py-4 whitespace-nowrap text-blue-600 underline">
-                <Link href={`/asset/${item.asset_id}`}>{item.asset_id}</Link>
+                <Link href={`/assetForm1?assetId=${item.asset_id}`}>{item.asset_id}</Link>
               </td>
               <td className="px-6 py-4">{item.inventiontitle}</td>
               <td className="px-6 py-4">{item.commonname}</td>
