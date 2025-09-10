@@ -17,14 +17,22 @@ import { useEffect } from "react";
 const InventionExtraction = () => {
   const { formData2, uploadedPaths , assetId } = useFormStore();
   const router = useRouter();
+  const [shouldRedirect, setShouldRedirect] = useState(false);
   const { isLoaded, isSignedIn } = useUser();
 
   // Authentication check
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
+      setShouldRedirect(true);
+    }
+  }, [isLoaded, isSignedIn]);
+
+  // Handle redirect
+  useEffect(() => {
+    if (shouldRedirect) {
       router.push('/');
     }
-  }, [isLoaded, isSignedIn, router]);
+  }, [shouldRedirect, router]);
 
   // Show loading while checking authentication
   if (!isLoaded) {

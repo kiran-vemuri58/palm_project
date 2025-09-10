@@ -16,14 +16,22 @@ const PatentCommercialisation = () => {
   const assetId = useFormStore((state) => state.assetId);
   const formData9 = useFormStore((state) => state.formData9); 
   const router = useRouter();
+  const [shouldRedirect, setShouldRedirect] = useState(false);
   const { isLoaded, isSignedIn } = useUser();
 
   // Authentication check
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
+      setShouldRedirect(true);
+    }
+  }, [isLoaded, isSignedIn]);
+
+  // Handle redirect
+  useEffect(() => {
+    if (shouldRedirect) {
       router.push('/');
     }
-  }, [isLoaded, isSignedIn, router]);
+  }, [shouldRedirect, router]);
 
   // Show loading while checking authentication
   if (!isLoaded) {

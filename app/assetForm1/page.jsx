@@ -25,14 +25,22 @@ const InventionRecognitionForm = () => {
   const setAssetId = useFormStore((state) => state.setAssetId);
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
   const { isLoaded, isSignedIn, user } = useUser();
 
   // Authentication check
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
+      setShouldRedirect(true);
+    }
+  }, [isLoaded, isSignedIn]);
+
+  // Handle redirect
+  useEffect(() => {
+    if (shouldRedirect) {
       router.push('/');
     }
-  }, [isLoaded, isSignedIn, router]);
+  }, [shouldRedirect, router]);
 
   // Show loading while checking authentication
   if (!isLoaded) {

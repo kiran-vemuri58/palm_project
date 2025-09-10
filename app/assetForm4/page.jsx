@@ -24,14 +24,22 @@ const PatentSpecificationPreparation = () => {
   const formData4 = useFormStore((state) => state.formData4);
   const router = useRouter();
   const draftType = useFormStore((state) => state.formData4.draftType);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
   const { isLoaded, isSignedIn } = useUser();
 
   // Authentication check
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
+      setShouldRedirect(true);
+    }
+  }, [isLoaded, isSignedIn]);
+
+  // Handle redirect
+  useEffect(() => {
+    if (shouldRedirect) {
       router.push('/');
     }
-  }, [isLoaded, isSignedIn, router]);
+  }, [shouldRedirect, router]);
 
   // Show loading while checking authentication
   if (!isLoaded) {
