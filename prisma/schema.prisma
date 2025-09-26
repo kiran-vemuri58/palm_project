@@ -7,6 +7,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Authentication models
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  isWhitelisted Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  lastLogin     DateTime?
+  
+  sessions      Session[]
+  
+  @@map("users")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  userId       String
+  createdAt    DateTime @default(now())
+  expiresAt    DateTime
+  lastActivity DateTime @default(now())
+  
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("sessions")
+}
+
 model Invention {
   asset_id                  String                      @id
   inventiontitle            String

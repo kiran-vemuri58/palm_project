@@ -1,19 +1,54 @@
 
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
+// Define protected routes that require authentication
+const protectedRoutes = [
+  "/assets",
+  "/assetForm1",
+  "/assetForm2", 
+  "/assetForm3",
+  "/assetForm4",
+  "/assetForm5",
+  "/assetForm6",
+  "/assetForm7",
+  "/assetForm8",
+  "/assetForm9",
+  "/admin"
+];
 
-//Mention the routes which are not be accessed with out login.
-const isProtectedRoute = createRouteMatcher(["/admin(.*)"])
+// Define public routes that don't require authentication
+const publicRoutes = [
+  "/",
+  "/login",
+  "/unauthorized",
+  "/api/auth",
+  "/debug-auth"
+];
 
+function isProtectedRoute(pathname) {
+  return protectedRoutes.some(route => pathname.startsWith(route));
+}
 
-//use auth function and redirect to login page
-export default clerkMiddleware(async (auth,req)=>{
-    const {userId} = await auth();
-    if(!userId && isProtectedRoute(req)){
-        const { redirectToSignIn } = await auth();
-        return redirectToSignIn();
-    }
-});
+function isPublicRoute(pathname) {
+  return publicRoutes.some(route => pathname.startsWith(route));
+}
+
+export function middleware(request) {
+  const { pathname } = request.nextUrl;
+
+  // Allow public routes
+  if (isPublicRoute(pathname)) {
+    return NextResponse.next();
+  }
+
+  // For protected routes, let the client-side handle authentication
+  // The SimpleProtectedRoute component will handle redirects
+  if (isProtectedRoute(pathname)) {
+    return NextResponse.next();
+  }
+
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: [

@@ -17,7 +17,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { uploadDocuments } from "@/utils/FileUploadUI";
 import { fetchAssetIdFromDB } from "@/utils/assetUtils"; // Utility to fetch or generate asset ID
 import { toast } from "sonner";
-import { useUser } from "@clerk/nextjs";
+import SimpleProtectedRoute from "@/components/SimpleProtectedRoute";
 
 // Component that uses useSearchParams - needs to be wrapped in Suspense
 const InventionRecognitionFormContent = () => {
@@ -27,8 +27,6 @@ const InventionRecognitionFormContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isSaving, setIsSaving] = useState(false);
-  const [authChecked, setAuthChecked] = useState(false);
-  const { isLoaded, isSignedIn, user } = useUser();
 
   // Handle assetId from query parameter
   useEffect(() => {
@@ -38,261 +36,161 @@ const InventionRecognitionFormContent = () => {
     }
   }, [searchParams, assetId, setAssetId]);
 
-  // Load existing data if assetId exists - moved to top level
+  // Load existing data when assetId changes
   const loadExistingData = async () => {
-    if (assetId) {
-      try {
-        const response = await fetch(`/api/invention?assetId=${assetId}`);
-        if (response.ok) {
-          const data = await response.json();
-          if (data.success && data.data) {
-            // Map the data back to form format
-            const formData = {
-              inventiontitle: data.data.inventiontitle || '',
-              commonName: data.data.commonname || '',
-              inventordetails: data.data.inventordetails || '',
-              incrementalRenovation: data.data.incrementalrenovation || '',
-              patentNumbers: data.data.patentnumbers || '',
-              journalNumbers: data.data.journalnumbers || '',
-              productIdentity: data.data.productidentity || '',
-              problemAddressed: data.data.problemaddressed || '',
-              trainRun: data.data.trainrun || '',
-              experimentResults: data.data.experimentresults || '',
-              evidence: data.data.evidence || [],
-              minuteOfMeeting: data.data.minuteofmeeting || [],
-              attachments: data.data.attachments || [],
-              ipRecognizer: data.data.iprecognizer || '',
-              hoursSpent: data.data.hoursspent || '',
-              agencyRecognizer: data.data.agencyrecognizer || '',
-              agencyCost: data.data.agencycost || '',
-              reviewEffort: data.data.revieweffort || '',
-              managerEmpId: data.data.managerempid || '',
-              entity: data.data.entity || '',
-              date: data.data.date || '',
-              inventionCountry: data.data.inventioncountry || '',
-              creationCountry: data.data.creationcountry || '',
-              collaboration: data.data.collaboration || '',
-              collaboratorName: data.data.collaboratorname || '',
-              collaboratorCountry: data.data.collaboratorcountry || '',
-              stakeholders: data.data.stakeholders || '',
-              inventors: data.data.inventors || [],
-            };
-            updateFormData(formData);
-            console.log('✅ Existing data loaded:', formData);
-          }
+    if (!assetId) return;
+
+    try {
+      const response = await fetch(`/api/invention?assetId=${assetId}`);
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.data) {
+          // Update form data with existing data
+          updateFormData(data.data);
         }
-      } catch (error) {
-        console.error('❌ Error loading existing data:', error);
       }
+    } catch (error) {
+      console.error('Error loading existing data:', error);
     }
   };
 
-  // Load data on component mount - moved to top level
+  // Load data on component mount
   useEffect(() => {
     loadExistingData();
   }, [assetId]);
 
-  // Authentication check with proper timing
-  useEffect(() => {
-    if (isLoaded) {
-      // Add a small delay to ensure all auth state is properly loaded
-      const timeoutId = setTimeout(() => {
-        if (!isSignedIn) {
-          router.push('/');
-        } else {
-          setAuthChecked(true);
-        }
-      }, 200); // 200ms delay to ensure auth state is stable
-
-      return () => clearTimeout(timeoutId);
-    }
-  }, [isLoaded, isSignedIn, router]);
-
-  // Show loading while checking authentication
-  if (!isLoaded || !authChecked) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">
-            {!isLoaded ? 'Loading...' : 'Verifying authentication...'}
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  // Show loading if not signed in (while redirecting)
-  if (!isSignedIn) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Redirecting...</p>
-        </div>
-      </div>
-    );
-  }
+  // No complex authentication logic needed - SimpleProtectedRoute handles it
 
   const handleSave = async () => {
     // Prevent double API calls
-    if (isSaving) {
-      console.log('⚠️ Save already in progress, ignoring duplicate call');
-      return false;
-    }
+    if (isSaving) return;
 
-    const errors = validateInventionForm(formData);
-    console.log('🔍 Validation errors:', errors);
-    console.log('🔍 Form data:', formData);
-    if (Object.keys(errors).length > 0) {
-      // Show specific toast for missing mandatory fields
-      console.log('🔍 Showing validation error toast');
-      toast.error('Please enter those three fields: Invention Title, Common Name, and Inventor Details');
-      setErrors(errors);
-      return false; // Return false to indicate validation failed
-    }
-  
+    setIsSaving(true);
+
     try {
-      setIsSaving(true);
-      console.log('🚀 Starting form submission...');
-      console.log('📁 Current form data:', formData);
-      
-      // Use existing assetId if available, otherwise get a new one
-      const currentAssetId = assetId || await fetchAssetIdFromDB();
-      const componentName = 'InventionRecognitionForm';
-
-      console.log('🆔 Asset ID:', currentAssetId);
-      console.log('🏷️ Component Name:', componentName);
-
-      // Extract only the file fields from formData
-      const files = {
-        evidence: formData.evidence || [],
-        minuteOfMeeting: formData.minuteOfMeeting || [],
-        attachments: formData.attachments || [],
-      };
-
-      console.log('📂 Files to upload:', files);
-
-      // Only upload if there are files
-      let uploadedPaths = {};
-      if (files.evidence.length > 0 || files.minuteOfMeeting.length > 0 || files.attachments.length > 0) {
-        console.log('📤 Starting file upload...');
-        // Upload and get file paths
-        uploadedPaths = await uploadDocuments({ files, assetId: currentAssetId, componentName, updateFormData });
-        console.log('✅ File upload completed:', uploadedPaths);
-      } else {
-        console.log('ℹ️ No files to upload');
+      // Validate form data
+      const validationResult = validateInventionForm(formData);
+      if (!validationResult.isValid) {
+        setErrors(validationResult.errors);
+        toast.error("Please fix the validation errors before saving.");
+        return;
       }
-  
-      // Merge uploaded file paths into payload, but preserve the existing uploadedFilePaths structure
+
+      // Clear previous errors
+      setErrors({});
+
+      // Prepare payload
       const payload = {
         ...formData,
-        asset_id: currentAssetId, // Pass the asset ID to the API
-        uploadedFilePaths: {
-          ...formData.uploadedFilePaths,
-          evidence: uploadedPaths.evidencePaths || formData.uploadedFilePaths.evidence || [],
-          minuteOfMeeting: uploadedPaths.minuteOfMeetingPaths || formData.uploadedFilePaths.minuteOfMeeting || [],
-          attachments: uploadedPaths.attachmentsPaths || formData.uploadedFilePaths.attachments || [],
-        }
+        assetId: assetId || await fetchAssetIdFromDB(),
+        uploadedPaths: uploadedPaths
       };
-  
-      console.log('📦 Final payload to API:', payload);
-  
-      // Submit to invention API
-      const saveRes = await fetch('/api/invention', {
+
+      // Upload documents if any
+      if (uploadedPaths && uploadedPaths.length > 0) {
+        try {
+          const uploadResult = await uploadDocuments(uploadedPaths, assetId, 'InventionRecognitionForm');
+          if (uploadResult.success) {
+            payload.uploadedPaths = uploadResult.uploadedPaths;
+          }
+        } catch (uploadError) {
+          console.error('Upload error:', uploadError);
+          toast.error("Error uploading documents. Please try again.");
+          return;
+        }
+      }
+
+      // Save to database
+      const response = await fetch('/api/invention', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
       });
-  
-      // Check if the response is successful
-      if (!saveRes.ok) {
-        const errorData = await saveRes.json().catch(() => ({}));
-        throw new Error(`API call failed: ${saveRes.status} ${saveRes.statusText}. ${errorData.message || ''}`);
+
+      const result = await response.json();
+
+      if (result.success) {
+        toast.success("Invention recognition form saved successfully!");
+        // Optionally redirect to assets page
+        // router.push('/assets');
+      } else {
+        toast.error(result.error || "Failed to save form. Please try again.");
       }
-  
-      const resultDB = await saveRes.json();
-      
-      // Validate the response data
-      if (!resultDB || !resultDB.success) {
-        throw new Error(`API returned error: ${resultDB?.message || 'Unknown error'}`);
-      }
-      
-      if (!resultDB.data || !resultDB.data.asset_id) {
-        throw new Error('API response missing asset_id');
-      }
-  
-      setAssetId(resultDB.data.asset_id); // Set the asset ID in the store
-      console.log('🎉 Operation completed:', resultDB.message);
-      console.log('🎉 Invention saved successfully:', resultDB);
-      toast.success('Data saved successfully!');
-      return true; // Return true to indicate successful save
     } catch (error) {
-      console.error('❌ Error saving invention:', error);
-      toast.error(`Failed to save invention: ${error.message}`);
-      return false; // Return false to indicate save failed
+      console.error('Save error:', error);
+      toast.error("An error occurred while saving. Please try again.");
     } finally {
       setIsSaving(false);
     }
   };
-  
 
   return (
-    <div className="min-h-screen flex flex-col pt-14">
-      <CardWrapper
-        label="1- Invention Recognition"
-        title="Register" 
-        backButtonHref="/previous-page"
-        nextButtonHref={assetId ? `/assetForm2?assetId=${assetId}` : "/assetForm2"}
-        className="w-full max-w-[90%] mx-auto p-8"
-        onSave={handleSave}
-        requireSave={false}
-        formData={formData}
-        validateForm={validateInventionForm}
-        nextButtonEnabled={!!assetId}
-      >
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      <CardWrapper>
         <MiniHeader title="Invention Details" />
-
-        {/* Form Layout (Stacked One Below The Other) */}
-        <div className="flex flex-col gap-6 p-6">
-          
-          <InventionDetails />
-          <div className="ml-4">
-            <AddOrDeleteInventor />
-          </div>
-          <EntityDetails />
-        </div>
-
+        <InventionDetails formKey="formData" updateFunction="updateFormData" />
+        
+        <MiniHeader title="Add or Delete Inventor" />
+        <AddOrDeleteInventor formKey="formData" updateFunction="updateFormData" />
+        
+        <MiniHeader title="Entity Details" />
+        <EntityDetails formKey="formData" updateFunction="updateFormData" />
+        
         <MiniHeader title="Technology Details" />
-        <TechnologyDetails />
-
-        <MiniHeader title="Experiments" />
-        <TrainRunExperimentation />
-
-        <MiniHeader title="Effort Sheet"  />
+        <TechnologyDetails formKey="formData" updateFunction="updateFormData" />
+        
+        <MiniHeader title="Train Run Experimentation" />
+        <TrainRunExperimentation formKey="formData" updateFunction="updateFormData" />
+        
+        <MiniHeader title="Effort Sheet Details" />
         <EffortSheetDetails formKey="formData" updateFunction="updateFormData" />
+        
         <MiniHeader title="Activity Status" />
         <ActivityStatus formKey="formData" updateFunction="updateFormData" />
+        
+        <div className="flex justify-end space-x-4 mt-8">
+          <button
+            onClick={() => router.push('/assets')}
+            className="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={isSaving}
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            {isSaving ? 'Saving...' : 'Save Form'}
+          </button>
+        </div>
       </CardWrapper>
     </div>
   );
 };
 
-// Main component with Suspense boundary
+// Main component with Suspense wrapper
 const InventionRecognitionForm = () => {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+    <SimpleProtectedRoute>
+      <Suspense fallback={
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
+          <div className="text-center bg-white/90 backdrop-blur-sm rounded-2xl p-12 shadow-2xl border border-gray-200/50 max-w-md mx-auto">
+            <div className="animate-spin rounded-full h-20 w-20 border-4 border-blue-500 border-t-transparent mx-auto mb-6"></div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">Loading Form</h3>
+            <p className="text-gray-600 mb-6">Please wait while we load the invention recognition form...</p>
+            <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+            </div>
+          </div>
         </div>
-      </div>
-    }>
-      <InventionRecognitionFormContent />
-    </Suspense>
+      }>
+        <InventionRecognitionFormContent />
+      </Suspense>
+    </SimpleProtectedRoute>
   );
 };
 

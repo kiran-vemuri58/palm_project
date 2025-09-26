@@ -2,32 +2,24 @@
 
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { clientAuth } from "@/lib/simpleAuth";
 
 export default function Home() {
-  const { isLoaded, isSignedIn, user } = useUser();
   const router = useRouter();
 
-  // Redirect to assets if already signed in
+  // Check if user is already authenticated
   useEffect(() => {
-    if (isLoaded && isSignedIn) {
-      router.push('/assets');
-    }
-  }, [isLoaded, isSignedIn, router]);
-
-  // Show loading while checking authentication
-  if (!isLoaded) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
-  }
+    const checkAuth = async () => {
+      const isAuthenticated = await clientAuth.isAuthenticated();
+      if (isAuthenticated) {
+        router.push('/assets');
+      }
+    };
+    
+    checkAuth();
+  }, [router]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -90,17 +82,10 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
-              onClick={() => router.push('/sign-in')}
+              onClick={() => router.push('/login')}
               className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg"
             >
               Sign In
-            </Button>
-            <Button 
-              onClick={() => router.push('/sign-up')}
-              variant="outline"
-              className="border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-3 text-lg"
-            >
-              Create Account
             </Button>
           </div>
         </div>
