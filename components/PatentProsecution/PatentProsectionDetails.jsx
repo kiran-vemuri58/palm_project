@@ -40,7 +40,7 @@ const PatentProsectionDetails = ({ formKey, updateFunction }) => {
         <div>
           <Label className="mb-1">Patent Published?</Label>
           <Select
-            value={formData.patentPublished}
+            value={formData?.patentPublished}
             onValueChange={handlePatentPublishedChange}
           >
             <SelectTrigger className="w-full">
@@ -55,7 +55,7 @@ const PatentProsectionDetails = ({ formKey, updateFunction }) => {
       </div>
 
       {/* Conditional Publication Number */}
-      {formData.patentPublished === 'yes' && (
+      {formData?.patentPublished === 'yes' && (
         <div className="grid grid-cols-3 gap-4 mt-4">
           <div>
             <Label className="mb-1">Publication Number</Label>
@@ -63,7 +63,7 @@ const PatentProsectionDetails = ({ formKey, updateFunction }) => {
               className="p-2"
               placeholder="Enter Publication Number"
               name="publicationNumber"
-              value={formData.publicationNumber || ''}
+              value={formData?.publicationNumber || ''}
               onChange={handleChange}
             />
           </div>
@@ -76,7 +76,7 @@ const PatentProsectionDetails = ({ formKey, updateFunction }) => {
           <Label className="mb-1">Post Grant Opposed?</Label>
           <Select
             className="w-full"
-            value={formData.apopposed}
+            value={formData?.apopposed}
             onValueChange={handleApopposedChange}
           >
             <SelectTrigger className="w-full">
@@ -91,7 +91,7 @@ const PatentProsectionDetails = ({ formKey, updateFunction }) => {
       </div>
 
       {/* Conditional Opposition Fields */}
-      {formData.apopposed === 'yes' && (
+      {formData?.apopposed === 'yes' && (
         <>
           {/* Opposer Name, Attachment, Citations */}
           <div className="grid grid-cols-3 gap-4 mt-4">
@@ -101,7 +101,7 @@ const PatentProsectionDetails = ({ formKey, updateFunction }) => {
                 className="p-2"
                 placeholder="Enter Opposer Name"
                 name="oname"
-                value={formData.oname || ''}
+                value={formData?.oname || ''}
                 onChange={handleChange}
               />
             </div>
@@ -111,7 +111,7 @@ const PatentProsectionDetails = ({ formKey, updateFunction }) => {
                 name="attachments"
                 multiple={true}
                 accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                value={formData.attachments || []}
+                value={formData?.attachments || []}
                 onChange={handleFileUpload}
                 maxFiles={10}
                 maxFileSize={20 * 1024 * 1024}
@@ -123,7 +123,7 @@ const PatentProsectionDetails = ({ formKey, updateFunction }) => {
                 className="p-2"
                 placeholder="Enter Citations Filed by Opposer"
                 name="cfbopposer"
-                value={formData.cfbopposer || ''}
+                value={formData?.cfbopposer || ''}
                 onChange={handleChange}
               />
             </div>
@@ -139,7 +139,7 @@ const PatentProsectionDetails = ({ formKey, updateFunction }) => {
                 className="p-2"
                 placeholder="Enter Opinion"
                 name="boaof"
-                value={formData.boaof || ''}
+                value={formData?.boaof || ''}
                 onChange={handleChange}
               />
             </div>
@@ -149,7 +149,7 @@ const PatentProsectionDetails = ({ formKey, updateFunction }) => {
                 className="p-2"
                 placeholder="Enter Response"
                 name="rffo"
-                value={formData.rffo || ''}
+                value={formData?.rffo || ''}
                 onChange={handleChange}
               />
             </div>
@@ -159,7 +159,7 @@ const PatentProsectionDetails = ({ formKey, updateFunction }) => {
                 name="attachments"
                 multiple={true}
                 accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                value={formData.attachments || []}
+                value={formData?.attachments || []}
                 onChange={handleFileUpload}
                 maxFiles={10}
                 maxFileSize={20 * 1024 * 1024}
@@ -171,7 +171,7 @@ const PatentProsectionDetails = ({ formKey, updateFunction }) => {
                 className="p-2"
                 placeholder="Enter Employee ID"
                 name="orpby"
-                value={formData.orpby || ''}
+                value={formData?.orpby || ''}
                 onChange={handleChange}
               />
             </div>
@@ -183,7 +183,7 @@ const PatentProsectionDetails = ({ formKey, updateFunction }) => {
                 className="p-2"
                 placeholder="Enter Agency Number"
                 name="eagency"
-                value={formData.eagency || ''}
+                value={formData?.eagency || ''}
                 onChange={handleChange}
               />
             </div>
@@ -193,7 +193,7 @@ const PatentProsectionDetails = ({ formKey, updateFunction }) => {
                 className="p-2"
                 placeholder="Enter Employee ID"
                 name="revby"
-                value={formData.revby || ''}
+                value={formData?.revby || ''}
                 onChange={handleChange}
               />
             </div>
@@ -205,7 +205,7 @@ const PatentProsectionDetails = ({ formKey, updateFunction }) => {
                 name="attachments"
                 multiple={true}
                 accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                value={formData.attachments || []}
+                value={formData?.attachments || []}
                 onChange={handleFileUpload}
                 maxFiles={10}
                 maxFileSize={20 * 1024 * 1024}

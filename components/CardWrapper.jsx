@@ -3,25 +3,32 @@
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "sonner";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 
-const CardWrapper = ({ label, title, backButtonHref, nextButtonHref, onSave, children, requireSave = false, formData = null, validateForm = null, nextButtonEnabled = true }) => {
+const CardWrapper = ({ label, title, backButtonHref, nextButtonHref, onSave, children, requireSave = false, formData = null, validateForm = null, assetId = null }) => {
   const router = useRouter();
-  const [confirmOpen, setConfirmOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [validationError, setValidationError] = useState(false);
-  const [showValidationMessage, setShowValidationMessage] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
 
   const handleSave = async () => {
     if (!onSave) return;
+    
+    // Validate form before saving
+    if (formData && validateForm) {
+      const validationResult = validateForm(formData);
+      if (!validationResult.isValid) {
+        setValidationErrors(validationResult.errors);
+        toast.error("Please fix validation errors before saving");
+        return false;
+      }
+    }
+    
     try {
       setIsSaving(true);
       const success = await onSave();
       if (success) {
-      toast.success("Saved successfully");
-        setValidationError(false);
-      return true;
+        toast.success("Saved successfully");
+        setValidationErrors({});
+        return true;
       } else {
         return false;
       }
@@ -35,22 +42,20 @@ const CardWrapper = ({ label, title, backButtonHref, nextButtonHref, onSave, chi
 
   const handleNext = () => {
     if (requireSave) {
-      setValidationError(false); // Reset validation error when opening dialog
-      
-      // Check validation immediately when opening dialog
+      // For page 1: Check validation before navigating
       if (formData && validateForm) {
-        const errors = validateForm(formData);
-        const hasValidationErrors = Object.keys(errors).length > 0;
-        setShowValidationMessage(hasValidationErrors);
-        console.log('🔍 Validation check on Next click:', { errors, hasValidationErrors });
-      } else {
-        setShowValidationMessage(false);
+        const validationResult = validateForm(formData);
+        if (!validationResult.isValid) {
+          setValidationErrors(validationResult.errors);
+          toast.error("Please fix validation errors before proceeding");
+          return;
+        }
       }
-      
-      setConfirmOpen(true);
-    } else {
-      router.push(nextButtonHref);
     }
+    
+    // Navigate to next page with assetId if available
+    const nextUrl = assetId ? `${nextButtonHref}?assetId=${assetId}` : nextButtonHref;
+    router.push(nextUrl);
   };
 
   return (
@@ -67,7 +72,10 @@ const CardWrapper = ({ label, title, backButtonHref, nextButtonHref, onSave, chi
       <div className="flex justify-between items-center gap-4">
         {backButtonHref && (
           <button
-            onClick={() => router.push(backButtonHref)}
+            onClick={() => {
+              const backUrl = assetId ? `${backButtonHref}?assetId=${assetId}` : backButtonHref;
+              router.push(backUrl);
+            }}
             className="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg text-base hover:bg-gray-400 transition min-w-[120px]"
           >
             Back
@@ -85,60 +93,16 @@ const CardWrapper = ({ label, title, backButtonHref, nextButtonHref, onSave, chi
             </button>
           )}
           {nextButtonHref && (
-            <div className="flex flex-col items-end">
-              <button
-                onClick={handleNext}
-                disabled={!nextButtonEnabled}
-                className={`px-6 py-2 rounded-lg text-base transition min-w-[120px] ${
-                  nextButtonEnabled 
-                    ? 'bg-green-500 text-white hover:bg-green-600' 
-                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                }`}
-              >
-                Next
-              </button>
-              {!nextButtonEnabled && (
-                <p className="text-xs text-gray-500 mt-1">Save first to enable</p>
-              )}
-            </div>
+            <button
+              onClick={handleNext}
+              className="bg-green-500 text-white px-6 py-2 rounded-lg text-base hover:bg-green-600 transition min-w-[120px]"
+            >
+              Next
+            </button>
           )}
         </div>
       </div>
 
-      <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Save required to continue</DialogTitle>
-          </DialogHeader>
-          <p className="text-sm text-muted-foreground">
-            {showValidationMessage 
-              ? "Please enter those three fields: Invention Title, Common Name, and Inventor Details before proceeding to the next step."
-              : "You must save your data before proceeding to the next step."
-            }
-          </p>
-          <DialogFooter>
-            <Button variant="ghost" onClick={() => setConfirmOpen(false)}>Cancel</Button>
-            <Button
-              onClick={async () => {
-                console.log('🔍 Save button clicked');
-                const ok = await handleSave();
-                console.log('🔍 handleSave result:', ok);
-                if (ok) {
-                  setConfirmOpen(false);
-                  router.push(nextButtonHref);
-                } else {
-                  // Show validation error message
-                  console.log('🔍 Setting showValidationMessage to true');
-                  setShowValidationMessage(true);
-                }
-              }}
-              disabled={isSaving}
-            >
-              {isSaving ? "Saving..." : "Save & Continue"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };

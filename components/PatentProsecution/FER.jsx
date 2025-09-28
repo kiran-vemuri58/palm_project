@@ -35,25 +35,25 @@ const FER = ({ formKey, updateFunction }) => {
   const formData = useFormStore((state) => state[formKey]);
   const updateFormData = useFormStore((state) => state[updateFunction]);
 
-  const ferList = formData.ferList || [];
+  const ferList = safeFormData.ferList || [];
 
   const handleChange = (index, e) => {
     const { name, value } = e.target;
     const updatedList = [...ferList];
     updatedList[index][name] = value;
-    updateFormData({ ...formData, ferList: updatedList });
+    updateFormData({ ...safeFormData, ferList: updatedList });
   };
 
   const handleFileUpload = (index, e) => {
     const { name, value } = e.target; // value is array of File
     const updatedList = [...ferList];
     updatedList[index][name] = value;
-    updateFormData({ ...formData, ferList: updatedList });
+    updateFormData({ ...safeFormData, ferList: updatedList });
   };
 
   const handleAddFer = () => {
     updateFormData({
-      ...formData,
+      ...safeFormData,
       ferList: [...ferList, structuredClone(emptyFER)],
     });
   };
@@ -61,7 +61,7 @@ const FER = ({ formKey, updateFunction }) => {
   const handleDeleteFer = (index) => {
     const updatedList = [...ferList];
     updatedList.splice(index, 1);
-    updateFormData({ ...formData, ferList: updatedList });
+    updateFormData({ ...safeFormData, ferList: updatedList });
   };
 
   return (
@@ -77,7 +77,7 @@ const FER = ({ formKey, updateFunction }) => {
                 onValueChange={(value) => {
                   const updated = [...ferList];
                   updated[index].ferReceived = value;
-                  updateFormData({ ...formData, ferList: updated });
+                  updateFormData({ ...safeFormData, ferList: updated });
                 }}
               >
                 <SelectTrigger className="w-full h-10 px-3">
@@ -105,7 +105,7 @@ const FER = ({ formKey, updateFunction }) => {
                 onValueChange={(value) => {
                   const updated = [...ferList];
                   updated[index].ferArgument = value;
-                  updateFormData({ ...formData, ferList: updated });
+                  updateFormData({ ...safeFormData, ferList: updated });
                 }}
               >
                 <SelectTrigger className="w-full h-10 px-3">
@@ -165,7 +165,7 @@ const FER = ({ formKey, updateFunction }) => {
                 onValueChange={(value) => {
                   const updated = [...ferList];
                   updated[index].ferPrepared = value;
-                  updateFormData({ ...formData, ferList: updated });
+                  updateFormData({ ...safeFormData, ferList: updated });
                 }}
               >
                 <SelectTrigger className="w-full h-10 px-3">

@@ -3,6 +3,7 @@
 import useFormStore from '@/store/store';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { getSafeFormValue } from '@/utils/formUtils';
 import React from 'react';
 
 const EffortSheetDetails = ({formKey,updateFunction}) => {
@@ -11,7 +12,15 @@ const EffortSheetDetails = ({formKey,updateFunction}) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    updateFormDataByKey({ ...formData, [name]: value });
+    if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      updateFormDataByKey({ ...formData, [name]: value });
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
   };
 
   return (
@@ -26,7 +35,7 @@ const EffortSheetDetails = ({formKey,updateFunction}) => {
             placeholder="Enter employee ID..."
             id="ipRecognizer"
             name="ipRecognizer"
-            value={formData.ipRecognizer}
+            value={getSafeFormValue(formData, 'ipRecognizer')}
             onChange={handleChange}
           />
         </div>
@@ -38,7 +47,7 @@ const EffortSheetDetails = ({formKey,updateFunction}) => {
             id="hoursSpent"
             name="hoursSpent"
             type="number"
-            value={formData.hoursSpent}
+            value={getSafeFormValue(formData, 'hoursSpent')}
             onChange={handleChange}
           />
         </div>
@@ -49,7 +58,7 @@ const EffortSheetDetails = ({formKey,updateFunction}) => {
             placeholder="Enter agency name..."
             id="agencyRecognizer"
             name="agencyRecognizer"
-            value={formData.agencyRecognizer}
+            value={getSafeFormValue(formData, 'agencyRecognizer')}
             onChange={handleChange}
           />
         </div>
@@ -65,7 +74,7 @@ const EffortSheetDetails = ({formKey,updateFunction}) => {
             id="agencyCost"
             name="agencyCost"
             type="number"
-            value={formData.agencyCost}
+            value={getSafeFormValue(formData, 'agencyCost')}
             onChange={handleChange}
           />
         </div>
@@ -77,7 +86,7 @@ const EffortSheetDetails = ({formKey,updateFunction}) => {
             id="reviewEffort"
             name="reviewEffort"
             type="number"
-            value={formData.reviewEffort}
+            value={getSafeFormValue(formData, 'reviewEffort')}
             onChange={handleChange}
           />
         </div>
@@ -88,7 +97,7 @@ const EffortSheetDetails = ({formKey,updateFunction}) => {
             placeholder="Enter manager ID..."
             id="managerEmpId"
             name="managerEmpId"
-            value={formData.managerEmpId}
+            value={getSafeFormValue(formData, 'managerEmpId')}
             onChange={handleChange}
           />
         </div>
@@ -105,7 +114,7 @@ const EffortSheetDetails = ({formKey,updateFunction}) => {
             id="extractionEffort"
             name="extractionEffort"
             type="number"
-            value={formData.extractionEffort}
+            value={getSafeFormValue(formData, 'extractionEffort')}
             onChange={handleChange}
           />
         </div>

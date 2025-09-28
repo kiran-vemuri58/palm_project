@@ -1,10 +1,17 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { authenticateRequest, createUnauthorizedResponse } from '@/lib/authMiddleware';
 
 const prisma = new PrismaClient();
 
 export async function GET(req) {
   try {
+    // Authenticate request
+    const authResult = await authenticateRequest(req);
+    if (!authResult.success) {
+      return createUnauthorizedResponse(authResult.message);
+    }
+
     const { searchParams } = new URL(req.url);
     const assetId = searchParams.get('assetId');
     
@@ -46,6 +53,12 @@ export async function GET(req) {
 
 export async function POST(req) {
   try {
+    // Authenticate request
+    const authResult = await authenticateRequest(req);
+    if (!authResult.success) {
+      return createUnauthorizedResponse(authResult.message);
+    }
+
     const payload = await req.json(); // read body from POST request
         // 🧠 Fetch latest asset_id and generate a new one
     // const lastEntry = await prisma.inventions.findFirst({ 

@@ -12,11 +12,27 @@ const DecisionSheet = ({formKey, updateFunction}) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    updateFormDataByKey({ [name]: value });
+    if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      updateFormDataByKey({ [name]: value });
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
   };
   const handleFileUpload = (e) => {
     const { name, value } = e.target; // value is array of File
-    updateFormDataByKey({ [name]: value });
+    if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      updateFormDataByKey({ [name]: value });
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
   };
 
   return (
@@ -31,7 +47,7 @@ const DecisionSheet = ({formKey, updateFunction}) => {
             placeholder="Enter Name of Decision Maker"
             id="ipRecognizer"
             name="nodc"
-            value={formData.nodc || ''}
+            value={formData?.nodc || ''}
             onChange={handleChange}
           />
         </div>
@@ -42,7 +58,7 @@ const DecisionSheet = ({formKey, updateFunction}) => {
             placeholder="Enter decision in brief"
             id="dibrief"
             name="dibrief"
-            value={formData.dibrief || ''}
+            value={formData?.dibrief || ''}
             onChange={handleChange}
           />
         </div>
@@ -53,7 +69,7 @@ const DecisionSheet = ({formKey, updateFunction}) => {
             name="attachments"
             multiple={true}
             accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.txt"
-            value={formData.attachments || []}
+            value={formData?.attachments || []}
             onChange={handleFileUpload}
             maxFiles={10}
             maxFileSize={20 * 1024 * 1024}

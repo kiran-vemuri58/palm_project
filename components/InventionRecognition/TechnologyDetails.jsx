@@ -26,7 +26,7 @@ const TechnologyDetails = () => {
           <Label className="mb-1">Is Technology Incremental Renovation?</Label>
           <Select
             className="w-full"
-            value={formData.incrementalRenovation || ''}
+            value={formData?.incrementalRenovation || ''}
             onValueChange={handleIncrementalRenovationChange}
           >
             <SelectTrigger className="w-full">
@@ -41,17 +41,17 @@ const TechnologyDetails = () => {
       </div>
 
       {/* Show other inputs only if "Yes" is selected */}
-      {formData.incrementalRenovation === 'yes' && (
+      {formData?.incrementalRenovation === 'yes' && (
         <>
           {/* Second Row */}
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div>
               <Label className="mb-1">Patent Numbers</Label>
-              <Input className="p-2" placeholder="Enter patent numbers..." id="patentNumbers" name="patentNumbers" value={formData.patentNumbers} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter patent numbers..." id="patentNumbers" name="patentNumbers" value={formData?.patentNumbers} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Journal Numbers</Label>
-              <Input className="p-2" placeholder="Enter journal numbers..." id="journalNumbers" name="journalNumbers" value={formData.journalNumbers} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter journal numbers..." id="journalNumbers" name="journalNumbers" value={formData?.journalNumbers} onChange={handleChange} />
             </div>
           </div>
 
@@ -59,11 +59,11 @@ const TechnologyDetails = () => {
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div>
               <Label className="mb-1">Product Identity Number</Label>
-              <Input className="p-2" placeholder="Enter product identity number..." id="productIdentity" name="productIdentity" value={formData.productIdentity} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter product identity number..." id="productIdentity" name="productIdentity" value={formData?.productIdentity} onChange={handleChange} />
             </div>
             <div className="col-span-2">
               <Label className="mb-1">Problem the Invention Addresses</Label>
-              <Input className="p-2 w-full" placeholder="Describe the problem addressed by the invention..." id="problemAddressed" name="problemAddressed" value={formData.problemAddressed} onChange={handleChange} />
+              <Input className="p-2 w-full" placeholder="Describe the problem addressed by the invention..." id="problemAddressed" name="problemAddressed" value={formData?.problemAddressed} onChange={handleChange} />
             </div>
           </div>
         </>

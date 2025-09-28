@@ -32,7 +32,7 @@ const Provisional = () => {
           <Input
             placeholder="Enter Name of Patent Filing"
             name="patentFilingName"
-            value={formData.patentFilingName || ''}
+            value={formData?.patentFilingName || ''}
             onChange={handleChange}
           />
         </div>
@@ -40,7 +40,7 @@ const Provisional = () => {
           <Label>Submitted Provisional Patent Application</Label>
           <FileInput
             name="provisionalPatent"
-            value={formData.provisionalPatent || []}
+            value={formData?.provisionalPatent || []}
             onChange={(files) => updateFormData({ ...formData, provisionalPatent: files })}
             multiple={true}
             accept=".pdf,.doc,.docx,.txt"
@@ -52,7 +52,7 @@ const Provisional = () => {
           <Label>Attachment</Label>
           <FileInput
             name="attachment"
-            value={formData.attachment || []}
+            value={formData?.attachment || []}
             onChange={(files) => updateFormData({ ...formData, attachment: files })}
             multiple={true}
             accept=".pdf,.doc,.docx,.txt"
@@ -66,7 +66,7 @@ const Provisional = () => {
           <Input
             type="date"
             name="dateProvision"
-            value={formData.dateProvision || ''}
+            value={formData?.dateProvision || ''}
             onChange={handleChange}
           />
         </div>
@@ -75,14 +75,14 @@ const Provisional = () => {
           <Input
             placeholder="Enter Applicant Name"
             name="applicantName"
-            value={formData.applicantName || ''}
+            value={formData?.applicantName || ''}
             onChange={handleChange}
           />
         </div>
         <div>
           <Label>Is Profile Patent?</Label>
           <Select
-            value={formData.isProfilePatent || ''}
+            value={formData?.isProfilePatent || ''}
             onValueChange={(value) => handleSelectChange('isProfilePatent', value)}
           >
             <SelectTrigger>
@@ -98,7 +98,7 @@ const Provisional = () => {
         <div>
           <Label>Is Defensive Patent?</Label>
           <Select
-            value={formData.isDefensivePatent || ''}
+            value={formData?.isDefensivePatent || ''}
             onValueChange={(value) => handleSelectChange('isDefensivePatent', value)}
           >
             <SelectTrigger>
@@ -114,7 +114,7 @@ const Provisional = () => {
           <Label>Claiming Any Startup?</Label>
           <FileInput
             name="claimingStartup"
-            value={formData.claimingStartup || []}
+            value={formData?.claimingStartup || []}
             onChange={(files) => updateFormData({ ...formData, claimingStartup: files })}
             multiple={true}
             accept=".pdf,.doc,.docx,.txt"
@@ -127,7 +127,7 @@ const Provisional = () => {
           <Input
             placeholder="Enter POA Sent Office"
             name="poaOffice"
-            value={formData.poaOffice || ''}
+            value={formData?.poaOffice || ''}
             onChange={handleChange}
           />
         </div>
@@ -137,7 +137,7 @@ const Provisional = () => {
           <Input
             placeholder="Enter Efforts Spent"
             name="effortsSpent"
-            value={formData.effortsSpent || ''}
+            value={formData?.effortsSpent || ''}
             onChange={handleChange}
           />
         </div>
@@ -146,7 +146,7 @@ const Provisional = () => {
           <Input
             placeholder="Enter Patent Filer"
             name="patentFiler"
-            value={formData.patentFiler || ''}
+            value={formData?.patentFiler || ''}
             onChange={handleChange}
           />
         </div>
@@ -155,7 +155,7 @@ const Provisional = () => {
           <Input
             placeholder="Enter Hours Spent"
             name="hoursSpent"
-            value={formData.hoursSpent || ''}
+            value={formData?.hoursSpent || ''}
             onChange={handleChange}
           />
         </div>
@@ -165,7 +165,7 @@ const Provisional = () => {
           <Input
             placeholder="Enter External Agency Recognizer"
             name="agencyRecognizer"
-            value={formData.agencyRecognizer || ''}
+            value={formData?.agencyRecognizer || ''}
             onChange={handleChange}
           />
         </div>
@@ -174,7 +174,7 @@ const Provisional = () => {
           <Input
             placeholder="Enter Agency Cost"
             name="agencyCost"
-            value={formData.agencyCost || ''}
+            value={formData?.agencyCost || ''}
             onChange={handleChange}
           />
         </div>
@@ -183,7 +183,7 @@ const Provisional = () => {
           <Input
             placeholder="Enter Manager Responsible"
             name="managerResponsible"
-            value={formData.managerResponsible || ''}
+            value={formData?.managerResponsible || ''}
             onChange={handleChange}
           />
         </div>

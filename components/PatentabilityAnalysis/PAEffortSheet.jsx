@@ -8,10 +8,16 @@ import React from 'react';
 const PAEffortSheetDetails = ({formKey, updateFunction}) => {
   const formData = useFormStore((state) => state[formKey]);
   const updateFormDataByKey = useFormStore((state) => state[updateFunction]);
+  
+  const safeFormData = formData || {};
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    updateFormDataByKey({ [name]: value });
+    if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      updateFormDataByKey({ [name]: value });
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
   };
 
   return (
@@ -26,7 +32,7 @@ const PAEffortSheetDetails = ({formKey, updateFunction}) => {
             placeholder="Enter employee ID..."
             id="esfsearcher"
             name="esfsearcher"
-            value={formData.esfsearcher || ''}
+            value={safeFormData.esfsearcher || ''}
             onChange={handleChange}
           />
         </div>
@@ -37,7 +43,7 @@ const PAEffortSheetDetails = ({formKey, updateFunction}) => {
             placeholder="Enter employee ID..."
             id="ipsearcher"
             name="ipRecognizer"
-            value={formData.ipRecognizer || ''}
+            value={safeFormData.ipRecognizer || ''}
             onChange={handleChange}
           />
         </div>
@@ -49,7 +55,7 @@ const PAEffortSheetDetails = ({formKey, updateFunction}) => {
             id="hoursSpent"
             name="hoursSpent"
             type="number"
-            value={formData.hoursSpent || ''}
+            value={safeFormData.hoursSpent || ''}
             onChange={handleChange}
           />
         </div>
@@ -65,7 +71,7 @@ const PAEffortSheetDetails = ({formKey, updateFunction}) => {
             placeholder="Enter agency name..."
             id="agencyRecognizer"
             name="agencyRecognizer"
-            value={formData.agencyRecognizer || ''}
+            value={safeFormData.agencyRecognizer || ''}
             onChange={handleChange}
           />
         </div>
@@ -77,7 +83,7 @@ const PAEffortSheetDetails = ({formKey, updateFunction}) => {
             id="agencyCost"
             name="agencyCost"
             type="number"
-            value={formData.agencyCost || ''}
+            value={safeFormData.agencyCost || ''}
             onChange={handleChange}
           />
         </div>
@@ -89,7 +95,7 @@ const PAEffortSheetDetails = ({formKey, updateFunction}) => {
             id="reviewEffort"
             name="reviewEffort"
             type="number"
-            value={formData.reviewEffort || ''}
+            value={safeFormData.reviewEffort || ''}
             onChange={handleChange}
           />
         </div>
@@ -100,7 +106,7 @@ const PAEffortSheetDetails = ({formKey, updateFunction}) => {
             placeholder="Enter manager ID..."
             id="managerEmpId"
             name="managerEmpId"
-            value={formData.managerEmpId || ''}
+            value={safeFormData.managerEmpId || ''}
             onChange={handleChange}
           />
         </div>

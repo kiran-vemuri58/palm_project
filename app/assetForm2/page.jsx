@@ -15,12 +15,14 @@ import SimpleProtectedRoute from "@/components/SimpleProtectedRoute";
 
 // Component that uses useSearchParams - needs to be wrapped in Suspense
 const InventionExtractionContent = () => {
-  const { formData2, uploadedPaths, assetId } = useFormStore();
+  const { formData, formData2, uploadedPaths, assetId } = useFormStore();
+  const updateFormData = useFormStore((state) => state.updateFormData);
   const updateFormData2 = useFormStore((state) => state.updateFormData2);
   const setAssetId = useFormStore((state) => state.setAssetId);
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isSaving, setIsSaving] = useState(false);
+  const [isLoadingData, setIsLoadingData] = useState(false);
 
   // Handle assetId from query parameter
   useEffect(() => {
@@ -31,20 +33,82 @@ const InventionExtractionContent = () => {
   }, [searchParams, assetId, setAssetId]);
 
   // Load existing data when assetId changes
+    // Map invention database fields to form fields
+  const mapInventionToForm = (dbData) => {
+    if (!dbData) return {};
+    
+    return {
+      inventiontitle: dbData.inventiontitle || '',
+      commonName: dbData.commonname || '', // Map snake_case to camelCase
+      inventordetails: dbData.inventordetails || '',
+      incrementalrenovation: dbData.incrementalrenovation || '',
+      patentnumbers: dbData.patentnumbers || '',
+      journalnumbers: dbData.journalnumbers || '',
+      productidentity: dbData.productidentity || '',
+      problemaddressed: dbData.problemaddressed || '',
+      trainrun: dbData.trainrun || '',
+      experimentresults: dbData.experimentresults || '',
+      evidence: dbData.evidence || [],
+      minuteofmeeting: dbData.minuteofmeeting || [],
+      attachments: dbData.attachments || [],
+      rating: dbData.rating || 0
+    };
+  };
+
+  // Map extraction database fields to form fields
+  const mapExtractionToForm = (dbData) => {
+    if (!dbData) return {};
+    
+    return {
+      extractorOne: dbData.extractorOne || '',
+      extractortwo: dbData.extractortwo || '',
+      iEDate: dbData.iEDate || '',
+      iawpl: dbData.iawpl || '',
+      nfeature: dbData.nfeature || '',
+      ifeature: dbData.ifeature || '',
+      idattachments: dbData.idattachments || [],
+      scountry: dbData.scountry || '',
+      oextractor: dbData.oextractor || '',
+      ipRecognizer: dbData.ipRecognizer || '',
+      hoursSpent: dbData.hoursSpent || '', // This field exists in Extraction table
+      agencyRecognizer: dbData.agencyRecognizer || '',
+      agencyCost: dbData.agencyCost || '',
+      reviewEffort: dbData.reviewEffort || '',
+      managerEmpId: dbData.managerEmpId || '',
+      activityStatus: dbData.activityStatus || '',
+      updatenba: dbData.updatenba || ''
+    };
+  };
+
   const loadExistingData = async () => {
     if (!assetId) return;
 
+    setIsLoadingData(true);
     try {
-      const response = await fetch(`/api/extraction?assetId=${assetId}`);
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success && data.data) {
-          // Update form data with existing data
-          updateFormData2(data.data);
+      // Load invention data (form 1) first
+      const inventionResponse = await fetch(`/api/invention?assetId=${assetId}`);
+      if (inventionResponse.ok) {
+        const inventionData = await inventionResponse.json();
+        if (inventionData.success && inventionData.data) {
+          const mappedData = mapInventionToForm(inventionData.data);
+          updateFormData(mappedData);
+        }
+      }
+
+      // Load extraction data (form 2)
+      const extractionResponse = await fetch(`/api/extraction?assetId=${assetId}`);
+      if (extractionResponse.ok) {
+        const extractionData = await extractionResponse.json();
+        if (extractionData.success && extractionData.data) {
+          const mappedExtractionData = mapExtractionToForm(extractionData.data);
+          updateFormData2(mappedExtractionData);
         }
       }
     } catch (error) {
       console.error('Error loading existing data:', error);
+      toast.error("Failed to load existing data. Please try again.");
+    } finally {
+      setIsLoadingData(false);
     }
   };
 
@@ -97,39 +161,47 @@ const InventionExtractionContent = () => {
     }
   };
 
+    // Show loading state while fetching data
+  if (isLoadingData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
+        <div className="text-center bg-white/90 backdrop-blur-sm rounded-2xl p-12 shadow-2xl border border-gray-200/50 max-w-md mx-auto">
+          <div className="animate-spin rounded-full h-20 w-20 border-4 border-blue-500 border-t-transparent mx-auto mb-6"></div>
+          <h3 className="text-2xl font-bold text-gray-900 mb-3">Loading Asset Data</h3>
+          <p className="text-gray-600 mb-6">Please wait while we load the existing form data...</p>
+          <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
+            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      <CardWrapper>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4">
+      <CardWrapper
+        label={`Invention Extraction Form${assetId ? ` - Asset ID: ${assetId}` : ''}`}
+        backButtonHref="/assetForm1"
+        nextButtonHref="/assetForm3"
+        onSave={handleSave}
+        assetId={assetId}
+      >
+        <MiniHeader title="Invention Details" />
+        <InventionDetails formKey="formData" updateFunction="updateFormData" disableCommon={true} />
+        
         <MiniHeader title="Extractor Details" />
         <ExtractorDetails formKey="formData2" updateFunction="updateFormData2" />
         
         <MiniHeader title="Updates NBA" />
         <UpdatesNBA formKey="formData2" updateFunction="updateFormData2" />
         
-        <MiniHeader title="Invention Details" />
-        <InventionDetails formKey="formData2" updateFunction="updateFormData2" />
-        
         <MiniHeader title="Effort Sheet Details" />
         <EffortSheetDetails formKey="formData2" updateFunction="updateFormData2" />
         
         <MiniHeader title="Activity Status" />
         <ActivityStatus formKey="formData2" updateFunction="updateFormData2" />
-        
-        <div className="flex justify-end space-x-4 mt-8">
-          <button
-            onClick={() => router.push('/assets')}
-            className="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={isSaving}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {isSaving ? 'Saving...' : 'Save Form'}
-          </button>
-        </div>
       </CardWrapper>
     </div>
   );

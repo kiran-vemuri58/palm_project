@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { authenticateRequest, createUnauthorizedResponse } from '@/lib/authMiddleware';
 
 const prisma = new PrismaClient();
 
@@ -7,8 +8,16 @@ const prisma = new PrismaClient();
 
 export async function GET(req) {
   try {
+    // Authenticate request
+    const authResult = await authenticateRequest(req);
+    if (!authResult.success) {
+      return createUnauthorizedResponse(authResult.message);
+    }
+
     const { searchParams } = new URL(req.url);
     const assetId = searchParams.get('assetId');
+    
+    console.log('🔍 API GET request - assetId:', assetId);
     
     // Test database connection
     await prisma.$connect();
@@ -16,9 +25,11 @@ export async function GET(req) {
 
     // If assetId is provided, fetch specific record
     if (assetId) {
+      console.log('🔍 Fetching invention with assetId:', assetId);
       const data = await prisma.Invention.findUnique({
         where: { asset_id: assetId },
       });
+      console.log('🔍 Found invention data:', data);
 
       if (!data) {
         return NextResponse.json({ 
@@ -70,6 +81,12 @@ export async function GET(req) {
 
 export async function POST(req) {
   try {
+    // Authenticate request
+    const authResult = await authenticateRequest(req);
+    if (!authResult.success) {
+      return createUnauthorizedResponse(authResult.message);
+    }
+
     const payload = await req.json(); // read body from POST request
     
     console.log('Received payload:', payload); // Debug log

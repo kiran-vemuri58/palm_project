@@ -34,38 +34,66 @@ model Session {
 }
 
 model Invention {
+  // Primary key - passed separately
   asset_id                  String                      @id
+  
+  // Mandatory fields (3 required)
   inventiontitle            String
   commonname                String
   inventordetails           String
+  
+  // Optional fields - Invention Details
+  rating                    Int?                        @default(0)
+  
+  // Optional fields - Entity Details
+  entity                    String?
+  date                      String?
+  inventioncountry          String?
+  creationcountry           String?
+  collaboration             String?
+  collaboratorName          String?
+  collaboratorCountry       String?
+  stakeholders              String?
+  entityJournalNumbers      String?
+  entityProductIdentity     String?
+  
+  // Optional fields - Technology Details
   incrementalrenovation     String?
   patentnumbers             String?
   journalnumbers            String?
   productidentity           String?
   problemaddressed          String?
+  
+  // Optional fields - Train Run / Experimentation
   trainrun                  String?
   experimentresults         String?
   evidence                  String[]                    @default([])
-  minuteofmeeting           String[]                    @default([])
+  minuteOfMeeting           String[]                    @default([])
   attachments               String[]                    @default([])
+  
+  // Optional fields - Effort Sheet Details (matching component field names)
   iprecognizer              String?
-  hoursspent                String?
+  hoursspent                Int?        // Integer for hours
   agencyrecognizer          String?
-  agencycost                String?
-  revieweffort              String?
+  agencycost                Int?        // Integer for cost
+  revieweffort              Int?        // Integer for effort
   managerempid              String?
-  entity                    String?
-  date                      DateTime                    @default(now())
-  inventioncountry          String?
-  creationcountry           String?
-  collaboration             String?
-  collaboratorname          String?
-  collaboratorcountry       String?
-  stakeholders              String?
-  created_at                DateTime                    @default(now())
+  extractionEffort          Int?        // Integer for effort
+  
+  // Optional fields - Activity Status
+  activityStatus            String?
+  
+  // Optional fields - Inventors (stored as JSON)
   inventors                 Json?
+  
+  // Timestamps
+  created_at                DateTime                    @default(now())
+  updated_at                DateTime                    @updatedAt
+  
+  // Relations
   extractions               Extraction[]                @relation("InventionExtraction")
   patentabilities           Patentability[]             @relation("InventionPatentabilities")
+  patentabilityAnalyses     PatentabilityAnalysis[]     @relation("InventionPatentabilityAnalyses")
   PatentSpecificInformation PatentSpecificInformation[] @relation("PatentSpecificInfoToInvention")
   PatentFiling              PatentFiling[]              @relation("PatentFiling")
   PostGrantOpposition       PostGrantOpposition[]       @relation("PostGrantOppositionToInvention")
@@ -76,25 +104,36 @@ model Invention {
 
 model Extraction {
   id               Int        @id @default(autoincrement())
-  asset_id         String?
-  invention        Invention? @relation("InventionExtraction", fields: [asset_id], references: [asset_id], onDelete: Cascade)
-  extractorOne     String
-  extractortwo     String
-  iEDate           DateTime
-  iawpl            String
-  nfeature         String
-  ifeature         String
+  asset_id         String     // Required foreign key
+  invention        Invention  @relation("InventionExtraction", fields: [asset_id], references: [asset_id], onDelete: Cascade)
+  
+  // Extraction Details (matching V2 component field names exactly)
+  extractorOne     String?
+  extractortwo     String?
+  iEDate           String?
+  iawpl            String?
+  nfeature         String?
+  ifeature         String?
   idattachments    String[] @default([])
-  scountry         String
-  oextractor       String
-  ipRecognizer     String
-  hoursSpent       String
-  agencyRecognizer String
-  agencyCost       String
-  reviewEffort     String
-  managerEmpId     String
-  activityStatus   String
-  updatenba        String
+  scountry         String?
+  oextractor       String?
+  
+  // NBA Updates
+  updatenba        String?
+  
+  // Effort Sheet Details (matching component field names exactly)
+  iprecognizer     String?
+  hoursspent       Int?        // Integer for hours
+  agencyrecognizer String?
+  agencycost       Int?        // Integer for cost
+  revieweffort     Int?        // Integer for effort
+  managerempid     String?
+  extractionEffort Int?        // Integer for effort
+  
+  // Activity Status
+  activityStatus   String?
+  
+  // Timestamps
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
 }
@@ -113,7 +152,7 @@ model Patentability {
   nfeature    String?
   ifeature    String?
   scountry    String?
-  ooextractor String?
+  oextractor String?
 
   // Invention Details
   trainRun String?
@@ -137,6 +176,77 @@ model Patentability {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model PatentabilityAnalysis {
+  id               Int        @id @default(autoincrement())
+  asset_id         String     // Required foreign key
+  invention        Invention  @relation("InventionPatentabilityAnalyses", fields: [asset_id], references: [asset_id], onDelete: Cascade)
+  
+  // Patentability Analysis fields
+  analysisType           String?
+  analysisDate           String?
+  priorArtScope          String?
+  patentabilityRating    String?
+  analysisSummary        String?
+  patentReferences       String?
+  nonPatentLiterature    String?
+  priorArtSearch         String?
+  noveltyAssessment      String?
+  inventiveStep          String?
+  industrialApplicability String?
+  patentabilityConclusion String?
+  recommendations        String?
+  riskAssessment         String?
+  competitorAnalysis     String?
+  marketPotential        String?
+  technicalFeasibility   String?
+  legalCompliance        String?
+  costBenefitAnalysis    String?
+  timelineEstimate       String?
+  nextSteps              String?
+  
+  // Extractor Details fields
+  extractorOne     String?
+  extractortwo     String?
+  iEDate           String?
+  iawpl            String?
+  nfeature         String?
+  ifeature         String?
+  idattachments    String[] @default([])
+  scountry         String?
+  oextractor       String?
+  
+  // Innovation Analysis fields
+  trainRun         String?
+  minuteOfMeeting  String[] @default([])
+  attachments      String[] @default([])
+  
+  // Decision Sheet fields
+  nodc             String?
+  dibrief          String?
+  
+  // Patentability Extractor fields
+  psone            String?
+  pstwo            String?
+  rating           Int?
+  collaboration    String?
+  
+  // Effort Sheet fields
+  iprecognizer    String?
+  hoursspent      Int?
+  agencyrecognizer String?
+  agencycost      Int?
+  revieweffort    Int?
+  managerempid    String?
+  extractionEffort Int?
+  
+  // Activity Status
+  activityStatus  String?
+  
+  // Timestamps
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
 }
 
 model PatentSpecificInformation {

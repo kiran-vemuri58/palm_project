@@ -8,15 +8,25 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@
 const Innovation = ({formKey, updateFunction}) => {
   const formData = useFormStore((state) => state[formKey]);
   const updateFormDataByKey = useFormStore((state) => state[updateFunction]);
+  
+  const safeFormData = formData || {};
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    updateFormDataByKey({ [name]: value });
+    if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      updateFormDataByKey({ [name]: value });
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
   };
 
   const handleFileUpload = (e) => {
     const { name, files } = e.target;
-    updateFormDataByKey({ [name]: files[0] || null }); // Store only the first file or null
+    if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      updateFormDataByKey({ [name]: files[0] || null }); // Store only the first file or null
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
   };
 
   return (
@@ -27,8 +37,14 @@ const Innovation = ({formKey, updateFunction}) => {
           <Label className="mb-1">Is there more than an invention?</Label>
           <Select
             className="w-full"
-            value={formData.trainRun ?? ''} // ✅ Fix uncontrolled issue
-            onValueChange={(value) => updateFormDataByKey({ trainRun: value })}
+            value={safeFormData.trainRun ?? ''} // ✅ Fix uncontrolled issue
+            onValueChange={(value) => {
+              if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+                updateFormDataByKey({ trainRun: value });
+              } else {
+                console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+              }
+            }}
           >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select an option" />
@@ -42,7 +58,7 @@ const Innovation = ({formKey, updateFunction}) => {
       </div>
 
       {/* Show other inputs only if "Yes" is selected */}
-      {formData.trainRun === 'yes' && (
+      {safeFormData.trainRun === 'yes' && (
         <>
           
           <div className="grid grid-cols-3 gap-4 mt-4">

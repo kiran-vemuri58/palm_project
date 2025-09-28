@@ -14,7 +14,7 @@ export default function Home() {
     const checkAuth = async () => {
       const isAuthenticated = await clientAuth.isAuthenticated();
       if (isAuthenticated) {
-        router.push('/assets');
+        router.push('/v2/assets');
       }
     };
     

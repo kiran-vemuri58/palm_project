@@ -20,16 +20,40 @@ const Complete = ({ formKey, updateFunction }) => {
   const handleChange = (e) => {
     const { name, value, files, type } = e.target;
     const newValue = type === 'file' ? files[0] : value;
-    updateFormDataByKey({ ...formData, [name]: newValue });
+    if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      updateFormDataByKey({ ...safeFormData, [name]: newValue });
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
   };
 
   const handleFileArrayChange = (e) => {
     const { name, value } = e.target; // array of File
-    updateFormDataByKey({ ...formData, [name]: value });
+    if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      updateFormDataByKey({ ...safeFormData, [name]: value });
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
   };
 
   const handleSelectChange = (name, value) => {
-    updateFormDataByKey({ ...formData, [name]: value });
+    if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      updateFormDataByKey({ ...safeFormData, [name]: value });
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
   };
 
   return (
@@ -40,7 +64,7 @@ const Complete = ({ formKey, updateFunction }) => {
         <div>
           <Label>Is Provisional Filed?</Label>
           <Select
-            value={formData.isProvisionalFiled || ''}
+            value={safeFormData.isProvisionalFiled || ''}
             onValueChange={(value) => handleSelectChange('isProvisionalFiled', value)}
           >
             <SelectTrigger className="w-full">
@@ -53,14 +77,14 @@ const Complete = ({ formKey, updateFunction }) => {
           </Select>
         </div>
 
-        {formData.isProvisionalFiled === 'Yes' && (
+        {safeFormData.isProvisionalFiled === 'Yes' && (
           <>
             <div>
               <Label>Date of Provisional Spec filing</Label>
               <Input
                 type="date"
                 name="provisionalSpecDate"
-                value={formData.provisionalSpecDate || ''}
+                value={safeFormData.provisionalSpecDate || ''}
                 onChange={handleChange}
               />
             </div>
@@ -69,7 +93,7 @@ const Complete = ({ formKey, updateFunction }) => {
               <Input
                 name="applicationNumber"
                 placeholder="Enter Application number"
-                value={formData.applicationNumber || ''}
+                value={safeFormData.applicationNumber || ''}
                 onChange={handleChange}
               />
             </div>
@@ -82,7 +106,7 @@ const Complete = ({ formKey, updateFunction }) => {
         <div>
           <Label>Is PCT Filed?</Label>
           <Select
-            value={formData.isPCTFiled || ''}
+            value={safeFormData.isPCTFiled || ''}
             onValueChange={(value) => handleSelectChange('isPCTFiled', value)}
           >
             <SelectTrigger className="w-full">
@@ -95,13 +119,13 @@ const Complete = ({ formKey, updateFunction }) => {
           </Select>
         </div>
 
-        {formData.isPCTFiled === 'Yes' && (
+        {safeFormData.isPCTFiled === 'Yes' && (
           <div>
             <Label>Date of PCT filing</Label>
             <Input
               type="date"
               name="pctFilingDate"
-              value={formData.pctFilingDate || ''}
+              value={safeFormData.pctFilingDate || ''}
               onChange={handleChange}
             />
           </div>
@@ -110,7 +134,7 @@ const Complete = ({ formKey, updateFunction }) => {
         <div>
           <Label>Is PCT Published?</Label>
           <Select
-            value={formData.isPCTPublished || ''}
+            value={safeFormData.isPCTPublished || ''}
             onValueChange={(value) => handleSelectChange('isPCTPublished', value)}
           >
             <SelectTrigger className="w-full">
@@ -131,7 +155,7 @@ const Complete = ({ formKey, updateFunction }) => {
           <Input
             name="citedPatent"
             placeholder="Which Cited in Patent Document"
-            value={formData.citedPatent || ''}
+            value={safeFormData.citedPatent || ''}
             onChange={handleChange}
           />
         </div>
@@ -140,7 +164,7 @@ const Complete = ({ formKey, updateFunction }) => {
           <Input
             name="independentClaim"
             placeholder="Independent Claim"
-            value={formData.independentClaim || ''}
+            value={safeFormData.independentClaim || ''}
             onChange={handleChange}
           />
         </div>
@@ -149,7 +173,7 @@ const Complete = ({ formKey, updateFunction }) => {
           <Input
             name="dependentClaim"
             placeholder="Dependent Claim"
-            value={formData.dependentClaim || ''}
+            value={safeFormData.dependentClaim || ''}
             onChange={handleChange}
           />
         </div>
@@ -162,14 +186,14 @@ const Complete = ({ formKey, updateFunction }) => {
           <Input
             name="broadenedFeature"
             placeholder="Broadened claimed invention feature"
-            value={formData.broadenedFeature || ''}
+            value={safeFormData.broadenedFeature || ''}
             onChange={handleChange}
           />
         </div>
         <div>
           <Label>Is it a Profitable Patent?</Label>
           <Select
-            value={formData.isProfitPatent || ''}
+            value={safeFormData.isProfitPatent || ''}
             onValueChange={(value) => handleSelectChange('isProfitPatent', value)}
           >
             <SelectTrigger className="w-full">
@@ -184,7 +208,7 @@ const Complete = ({ formKey, updateFunction }) => {
         <div>
           <Label>Is it a Defensive Patent?</Label>
           <Select
-            value={formData.isDefensivePatent || ''}
+            value={safeFormData.isDefensivePatent || ''}
             onValueChange={(value) => handleSelectChange('isDefensivePatent', value)}
           >
             <SelectTrigger className="w-full">
@@ -206,7 +230,7 @@ const Complete = ({ formKey, updateFunction }) => {
             name="draftVersions"
             multiple={true}
             accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx"
-            value={formData.draftVersions || []}
+            value={safeFormData.draftVersions || []}
             onChange={handleFileArrayChange}
             maxFiles={20}
             maxFileSize={20 * 1024 * 1024}
@@ -218,7 +242,7 @@ const Complete = ({ formKey, updateFunction }) => {
             name="draftingEffort"
             placeholder="Enter efforts spent"
             type="number"
-            value={formData.draftingEffort || ''}
+            value={safeFormData.draftingEffort || ''}
             onChange={handleChange}
           />
         </div>
@@ -227,7 +251,7 @@ const Complete = ({ formKey, updateFunction }) => {
           <Input
             name="drafterEmpId"
             placeholder="Enter Patent Drafter"
-            value={formData.drafterEmpId || ''}
+            value={safeFormData.drafterEmpId || ''}
             onChange={handleChange}
           />
         </div>
@@ -241,7 +265,7 @@ const Complete = ({ formKey, updateFunction }) => {
             name="hoursSpent"
             placeholder="Enter hours spent"
             type="number"
-            value={formData.hoursSpent || ''}
+            value={safeFormData.hoursSpent || ''}
             onChange={handleChange}
           />
         </div>
@@ -250,7 +274,7 @@ const Complete = ({ formKey, updateFunction }) => {
           <Input
             name="agencyRecognizer"
             placeholder="Enter external agency recognizer"
-            value={formData.agencyRecognizer || ''}
+            value={safeFormData.agencyRecognizer || ''}
             onChange={handleChange}
           />
         </div>
@@ -260,7 +284,7 @@ const Complete = ({ formKey, updateFunction }) => {
             name="agencyCost"
             placeholder="Enter agency cost"
             type="number"
-            value={formData.agencyCost || ''}
+            value={safeFormData.agencyCost || ''}
             onChange={handleChange}
           />
         </div>
@@ -274,7 +298,7 @@ const Complete = ({ formKey, updateFunction }) => {
             name="reviewEffort"
             placeholder="Efforts in Hours for review"
             type="number"
-            value={formData.reviewEffort || ''}
+            value={safeFormData.reviewEffort || ''}
             onChange={handleChange}
           />
         </div>
@@ -283,14 +307,14 @@ const Complete = ({ formKey, updateFunction }) => {
           <Input
             name="managerEmpId"
             placeholder="Enter manager responsible"
-            value={formData.managerEmpId || ''}
+            value={safeFormData.managerEmpId || ''}
             onChange={handleChange}
           />
         </div>
         <div>
           <Label>Activity Status</Label>
           <Select
-            value={formData.activityStatus || ''}
+            value={safeFormData.activityStatus || ''}
             onValueChange={(value) => handleSelectChange('activityStatus', value)}
           >
             <SelectTrigger className="w-full">

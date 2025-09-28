@@ -22,15 +22,15 @@ const EntityDetails = () => {
       <div className="grid grid-cols-3 gap-4">
         <div>
           <Label className="mb-1">Entity</Label>
-          <Input className="p-2" placeholder="Enter entity name..." id="entity" name="entity" value={formData.entity} onChange={handleChange} />
+          <Input className="p-2" placeholder="Enter entity name..." id="entity" name="entity" value={formData?.entity} onChange={handleChange} />
         </div>
         <div>
           <Label className="mb-1">Date</Label>
-          <Input className="p-2" placeholder="Select a date..." id="date" name="date" type="date" value={formData.date} onChange={handleChange} />
+          <Input className="p-2" placeholder="Select a date..." id="date" name="date" type="date" value={formData?.date} onChange={handleChange} />
         </div>
         <div>
           <Label className="mb-1">Invention Arriving Country</Label>
-          <Input className="p-2" placeholder="Enter country of arrival..." id="inventionCountry" name="inventionCountry" value={formData.inventionCountry} onChange={handleChange} />
+          <Input className="p-2" placeholder="Enter country of arrival..." id="inventionCountry" name="inventionCountry" value={formData?.inventionCountry} onChange={handleChange} />
         </div>
       </div>
 
@@ -38,7 +38,7 @@ const EntityDetails = () => {
       <div className="grid grid-cols-3 gap-4 mt-4">
         <div>
           <Label className="mb-1">Country of Invention Creation</Label>
-          <Input className="p-2" placeholder="Enter country of invention..." id="creationCountry" name="creationCountry" value={formData.creationCountry} onChange={handleChange} />
+          <Input className="p-2" placeholder="Enter country of invention..." id="creationCountry" name="creationCountry" value={formData?.creationCountry} onChange={handleChange} />
         </div>
         <div>
           <Label className="mb-1">Collaboration Innovation</Label>
@@ -54,21 +54,21 @@ const EntityDetails = () => {
         </div>
       </div>
 
-      {formData.collaboration === 'yes' && (
+      {formData?.collaboration === 'yes' && (
         <>
           {/* Third Row */}
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div>
               <Label className="mb-1">Collaborator Name</Label>
-              <Input className="p-2" placeholder="Enter collaborator name..." id="collaboratorName" name="collaboratorName" value={formData.collaboratorName} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter collaborator name..." id="collaboratorName" name="collaboratorName" value={formData?.collaboratorName} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Collaborator Country</Label>
-              <Input className="p-2" placeholder="Enter collaborator country..." id="collaboratorCountry" name="collaboratorCountry" value={formData.collaboratorCountry} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter collaborator country..." id="collaboratorCountry" name="collaboratorCountry" value={formData?.collaboratorCountry} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Stakeholders</Label>
-              <Input className="p-2" placeholder="Enter stakeholders..." id="stakeholders" name="stakeholders" value={formData.stakeholders} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter stakeholders..." id="stakeholders" name="stakeholders" value={formData?.stakeholders} onChange={handleChange} />
             </div>
           </div>
           
@@ -76,11 +76,11 @@ const EntityDetails = () => {
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div>
               <Label className="mb-1">Journal Numbers</Label>
-              <Input className="p-2" placeholder="Enter journal numbers..." id="entityJournalNumbers" name="entityJournalNumbers" value={formData.entityJournalNumbers} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter journal numbers..." id="entityJournalNumbers" name="entityJournalNumbers" value={formData?.entityJournalNumbers} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Product Identity Number</Label>
-              <Input className="p-2" placeholder="Enter product identity number..." id="entityProductIdentity" name="entityProductIdentity" value={formData.entityProductIdentity} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter product identity number..." id="entityProductIdentity" name="entityProductIdentity" value={formData?.entityProductIdentity} onChange={handleChange} />
             </div>
           </div>
         </>

@@ -29,25 +29,25 @@ const PatentMaintanceHistory = ({formKey , updateFunction}) => {
       <div className="grid grid-cols-3 gap-4">
       <div>
           <Label className="mb-1">Priority Date</Label>
-          <Input className="p-2" placeholder="Select a date..." id="priorityDate" name="priorityDate" type="date" value={formData.priorityDate || ''} onChange={handleChange} />
+          <Input className="p-2" placeholder="Select a date..." id="priorityDate" name="priorityDate" type="date" value={formData?.priorityDate || ''} onChange={handleChange} />
         </div>
         
         <div>
           <Label className="mb-1">Grant Date</Label>
-          <Input className="p-2" placeholder="Select a date..." id="grantDate" name="grantDate" type="date" value={formData.grantDate || ''} onChange={handleChange} />
+          <Input className="p-2" placeholder="Select a date..." id="grantDate" name="grantDate" type="date" value={formData?.grantDate || ''} onChange={handleChange} />
         </div>
         <div>
           <Label className="mb-1">Number of Years Paid</Label>
-          <Input className="p-2" placeholder="Enter number of years..." id="yearsPaid" name="yearsPaid" type="text" value={formData.yearsPaid || ''} onChange={handleChange} />
+          <Input className="p-2" placeholder="Enter number of years..." id="yearsPaid" name="yearsPaid" type="text" value={formData?.yearsPaid || ''} onChange={handleChange} />
         </div>
         <div>
           <Label className="mb-1">Next Due Date</Label>
-          <Input className="p-2" placeholder="Select a date..." id="nextDueDate" name="nextDueDate" type="date" value={formData.nextDueDate || ''} onChange={handleChange} />
+          <Input className="p-2" placeholder="Select a date..." id="nextDueDate" name="nextDueDate" type="date" value={formData?.nextDueDate || ''} onChange={handleChange} />
         </div>
         <div>
           <Label className="mb-1">whether maintainance is stopped?
           </Label>
-          <Input className="p-2" placeholder="Select a date..." id="maintenanceStopped" name="maintenanceStopped" type="date" value={formData.maintenanceStopped || ''} onChange={handleChange} />
+          <Input className="p-2" placeholder="Select a date..." id="maintenanceStopped" name="maintenanceStopped" type="date" value={formData?.maintenanceStopped || ''} onChange={handleChange} />
         </div>
         <div>
               <Label className="mb-1">decision page</Label>
@@ -77,13 +77,13 @@ const PatentMaintanceHistory = ({formKey , updateFunction}) => {
         </div>
       </div>
 
-      {formData.collaboration === 'yes' && (
+      {formData?.collaboration === 'yes' && (
         <>
           {/* Third Row */}
           <div className="grid grid-cols-3 gap-4 mt-4">
           <div>
           <Label className="mb-1">filing Date</Label>
-          <Input className="p-2" placeholder="Select a date..." id="filingDate" name="filingDate" type="date" value={formData.filingDate || ''} onChange={handleChange} />
+          <Input className="p-2" placeholder="Select a date..." id="filingDate" name="filingDate" type="date" value={formData?.filingDate || ''} onChange={handleChange} />
         </div>
             <div>
               <Label className="mb-1">filing Attachment</Label>
@@ -97,7 +97,7 @@ const PatentMaintanceHistory = ({formKey , updateFunction}) => {
             </div>
             <div>
               <Label className="mb-1">maintance Fee</Label>
-              <Input className="p-2" placeholder="Enter maintenance fee..." id="maintenanceFee" name="maintenanceFee" value={formData.maintenanceFee} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter maintenance fee..." id="maintenanceFee" name="maintenanceFee" value={formData?.maintenanceFee} onChange={handleChange} />
             </div>
           </div>
           
@@ -106,7 +106,7 @@ const PatentMaintanceHistory = ({formKey , updateFunction}) => {
             
             <div>
               <Label className="mb-1">external Agency</Label>
-              <Input className="p-2" placeholder="Enter external agency..." id="externalAgency" name="externalAgency" value={formData.externalAgency} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter external agency..." id="externalAgency" name="externalAgency" value={formData?.externalAgency} onChange={handleChange} />
             </div>
           </div>
         </>

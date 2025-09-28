@@ -8,6 +8,9 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@
 
 const Innovation = () => {
   const { formData, updateFormData } = useFormStore();
+  
+  // Safety check to ensure formData is defined
+  const safeFormData = formData || {};
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,7 +30,7 @@ const Innovation = () => {
           <Label className="mb-1">Is there more than an invention?</Label>
           <Select
             className="w-full"
-            value={formData.trainRun ?? ''} // ✅ Fix uncontrolled issue
+            value={safeFormData.trainRun ?? ''} // ✅ Fix uncontrolled issue
             onValueChange={(value) => updateFormData({ trainRun: value })}
           >
             <SelectTrigger className="w-full">
@@ -42,7 +45,7 @@ const Innovation = () => {
       
 
       {/* Show other inputs only if "Yes" is selected */}
-      {formData.trainRun === 'yes' && (
+      {safeFormData.trainRun === 'yes' && (
         <>
           
         
@@ -53,7 +56,7 @@ const Innovation = () => {
                 name="minuteOfMeeting"
                 multiple={true}
                 accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.txt"
-                value={formData.minuteOfMeeting || []}
+                value={safeFormData.minuteOfMeeting || []}
                 onChange={handleFileUpload}
                 maxFiles={10}
                 maxFileSize={20 * 1024 * 1024}
@@ -66,7 +69,7 @@ const Innovation = () => {
                 name="attachments"
                 multiple={true}
                 accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.txt,.xls,.xlsx"
-                value={formData.attachments || []}
+                value={safeFormData.attachments || []}
                 onChange={handleFileUpload}
                 maxFiles={20}
                 maxFileSize={20 * 1024 * 1024}

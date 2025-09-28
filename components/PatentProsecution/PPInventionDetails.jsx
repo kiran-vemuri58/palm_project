@@ -9,11 +9,14 @@ import { Star } from 'lucide-react';
 
 const PPInventionDetails = ({ showRating = false ,formKey,updateFunction, disableCommon = false }) => {
   const { formData, updateFormData, errors } = useFormStore();
-  const [rating, setRating] = useState(0);
+  
+  // Safety check to ensure formData is defined
+  const safeFormData = formData || {};
+  const [rating, setRating] = useState(safeFormData.rating || 0);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    updateFormData({ ...formData, [name]: value });
+    updateFormData({ ...safeFormData, [name]: value });
   };
 
   const fields = [
@@ -59,7 +62,7 @@ const PPInventionDetails = ({ showRating = false ,formKey,updateFunction, disabl
               <Input
                 id={field.id}
                 type="text"
-                value={formData[field.id] || ""}
+                value={safeFormData[field.id] || ""}
                 onChange={(e) => updateFormData({ [field.id]: e.target.value })}
                 className="border-gray-300 focus:border-blue-500 px-4 py-2 rounded-md"
                 placeholder={field.label}
@@ -79,7 +82,7 @@ const PPInventionDetails = ({ showRating = false ,formKey,updateFunction, disabl
             placeholder="Enter Name of Decision Maker"
             id="ipRecognizer"
             name="ipRecognizer"
-            value={formData.ipRecognizer}
+            value={safeFormData.ipRecognizer || ""}
             onChange={handleChange}
           />
         </div>

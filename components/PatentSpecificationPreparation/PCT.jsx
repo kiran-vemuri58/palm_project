@@ -25,11 +25,27 @@ const PCT = ({ formKey, updateFunction }) => {
 
   const handleFileArrayChange = (e) => {
     const { name, value } = e.target; // value is array of File
-    updateFormDataByKey({ ...formData, [name]: value });
+    if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      updateFormDataByKey({ ...formData, [name]: value });
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
   };
 
   const handleSelectChange = (name, value) => {
-    updateFormDataByKey({ ...formData, [name]: value });
+    if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      updateFormDataByKey({ ...formData, [name]: value });
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
   };
 
   const isDirectPCTYes = formData.isDirectPCT === 'Yes';

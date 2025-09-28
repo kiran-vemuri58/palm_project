@@ -8,10 +8,13 @@ import React from 'react';
 
 const DecisionSheet = () => {
   const { formData, updateFormData } = useFormStore();
+  
+  // Safety check to ensure formData is defined
+  const safeFormData = formData || {};
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    updateFormData({ ...formData, [name]: value });
+    updateFormData({ ...safeFormData, [name]: value });
   };
   const handleFileUpload = (e) => {
     const { name, value } = e.target; // value is array of File
@@ -30,7 +33,7 @@ const DecisionSheet = () => {
             placeholder="Enter Name of Decision Maker"
             id="ipRecognizer"
             name="ipRecognizer"
-            value={formData.ipRecognizer}
+            value={safeFormData.ipRecognizer}
             onChange={handleChange}
           />
         </div>
@@ -42,7 +45,7 @@ const DecisionSheet = () => {
             id="hoursSpent"
             name="hoursSpent"
             type="number"
-            value={formData.hoursSpent}
+            value={safeFormData.hoursSpent}
             onChange={handleChange}
           />
         </div>
@@ -53,7 +56,7 @@ const DecisionSheet = () => {
             name="attachments"
             multiple={true}
             accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.txt"
-            value={formData.attachments || []}
+            value={safeFormData.attachments || []}
             onChange={handleFileUpload}
             maxFiles={10}
             maxFileSize={20 * 1024 * 1024}

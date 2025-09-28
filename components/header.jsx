@@ -3,14 +3,50 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 import { Button } from './ui/button'
 import { CassetteTape } from 'lucide-react'
 import { useSimpleAuth } from '@/hooks/useSimpleAuth'
 
 const Header = ({isAdminPage=false}) => {
-  const { isAuthenticated, user, signOut } = useSimpleAuth();
+  const { isAuthenticated, user, signOut, isLoading } = useSimpleAuth();
+  const router = useRouter();
   const isAdmin = false
+
+  // Debug logging
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      // Small delay to ensure auth state is updated
+      setTimeout(() => {
+        router.push('/login');
+      }, 100);
+    } catch (error) {
+      console.error('❌ Sign out error:', error);
+      // Still navigate to login page even if there's an error
+      setTimeout(() => {
+        router.push('/login');
+      }, 100);
+    }
+  };
+
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return (
+      <header className='fixed top-0 w-full bg-white/95 backdrop-blur-lg z-50 border-b border-gray-200/50 shadow-lg'>
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
+            <div className="flex items-center">
+              <div className="w-8 h-8 bg-gray-200 rounded animate-pulse"></div>
+            </div>
+            <div className="w-24 h-10 bg-gray-200 rounded animate-pulse"></div>
+          </div>
+        </nav>
+      </header>
+    );
+  }
   return (
     <header className='fixed top-0 w-full bg-white/95 backdrop-blur-lg z-50 border-b border-gray-200/50 shadow-lg'>
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -44,7 +80,7 @@ const Header = ({isAdminPage=false}) => {
                 <div className="hidden md:flex items-center space-x-2">
                     {isAuthenticated && (
                         <>
-                            <Link href="/assets" className="group relative px-5 py-3 text-sm font-semibold text-gray-700 hover:text-blue-600 rounded-xl hover:bg-blue-50 transition-all duration-300 border border-transparent hover:border-blue-200">
+                            <Link href="/v2/assets" className="group relative px-5 py-3 text-sm font-semibold text-gray-700 hover:text-blue-600 rounded-xl hover:bg-blue-50 transition-all duration-300 border border-transparent hover:border-blue-200">
                                 <span className="relative z-10 flex items-center">
                                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
@@ -53,15 +89,23 @@ const Header = ({isAdminPage=false}) => {
                                     Dashboard
                                 </span>
                             </Link>
-                            <Link href="/assetForm1" className="group relative px-5 py-3 text-sm font-semibold text-gray-700 hover:text-green-600 rounded-xl hover:bg-green-50 transition-all duration-300 border border-transparent hover:border-green-200">
+                            <button 
+                                onClick={() => {
+                                    // Clear only V2-specific localStorage data
+                                    localStorage.removeItem('v2-asset-storage');
+                                    // Navigate to V2 page with new=true
+                                    window.location.href = '/v2/invention-recognition?new=true';
+                                }}
+                                className="group relative px-5 py-3 text-sm font-semibold text-gray-700 hover:text-green-600 rounded-xl hover:bg-green-50 transition-all duration-300 border border-transparent hover:border-green-200"
+                            >
                                 <span className="relative z-10 flex items-center">
                                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                     </svg>
                                     New Asset
                                 </span>
-                            </Link>
-                            <Link href="/assets" className="group relative px-5 py-3 text-sm font-semibold text-gray-700 hover:text-purple-600 rounded-xl hover:bg-purple-50 transition-all duration-300 border border-transparent hover:border-purple-200">
+                            </button>
+                            <Link href="/v2/assets" className="group relative px-5 py-3 text-sm font-semibold text-gray-700 hover:text-purple-600 rounded-xl hover:bg-purple-50 transition-all duration-300 border border-transparent hover:border-purple-200">
                                 <span className="relative z-10 flex items-center">
                                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -77,38 +121,29 @@ const Header = ({isAdminPage=false}) => {
                 <div className="flex items-center space-x-4">
                     {isAuthenticated ? (
                         <>
-                            <Link href="/assetForm1">
-                                <Button className="group relative inline-flex items-center px-6 py-3 border border-transparent text-sm font-bold rounded-xl text-white bg-gradient-to-r from-blue-600 via-blue-700 to-purple-600 hover:from-blue-700 hover:via-blue-800 hover:to-purple-700 focus:outline-none focus:ring-4 focus:ring-blue-500/50 transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl">
-                                    <CassetteTape size={20} className="mr-2 group-hover:rotate-12 transition-transform duration-300" />
-                                    <span className='hidden sm:inline font-semibold'>New Asset</span>
-                                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                </Button>
-                            </Link>
-                            <div className="flex items-center space-x-3 bg-gray-50 rounded-xl px-4 py-2 border border-gray-200">
-                                <div className="flex items-center space-x-2">
-                                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                                        <span className="text-white text-sm font-bold">
-                                            {user?.email?.charAt(0).toUpperCase()}
-                                        </span>
-                                    </div>
-                                    <div className="hidden sm:block">
-                                        <p className="text-xs text-gray-500 font-medium">Signed in as</p>
-                                        <p className="text-sm text-gray-900 font-semibold truncate max-w-32">
-                                            {user?.email}
-                                        </p>
-                                    </div>
-                                </div>
-                                <Button 
-                                    onClick={signOut}
-                                    variant="outline" 
-                                    className="px-4 py-2 text-sm font-semibold rounded-lg text-gray-700 bg-white hover:bg-gray-50 border-gray-300 hover:border-gray-400 transition-all duration-200 shadow-sm hover:shadow-md"
-                                >
-                                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                    </svg>
-                                    Sign Out
-                                </Button>
-                            </div>
+                            <Button 
+                                onClick={() => {
+                                    // Clear only V2-specific localStorage data
+                                    localStorage.removeItem('v2-asset-storage');
+                                    // Navigate to V2 page with new=true
+                                    window.location.href = '/v2/invention-recognition?new=true';
+                                }}
+                                className="group relative inline-flex items-center px-6 py-3 border border-transparent text-sm font-bold rounded-xl text-white bg-gradient-to-r from-blue-600 via-blue-700 to-purple-600 hover:from-blue-700 hover:via-blue-800 hover:to-purple-700 focus:outline-none focus:ring-4 focus:ring-blue-500/50 transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl"
+                            >
+                                <CassetteTape size={20} className="mr-2 group-hover:rotate-12 transition-transform duration-300" />
+                                <span className='hidden sm:inline font-semibold'>New Asset</span>
+                                <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            </Button>
+                            <Button 
+                                onClick={handleSignOut}
+                                variant="outline" 
+                                className="px-4 py-2 text-sm font-semibold rounded-lg text-gray-700 bg-white hover:bg-gray-50 border-gray-300 hover:border-gray-400 transition-all duration-200 shadow-sm hover:shadow-md"
+                            >
+                                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                </svg>
+                                Sign Out
+                            </Button>
                         </>
                     ) : (
                         <Link href="/login">

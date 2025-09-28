@@ -4,6 +4,7 @@ import useFormStore from '@/store/store';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
+import { getSafeFormValue } from '@/utils/formUtils';
 import React from 'react';
 
 const ExtractorDetails = ({formKey, updateFunction}) => {
@@ -13,12 +14,28 @@ const ExtractorDetails = ({formKey, updateFunction}) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    updateFormDataByKey({ ...formData, [name]: value });
+    if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      updateFormDataByKey({ ...formData, [name]: value });
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
   };
 
   const handleFileUpload = (e) => {
     const { name, files } = e.target;
-    updateFormDataByKey({ [name]: files[0] || null }); // Store only the first file or null
+    if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      updateFormDataByKey({ [name]: files[0] || null });
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    } // Store only the first file or null
   };
 
   return (
@@ -28,17 +45,17 @@ const ExtractorDetails = ({formKey, updateFunction}) => {
       <div className="grid grid-cols-3 gap-4">
         <div>
           <Label className="mb-1">Name of the Extractor 1</Label>
-          <Input className="p-2" placeholder="Enter the name of Extractor 1" id="entity" name="extractorOne" value={formData.extractorOne} onChange={handleChange} />
+          <Input className="p-2" placeholder="Enter the name of Extractor 1" id="entity" name="extractorOne" value={getSafeFormValue(formData, 'extractorOne')} onChange={handleChange} />
         </div>
         
         <div>
           <Label className="mb-1">Name of the Extractor 2</Label>
-          <Input className="p-2" placeholder="Enter the name of Extractor 2" id="inventionCountry" name="extractortwo" value={formData.extractortwo} onChange={handleChange} />
+          <Input className="p-2" placeholder="Enter the name of Extractor 2" id="inventionCountry" name="extractortwo" value={getSafeFormValue(formData, 'extractortwo')} onChange={handleChange} />
         </div>
         
         <div>
           <Label className="mb-1">Invention Extraction Date</Label>
-          <Input className="p-2" placeholder="Select a date..." id="date" name="iEDate" type="date" value={formData.iEDate} onChange={handleChange} />
+          <Input className="p-2" placeholder="Select a date..." id="date" name="iEDate" type="date" value={getSafeFormValue(formData, 'iEDate')} onChange={handleChange} />
         </div>
       </div>
 
@@ -46,7 +63,13 @@ const ExtractorDetails = ({formKey, updateFunction}) => {
       <div className="grid grid-cols-3 gap-4 mt-4">
         <div>
           <Label className="mb-1">is Invention Accordance with Patent Laws?</Label>
-          <Select className="w-full" value={formData.iawpl} onValueChange={(value) => updateFormDataByKey({ ...formData, iawpl: value })}>
+          <Select className="w-full" value={getSafeFormValue(formData, 'iawpl')} onValueChange={(value) => {
+              if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+                updateFormDataByKey({ ...formData, iawpl: value });
+              } else {
+                console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+              }
+            }}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select an option" />
             </SelectTrigger>
@@ -58,17 +81,17 @@ const ExtractorDetails = ({formKey, updateFunction}) => {
         </div>
       </div>
 
-      {formData.iawpl === 'yes' && (
+      {formData?.iawpl === 'yes' && (
         <>
           {/* Third Row */}
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div>
               <Label className="mb-1">Novel Feature(Assumed)</Label>
-              <Input className="p-2" placeholder="Enter Novel Feature" id="collaboratorName" name="nfeature" value={formData.nfeature} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter Novel Feature" id="collaboratorName" name="nfeature" value={getSafeFormValue(formData, 'nfeature')} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Inventive Feature (Assumed)</Label>
-              <Input className="p-2" placeholder="Enter collaborator country..." id="collaboratorCountry" name="ifeature" value={formData.ifeature} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter collaborator country..." id="collaboratorCountry" name="ifeature" value={getSafeFormValue(formData, 'ifeature')} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Invention Detail Attachment</Label>
@@ -86,11 +109,11 @@ const ExtractorDetails = ({formKey, updateFunction}) => {
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div>
               <Label className="mb-1">Specific Country</Label>
-              <Input className="p-2" placeholder="Enter specific country..." id="scountry" name="scountry" value={formData.scountry} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter specific country..." id="scountry" name="scountry" value={getSafeFormValue(formData, 'scountry')} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Opinion Of Extractor</Label>
-              <Input className="p-2" placeholder="Enter Opinion Of Extractor" id="oextractor" name="oextractor" value={formData.oextractor} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter Opinion Of Extractor" id="oextractor" name="oextractor" value={getSafeFormValue(formData, 'oextractor')} onChange={handleChange} />
             </div>
           </div>
         </>

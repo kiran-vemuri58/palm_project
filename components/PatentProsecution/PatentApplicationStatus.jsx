@@ -18,20 +18,23 @@ const PatentStatusSection = ({formKey,updateFunction}) => {
   const formData = useFormStore((state) => state[formKey]);
   const updateFormData = useFormStore((state) => state[updateFunction]);
 
+  // Safety check to ensure formData is defined
+  const safeFormData = formData || {};
+
   useEffect(() => {
-    if (!formData.patentStatus) {
-      updateFormData({ ...formData, patentStatus: 'yes' }); // default to yes
+    if (!safeFormData.patentStatus) {
+      updateFormData({ ...safeFormData, patentStatus: 'yes' }); // default to yes
     }
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    updateFormData({ ...formData, [name]: value });
+    updateFormData({ ...safeFormData, [name]: value });
   };
 
   const handleFileUpload = (e) => {
     const { name, value } = e.target; // array of File
-    updateFormData({ ...formData, [name]: value });
+    updateFormData({ ...safeFormData, [name]: value });
   };
 
   return (
@@ -41,9 +44,9 @@ const PatentStatusSection = ({formKey,updateFunction}) => {
         <div>
           <Label className="mb-1">Patent Status</Label>
           <Select
-            value={formData.patentStatus}
+            value={safeFormData.patentStatus}
             onValueChange={(value) =>
-              updateFormData({ ...formData, patentStatus: value })
+              updateFormData({ ...safeFormData, patentStatus: value })
             }
           >
             <SelectTrigger className="w-full">
@@ -61,7 +64,7 @@ const PatentStatusSection = ({formKey,updateFunction}) => {
           <Input
             placeholder="Enter patent number"
             name="patentNumber"
-            value={formData.patentNumber || ''}
+            value={safeFormData.patentNumber || ''}
             onChange={handleChange}
           />
         </div>
@@ -72,7 +75,7 @@ const PatentStatusSection = ({formKey,updateFunction}) => {
             name="patentAttachment"
             multiple={true}
             accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-            value={formData.patentAttachment || []}
+            value={safeFormData.patentAttachment || []}
             onChange={handleFileUpload}
             maxFiles={10}
             maxFileSize={20 * 1024 * 1024}
@@ -81,14 +84,14 @@ const PatentStatusSection = ({formKey,updateFunction}) => {
       </div>
 
       {/* ✅ Conditionally Visible Second Row */}
-      {formData.patentStatus === 'yes' && (
+      {safeFormData.patentStatus === 'yes' && (
         <div className="grid grid-cols-3 gap-4 mt-4">
           <div>
             <Label className="mb-1">Patent Grant Date</Label>
             <Input
               type="date"
               name="patentGrantDate"
-              value={formData.patentGrantDate || ''}
+              value={safeFormData.patentGrantDate || ''}
               onChange={handleChange}
             />
           </div>
@@ -99,7 +102,7 @@ const PatentStatusSection = ({formKey,updateFunction}) => {
               name="rejectionReasonAttachment"
               multiple={true}
               accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-              value={formData.rejectionReasonAttachment || []}
+              value={safeFormData.rejectionReasonAttachment || []}
               onChange={handleFileUpload}
               maxFiles={10}
               maxFileSize={20 * 1024 * 1024}

@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import useFormStore from '@/store/store';
+import { getSafeFormValue } from '@/utils/formUtils';
 
 
 
@@ -23,8 +24,18 @@ const ActivityStatus = ({formKey,updateFunction}) => {
         Activity Status
       </label>
       <Select
-        value={formData.activityStatus || ""}
-        onValueChange={(value) => updateFormDataByKey({ ...formData,activityStatus: value })}
+        value={getSafeFormValue(formData, 'activityStatus')}
+        onValueChange={(value) => {
+              if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+                if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      updateFormDataByKey({ ...formData, activityStatus: value });
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    };
+              } else {
+                console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+              }
+            }}
       >
         <SelectTrigger className="w-full border-gray-300">
           <SelectValue placeholder="Select status" />

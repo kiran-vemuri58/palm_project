@@ -17,19 +17,22 @@ const PCEfforts = ({formKey,updateFunction}) => {
   const formData = useFormStore((state) => state[formKey]);
   const updateFormData = useFormStore((state) => state[updateFunction]);
  // const { formData, updateFormData } = useFormStore();
+  
+  // Safety check to ensure formData is defined
+  const safeFormData = formData || {};
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    updateFormData({ ...formData, [name]: value });
+    updateFormData({ ...safeFormData, [name]: value });
   };
 
   const handleFileUpload = (e) => {
     const { name, value } = e.target; // array of File
-    updateFormData({ ...formData, [name]: value });
+    updateFormData({ ...safeFormData, [name]: value });
   };
 
   const handleSelectChange = (name, value) => {
-    updateFormData({ ...formData, [name]: value });
+    updateFormData({ ...safeFormData, [name]: value });
   };
 
   return (
@@ -41,7 +44,7 @@ const PCEfforts = ({formKey,updateFunction}) => {
             name="salesFile"
             multiple={true}
             accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx"
-            value={formData.salesFile || []}
+            value={safeFormData.salesFile || []}
             onChange={handleFileUpload}
             maxFiles={20}
             maxFileSize={20 * 1024 * 1024}
@@ -53,7 +56,7 @@ const PCEfforts = ({formKey,updateFunction}) => {
             type="text"
             name="periodicSales"
             placeholder="Enter amount in numbers"
-            value={formData.periodicSales || ''}
+            value={safeFormData.periodicSales || ''}
             onChange={handleChange}
           />
         </div>
@@ -63,7 +66,7 @@ const PCEfforts = ({formKey,updateFunction}) => {
             name="invoiceFile"
             multiple={true}
             accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx"
-            value={formData.invoiceFile || []}
+            value={safeFormData.invoiceFile || []}
             onChange={handleFileUpload}
             maxFiles={20}
             maxFileSize={20 * 1024 * 1024}
@@ -75,7 +78,7 @@ const PCEfforts = ({formKey,updateFunction}) => {
           <Input
             type="date"
             name="commercializationDate"
-            value={formData.commercializationDate || ''}
+            value={safeFormData.commercializationDate || ''}
             onChange={handleChange}
           />
         </div>
@@ -85,14 +88,14 @@ const PCEfforts = ({formKey,updateFunction}) => {
             type="text"
             name="productId"
             placeholder="Enter Product ID"
-            value={formData.productId || ''}
+            value={safeFormData.productId || ''}
             onChange={handleChange}
           />
         </div>
         <div>
           <Label>Whether Patent is Licensed</Label>
           <Select
-            value={formData.isLicensed || ''}
+            value={safeFormData.isLicensed || ''}
             onValueChange={(value) => handleSelectChange('isLicensed', value)}
           >
             <SelectTrigger className="w-full">
@@ -108,7 +111,7 @@ const PCEfforts = ({formKey,updateFunction}) => {
         <div>
           <Label>Whether Patent is Cross Licensed</Label>
           <Select
-            value={formData.isCrossLicensed || ''}
+            value={safeFormData.isCrossLicensed || ''}
             onValueChange={(value) => handleSelectChange('isCrossLicensed', value)}
           >
             <SelectTrigger className="w-full">
@@ -123,7 +126,7 @@ const PCEfforts = ({formKey,updateFunction}) => {
         <div>
           <Label>Whether Patent Filed for Compulsory License</Label>
           <Select
-            value={formData.isCompulsoryLicenseFiled || ''}
+            value={safeFormData.isCompulsoryLicenseFiled || ''}
             onValueChange={(value) => handleSelectChange('isCompulsoryLicenseFiled', value)}
           >
             <SelectTrigger className="w-full">

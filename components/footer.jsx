@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -59,10 +61,18 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/assetForm1" className="group flex items-center text-gray-400 hover:text-white transition-colors duration-200">
+                <button 
+                  onClick={() => {
+                    // Clear only V2-specific localStorage data
+                    localStorage.removeItem('v2-asset-storage');
+                    // Navigate to V2 page with new=true
+                    window.location.href = '/v2/invention-recognition?new=true';
+                  }}
+                  className="group flex items-center text-gray-400 hover:text-white transition-colors duration-200"
+                >
                   <Zap size={16} className="mr-2 group-hover:scale-110 transition-transform duration-200" />
                   New Asset
-                </Link>
+                </button>
               </li>
               <li>
                 <Link href="/assets" className="group flex items-center text-gray-400 hover:text-white transition-colors duration-200">

@@ -3,12 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from "next/navigation";
-import useFormStore from '@/store/store';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import PatentManagementModal from "@/components/PatentManagementModal";
 import SimpleProtectedRoute from "@/components/SimpleProtectedRoute";
-import { useSimpleAuth } from "@/hooks/useSimpleAuth";
 
 function AssetsContent() {
   const [data, setData] = useState([]);
@@ -16,9 +14,8 @@ function AssetsContent() {
   const [totalPages, setTotalPages] = useState(1);
   const [isDataLoading, setIsDataLoading] = useState(true);
   const rowsPerPage = 10;
-  const { user, signOut } = useSimpleAuth();
+  // Authentication is handled by the main header component
   const router = useRouter();
-  const clearAllData = useFormStore((state) => state.clearAllData);
   
   // Delete functionality states
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -112,11 +109,6 @@ function AssetsContent() {
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   };
 
-  const handleNewAsset = () => {
-    // Clear all form data before navigating to new asset
-    clearAllData();
-    router.push('/assetForm1');
-  };
 
   const handleDeleteClick = (assetId) => {
     setAssetToDelete(assetId);
@@ -268,40 +260,19 @@ function AssetsContent() {
   if (isDataLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-        {/* Header */}
-        <div className="bg-white/80 backdrop-blur-md shadow-lg border-b border-gray-200/50 sticky top-0 z-40">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center py-6 mt-16">
-              <div className="flex items-center space-x-4">
-                <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg">
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                </div>
-                <div>
-                  <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                    Patent Management
-                  </h1>
-                  <p className="mt-1 text-sm text-gray-600 font-medium">
-                    Loading your patent applications and inventions
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Loading Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="text-center">
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-12 shadow-2xl border border-gray-200/50 max-w-md mx-auto">
-              <div className="animate-spin rounded-full h-20 w-20 border-4 border-blue-500 border-t-transparent mx-auto mb-6"></div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">Loading Assets</h3>
-              <p className="text-gray-600 mb-6">Please wait while we fetch your patent data...</p>
-              <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+        <div className="pt-20 px-4 sm:px-6 lg:px-8 py-16">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center">
+              <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-12 shadow-2xl border border-gray-200/50 max-w-md mx-auto">
+                <div className="animate-spin rounded-full h-20 w-20 border-4 border-blue-500 border-t-transparent mx-auto mb-6"></div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">Loading Assets</h3>
+                <p className="text-gray-600 mb-6">Please wait while we fetch your patent data...</p>
+                <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                </div>
               </div>
             </div>
           </div>
@@ -314,7 +285,7 @@ function AssetsContent() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 relative">
       {/* Loading Overlay */}
       {isNavigating && (
-        <div className="absolute inset-0 bg-white/90 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-white/90 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="text-center bg-white rounded-2xl p-8 shadow-2xl border border-gray-100">
             <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-500 border-t-transparent mx-auto mb-4"></div>
             <p className="text-gray-700 font-semibold text-lg">Loading patent workflow...</p>
@@ -323,53 +294,10 @@ function AssetsContent() {
         </div>
       )}
       
-      {/* Header */}
-      <div className="bg-white/80 backdrop-blur-md shadow-lg border-b border-gray-200/50 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6 mt-16">
-            <div className="flex items-center space-x-4">
-              <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-              </div>
-            <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                  Patent Management
-                </h1>
-                <p className="mt-1 text-sm text-gray-600 font-medium">
-                  Manage your patent applications and inventions
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="text-right">
-                <p className="text-sm text-gray-600">Signed in as</p>
-                <p className="text-sm font-semibold text-gray-900">{user?.email}</p>
-            </div>
-              <button
-                onClick={signOut}
-                className="px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200"
-              >
-                Sign Out
-              </button>
-            <button
-              onClick={handleNewAsset}
-                className="group relative inline-flex items-center px-8 py-4 border border-transparent text-base font-semibold rounded-xl text-white bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 hover:from-blue-700 hover:via-blue-800 hover:to-indigo-800 focus:outline-none focus:ring-4 focus:ring-blue-500/50 transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl"
-            >
-                <svg className="w-5 h-5 mr-3 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-                <span className="relative z-10 font-semibold">Create New Asset</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-700 via-blue-800 to-indigo-800 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </button>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
         {/* Error Display */}
         {error && (
           <div className="mb-8 bg-red-50 border border-red-200 rounded-2xl p-6 shadow-lg">
@@ -418,6 +346,23 @@ function AssetsContent() {
             </div>
           </div>
         )}
+
+        {/* Workflow Viewing Disabled Notice */}
+        <div className="mb-8 bg-yellow-50 border border-yellow-200 rounded-2xl p-6 shadow-lg">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <svg className="h-8 w-8 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <h3 className="text-lg font-semibold text-yellow-800">Workflow Viewing Disabled</h3>
+              <p className="text-yellow-700 mt-1">
+                The workflow viewing functionality is currently disabled. Use the individual form pages to manage your assets.
+              </p>
+            </div>
+          </div>
+        </div>
 
         {/* Search and Stats Bar */}
         <div className="mb-8">
@@ -480,15 +425,6 @@ function AssetsContent() {
                 : 'Get started by creating your first patent asset to begin the patent management process.'
               }
             </p>
-              <button
-                onClick={handleNewAsset}
-              className="group inline-flex items-center px-8 py-4 border border-transparent text-base font-semibold rounded-xl text-white bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 hover:from-blue-700 hover:via-blue-800 hover:to-indigo-800 focus:outline-none focus:ring-4 focus:ring-blue-500/50 transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl"
-              >
-              <svg className="w-5 h-5 mr-3 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
-                Create New Asset
-              </button>
           </div>
         ) : (
           <div className="bg-white/90 backdrop-blur-sm shadow-2xl rounded-2xl border border-gray-200/50 overflow-hidden">
@@ -621,19 +557,15 @@ function AssetsContent() {
                       <td className="px-8 py-6 whitespace-nowrap">
                         <div className="flex items-center space-x-3">
                         <button
-                          onClick={() => handleViewPatentWorkflow(item.asset_id)}
-                          disabled={isNavigating}
-                            className="group inline-flex items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-4 focus:ring-blue-500/50 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                          disabled={true}
+                          className="group inline-flex items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl text-gray-500 bg-gradient-to-r from-gray-300 to-gray-400 cursor-not-allowed opacity-60"
+                          title="Workflow viewing is currently disabled"
                         >
-                          {isNavigating ? (
-                              <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
-                          ) : (
-                            <svg className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                          )}
-                            {isNavigating ? 'Loading...' : 'View Workflow'}
+                          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                          </svg>
+                          View Workflow (Disabled)
                         </button>
                         <button
                           onClick={() => handleDeleteClick(item.asset_id)}

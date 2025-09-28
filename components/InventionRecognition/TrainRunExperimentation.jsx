@@ -34,7 +34,7 @@ const TrainRunExperimentation = () => {
         <Label className="mb-2 block text-sm font-medium text-gray-700">Train Run / Experimentation?</Label>
         <Select
           className="w-full max-w-xs"
-          value={formData.trainRun ?? ''} // ✅ Fix uncontrolled issue
+          value={formData?.trainRun ?? ''} // ✅ Fix uncontrolled issue
           onValueChange={handleTrainRunChange}
         >
           <SelectTrigger className="w-full">
@@ -48,7 +48,7 @@ const TrainRunExperimentation = () => {
       </div>
 
       {/* Show other inputs only if "Yes" is selected */}
-      {formData.trainRun === 'yes' && (
+      {formData?.trainRun === 'yes' && (
         <div className="space-y-6">
           {/* Experimentation Results */}
           <div>
@@ -58,7 +58,7 @@ const TrainRunExperimentation = () => {
               placeholder="Enter experimentation results..."
               id="experimentResults"
               name="experimentResults"
-              value={formData.experimentResults ?? ''}
+              value={formData?.experimentResults ?? ''}
               onChange={handleChange}
             />
           </div>
@@ -71,7 +71,7 @@ const TrainRunExperimentation = () => {
                 name="evidence"
                 multiple={true}
                 accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.txt"
-                value={formData.evidence || []}
+                value={formData?.evidence || []}
                 onChange={handleFileUpload}
                 maxFileSize={20 * 1024 * 1024} // 20MB
                 maxFiles={5}
@@ -84,7 +84,7 @@ const TrainRunExperimentation = () => {
                 name="minuteOfMeeting"
                 multiple={true}
                 accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.txt"
-                value={formData.minuteOfMeeting || []}
+                value={formData?.minuteOfMeeting || []}
                 onChange={handleFileUpload}
                 maxFileSize={20 * 1024 * 1024} // 20MB
                 maxFiles={5}
@@ -97,7 +97,7 @@ const TrainRunExperimentation = () => {
                 name="attachments"
                 multiple={true}
                 accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.txt,.xls,.xlsx"
-                value={formData.attachments || []}
+                value={formData?.attachments || []}
                 onChange={handleFileUpload}
                 maxFileSize={20 * 1024 * 1024} // 20MB
                 maxFiles={10}

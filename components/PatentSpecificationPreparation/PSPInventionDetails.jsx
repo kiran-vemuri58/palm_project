@@ -7,6 +7,9 @@ import useFormStore from '@/store/store';
 
 const InventionDetails = ({ disableCommon = false }) => {
   const { formData, updateFormData, errors } = useFormStore();
+  
+  // Safety check to ensure formData is defined
+  const safeFormData = formData || {};
 
   const fields = [
     { id: "inventiontitle", label: "Invention Title" },
@@ -26,7 +29,7 @@ const InventionDetails = ({ disableCommon = false }) => {
           <Input
             id={field.id}
             type="text"
-            value={formData[field.id] || ""}
+            value={safeFormData[field.id] || ""}
             onChange={(e) => updateFormData({ [field.id]: e.target.value })}
             className="border-gray-300 focus:border-blue-500 px-4 py-2 rounded-md"
             placeholder={field.label}

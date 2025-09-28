@@ -18,19 +18,22 @@ const PatentCommercializationChild = ({formKey,updateFunction}) => {
   const formData = useFormStore((state) => state[formKey]);
   const updateFormData = useFormStore((state) => state[updateFunction]);
   //const { formData, updateFormData } = useFormStore();
+  
+  // Safety check to ensure formData is defined
+  const safeFormData = formData || {};
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    updateFormData({ ...formData, [name]: value });
+    updateFormData({ ...safeFormData, [name]: value });
   };
 
   const handleFileUpload = (e) => {
     const { name, value } = e.target; // array of File
-    updateFormData({ ...formData, [name]: value });
+    updateFormData({ ...safeFormData, [name]: value });
   };
 
   const handleSelectChange = (name, value) => {
-    updateFormData({ ...formData, [name]: value });
+    updateFormData({ ...safeFormData, [name]: value });
   };
 
   const implementationStages = [
@@ -49,7 +52,7 @@ const PatentCommercializationChild = ({formKey,updateFunction}) => {
         <div>
           <Label>Stage of Implementation of Invention</Label>
           <Select
-            value={formData.inventionStage || ''}
+            value={safeFormData.inventionStage || ''}
             onValueChange={(value) =>
               handleSelectChange('inventionStage', value)
             }
@@ -74,7 +77,7 @@ const PatentCommercializationChild = ({formKey,updateFunction}) => {
             name="implementationFile"
             multiple={true}
             accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx"
-            value={formData.implementationFile || []}
+            value={safeFormData.implementationFile || []}
             onChange={handleFileUpload}
             maxFiles={20}
             maxFileSize={20 * 1024 * 1024}
@@ -85,7 +88,7 @@ const PatentCommercializationChild = ({formKey,updateFunction}) => {
         <div>
           <Label>Working of Invention filed?</Label>
           <Select
-            value={formData.isWorkingFiled || ''}
+            value={safeFormData.isWorkingFiled || ''}
             onValueChange={(value) =>
               handleSelectChange('isWorkingFiled', value)
             }
@@ -106,7 +109,7 @@ const PatentCommercializationChild = ({formKey,updateFunction}) => {
           <Input
             type="date"
             name="firstWorkingDate"
-            value={formData.firstWorkingDate || ''}
+            value={safeFormData.firstWorkingDate || ''}
             onChange={handleChange}
             className="w-full"
           />

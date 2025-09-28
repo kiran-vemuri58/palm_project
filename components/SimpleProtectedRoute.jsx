@@ -8,11 +8,14 @@ const SimpleProtectedRoute = ({ children }) => {
   const { isLoading, isAuthenticated, user } = useSimpleAuth();
   const router = useRouter();
 
+  // Debug logging
+
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
       router.push('/login');
+    } else if (!isLoading && isAuthenticated) {
     }
-  }, [isLoading, isAuthenticated, router]);
+  }, [isLoading, isAuthenticated, user, router]);
 
   // Show loading while checking authentication
   if (isLoading) {

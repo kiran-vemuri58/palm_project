@@ -14,15 +14,33 @@ const PAExtractor = ({formKey,updateFunction}) => {
   const formData = useFormStore((state) => state[formKey]);
   const updateFormDataByKey = useFormStore((state) => state[updateFunction]);
   
+  // Safety check to ensure formData is defined
+  const safeFormData = formData || {};
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    updateFormDataByKey({ [name]: value });
+    if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      updateFormDataByKey({ [name]: value });
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
   };
-  const [rating, setRating] = useState(formData.rating || 0);
+  const [rating, setRating] = useState(safeFormData.rating || 0);
   const handleFileUpload = (e) => {
     const { name, files } = e.target;
-    updateFormDataByKey({ [name]: files[0] || null }); // Store only the first file or null
+    if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      updateFormDataByKey({ [name]: files[0] || null });
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    }
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    } // Store only the first file or null
   };
 
 
@@ -33,12 +51,12 @@ const PAExtractor = ({formKey,updateFunction}) => {
       <div className="grid grid-cols-3 gap-4">
         <div>
           <Label className="mb-1">Name of Patent Searcher 1 </Label>
-          <Input className="p-2" placeholder="Enter the Name of Patent Searcher 1" id="entity" name="psone" value={formData.psone || ''} onChange={handleChange} />
+          <Input className="p-2" placeholder="Enter the Name of Patent Searcher 1" id="entity" name="psone" value={safeFormData.psone || ''} onChange={handleChange} />
         </div>
 
         <div>
           <Label className="mb-1">Name of Patent Searcher 2</Label>
-          <Input className="p-2" placeholder="Enter the Name of Patent Searcher 2" id="inventionCountry" name="pstwo" value={formData.pstwo || ''} onChange={handleChange} />
+          <Input className="p-2" placeholder="Enter the Name of Patent Searcher 2" id="inventionCountry" name="pstwo" value={safeFormData.pstwo || ''} onChange={handleChange} />
         </div>
         <div className="flex items-center gap-2">
           {[1, 2, 3, 4, 5].map((star) => (
@@ -49,7 +67,15 @@ const PAExtractor = ({formKey,updateFunction}) => {
                 }`}
               onClick={() => {
                 setRating(star);
-                updateFormDataByKey({ rating: star });
+                if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      updateFormDataByKey({ rating: star });
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    };
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    };
               }}
               fill={rating >= star ? "#facc15" : "none"}
             />
@@ -65,7 +91,21 @@ const PAExtractor = ({formKey,updateFunction}) => {
       <div className="grid grid-cols-3 gap-4 mt-4">
         <div>
           <Label className="mb-1">is Invention Accordance with Patent Laws?</Label>
-          <Select className="w-full" value={formData.collaboration || ''} onValueChange={(value) => updateFormDataByKey({ collaboration: value })}>
+          <Select className="w-full" value={safeFormData.collaboration || ''} onValueChange={(value) => {
+              if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+                if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+      updateFormDataByKey({ collaboration: value });
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    };
+    } else {
+      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+    };
+              } else {
+                console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+              }
+            }}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select an option" />
             </SelectTrigger>
@@ -77,24 +117,30 @@ const PAExtractor = ({formKey,updateFunction}) => {
         </div>
       </div>
 
-      {formData.collaboration === 'yes' && (
+      {safeFormData.collaboration === 'yes' && (
         <>
           {/* Third Row */}
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div>
               <Label className="mb-1">Novel Feature(Assumed)</Label>
-              <Input className="p-2" placeholder="Enter Novel Feature" id="collaboratorName" name="nfeature" value={formData.nfeature || ''} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter Novel Feature" id="collaboratorName" name="nfeature" value={safeFormData.nfeature || ''} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Inventive Feature (Assumed)</Label>
-              <Input className="p-2" placeholder="Enter collaborator country..." id="collaboratorCountry" name="ifeature" value={formData.ifeature || ''} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter collaborator country..." id="collaboratorCountry" name="ifeature" value={safeFormData.ifeature || ''} onChange={handleChange} />
             </div>
             <div>
               <Label className="mb-1">Invention Detail Attachment</Label>
               <FileInput
                 name="attachment"
-                value={formData.attachment || []}
-                onChange={(files) => updateFormDataByKey({ attachment: files })}
+                value={safeFormData.attachment || []}
+                onChange={(files) => {
+                  if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
+                    updateFormDataByKey({ attachment: files });
+                  } else {
+                    console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
+                  }
+                }}
                 multiple={true}
                 accept=".pdf,.doc,.docx,.txt"
                 maxFileSize={10 * 1024 * 1024} // 10MB
@@ -111,7 +157,7 @@ const PAExtractor = ({formKey,updateFunction}) => {
                 id="scountry"
                 name="scountry"
                 className="p-2 border rounded w-full"
-                value={formData.scountry || ''}
+                value={safeFormData.scountry || ''}
                 onChange={handleChange}
               >
                 <option value="">Select a country</option>
@@ -130,7 +176,7 @@ const PAExtractor = ({formKey,updateFunction}) => {
 
             <div>
               <Label className="mb-1">Opinion Of Extractor</Label>
-              <Input className="p-2" placeholder="Enter Opinion Of Extractor" id="productIdentity" name="ooextractor" value={formData.ooextractor || ''} onChange={handleChange} />
+              <Input className="p-2" placeholder="Enter Opinion Of Extractor" id="productIdentity" name="ooextractor" value={safeFormData.ooextractor || ''} onChange={handleChange} />
             </div>
           </div>
         </>
