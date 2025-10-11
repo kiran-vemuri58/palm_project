@@ -143,7 +143,7 @@ function AssetsV2Content() {
         { page: 'inventionRecognition', endpoint: `/api/invention/get/${assetId}`, displayName: 'Invention Recognition' },
         { page: 'inventionExtraction', endpoint: `/api/extraction/get/${assetId}`, displayName: 'Invention Extraction' },
         { page: 'patentabilityAnalysis', endpoint: `/api/patentability/get/${assetId}`, displayName: 'Patentability Analysis' },
-        { page: 'patentSpecification', endpoint: `/api/patentSpecification/get/${assetId}`, displayName: 'Patent Specification' },
+        { page: 'patentSpecification', endpoint: `/api/psp?assetId=${assetId}`, displayName: 'Patent Specification' },
         { page: 'patentFiling', endpoint: `/api/patentFiling/get/${assetId}`, displayName: 'Patent Filing' },
         { page: 'patentProsecution', endpoint: `/api/patentProsecution/get/${assetId}`, displayName: 'Patent Prosecution' },
         { page: 'patentMaintenance', endpoint: `/api/patentMaintenance/get/${assetId}`, displayName: 'Patent Maintenance' },
