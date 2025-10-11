@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, Suspense } from 'react';
-
+import { toast } from "sonner";
 import CardWrapper from "@/components/CardWrapper";
 import ActivityStatus from "@/components/InventionRecognition/ActivityStatus";
 import InventionDetails from "@/components/InventionRecognition/InventionDetails";
@@ -26,6 +26,7 @@ const PatentSpecificationPreparationContent = () => {
   const setAssetId = useFormStore((state) => state.setAssetId);
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [isLoadingData, setIsLoadingData] = useState(false);
 
   // Handle assetId from query parameter
   useEffect(() => {

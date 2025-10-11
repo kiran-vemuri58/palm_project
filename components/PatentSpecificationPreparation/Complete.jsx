@@ -16,16 +16,13 @@ import {
 const Complete = ({ formKey, updateFunction }) => {
   const formData = useFormStore((state) => state[formKey]);
   const updateFormDataByKey = useFormStore((state) => state[updateFunction]);
+  const safeFormData = formData || {};
 
   const handleChange = (e) => {
     const { name, value, files, type } = e.target;
     const newValue = type === 'file' ? files[0] : value;
     if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
-      if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
       updateFormDataByKey({ ...safeFormData, [name]: newValue });
-    } else {
-      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
-    }
     } else {
       console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
     }
@@ -34,11 +31,7 @@ const Complete = ({ formKey, updateFunction }) => {
   const handleFileArrayChange = (e) => {
     const { name, value } = e.target; // array of File
     if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
-      if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
       updateFormDataByKey({ ...safeFormData, [name]: value });
-    } else {
-      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
-    }
     } else {
       console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
     }
@@ -46,11 +39,7 @@ const Complete = ({ formKey, updateFunction }) => {
 
   const handleSelectChange = (name, value) => {
     if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
-      if (updateFormDataByKey && typeof updateFormDataByKey === 'function') {
       updateFormDataByKey({ ...safeFormData, [name]: value });
-    } else {
-      console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
-    }
     } else {
       console.error('updateFormDataByKey is not a function:', updateFormDataByKey, 'updateFunction:', updateFunction);
     }

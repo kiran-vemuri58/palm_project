@@ -141,23 +141,101 @@ function getInitialFormData(page) {
     },
     
     patentSpecification: {
-      // Patent Specification fields
-      specificationDate: '',
-      technicalField: '',
-      backgroundArt: '',
-      summaryOfInvention: '',
-      briefDescriptionOfDrawings: '',
-      detailedDescription: '',
-      claims: '',
-      abstract: '',
-      drawings: [],
-      examples: '',
-      embodiments: '',
-      advantages: '',
-      scopeOfProtection: '',
-      legalRequirements: '',
-      technicalAccuracy: '',
-      completeness: ''
+      // Common fields
+      rating: 0,
+      activityStatus: '',
+      draftType: '',
+      
+      // Complete Specification fields
+      isProvisionalFiled: '',
+      provisionalSpecDate: '',
+      applicationNumber: '',
+      isPCTFiled: '',
+      pctFilingDate: '',
+      isPCTPublished: '',
+      citedPatent: '',
+      independentClaim: '',
+      dependentClaim: '',
+      broadenedFeature: '',
+      isProfitPatent: '',
+      isDefensivePatent: '',
+      draftVersions: [],
+      draftingEffort: '',
+      drafterEmpId: '',
+      hoursSpent: '',
+      agencyRecognizer: '',
+      agencyCost: '',
+      reviewEffort: '',
+      managerEmpId: '',
+      
+      // Provisional Application fields
+      nodrafter: '',
+      noreviewer: '',
+      attachments: [],
+      bned: '',
+      ifdescribed: '',
+      toinvention: '',
+      esfd: '',
+      pdrafter: '',
+      nohspent: '',
+      eafd: '',
+      csoagency: '',
+      eihfr: '',
+      mres: '',
+      
+      // PCT Application fields
+      isDirectPCT: '',
+      pctParentPermission: [],
+      pctProvisionalDate: '',
+      pctApplicationNumber: '',
+      pctDrafterName: '',
+      pctClaimSheet: [],
+      pctFormsPrepared: '',
+      pctCountryFiling: '',
+      pctReviewBy: '',
+      pctCitedPatent: '',
+      pctIndependentClaim: '',
+      pctDependentClaim: '',
+      pctBroadenedFeature: '',
+      pctIsProfit: '',
+      pctIsDefensive: '',
+      pctAllDrafts: [],
+      pctDraftingEffort: '',
+      pctDrafterEmpId: '',
+      pctHoursSpent: '',
+      pctAgencyRecognizer: '',
+      pctAgencyCost: '',
+      pctReviewEffort: '',
+      pctManagerEmpId: '',
+      pctActivityStatus: '',
+      
+      // National Phase fields
+      npPCTDate: '',
+      npApplicationNumber: '',
+      npPCTPublication: '',
+      npSearchReport: [],
+      npPCTOrProvisionalDate: '',
+      npApplicationCountry: '',
+      npDrafterName: '',
+      npClaimSheet: [],
+      npFormsPrepared: '',
+      npCountryFiling: '',
+      npReviewBy: '',
+      npCitedPatent: '',
+      npIndependentClaim: '',
+      npDependentClaim: '',
+      npBroadenedFeature: '',
+      npIsProfit: '',
+      npIsDefensive: '',
+      npAllDrafts: [],
+      npDraftingEffort: '',
+      npDrafterEmpId: '',
+      npHoursSpent: '',
+      npAgencyRecognizer: '',
+      npAgencyCost: '',
+      npReviewEffort: '',
+      npManagerEmpId: '',
+      npActivityStatus: ''
     },
     
     patentFiling: {
@@ -326,6 +404,8 @@ const useV2Store = create((set, get) => ({
         apiEndpoint = `/api/extraction/get/${assetId}`;
       } else if (page === 'patentabilityAnalysis') {
         apiEndpoint = `/api/patentability/get/${assetId}`;
+      } else if (page === 'patentSpecification') {
+        apiEndpoint = `/api/psp?assetId=${assetId}`;
       } else {
         apiEndpoint = `/api/invention/get/${assetId}`;
       }
@@ -384,6 +464,8 @@ const useV2Store = create((set, get) => ({
             apiEndpoint = `/api/extraction/get/${assetId}`;
           } else if (page === 'patentabilityAnalysis') {
             apiEndpoint = `/api/patentability/get/${assetId}`;
+          } else if (page === 'patentSpecification') {
+            apiEndpoint = `/api/psp?assetId=${assetId}`;
           } else {
             apiEndpoint = `/api/invention/get/${assetId}`;
           }
@@ -682,6 +764,105 @@ const useV2Store = create((set, get) => ({
           
           // Activity Status
           activityStatus: apiData.activityStatus || ''
+        };
+        
+      case 'patentSpecification':
+        return {
+          // Common fields
+          rating: apiData.rating || 0,
+          activityStatus: apiData.activityStatus || '',
+          draftType: apiData.draftType || '',
+          
+          // Complete Specification fields
+          isProvisionalFiled: apiData.isProvisionalFiled || '',
+          provisionalSpecDate: apiData.provisionalSpecDate || '',
+          applicationNumber: apiData.applicationNumber || '',
+          isPCTFiled: apiData.isPCTFiled || '',
+          pctFilingDate: apiData.pctFilingDate || '',
+          isPCTPublished: apiData.isPCTPublished || '',
+          citedPatent: apiData.citedPatent || '',
+          independentClaim: apiData.independentClaim || '',
+          dependentClaim: apiData.dependentClaim || '',
+          broadenedFeature: apiData.broadenedFeature || '',
+          isProfitPatent: apiData.isProfitPatent || '',
+          isDefensivePatent: apiData.isDefensivePatent || '',
+          draftVersions: apiData.draftVersions || [],
+          draftingEffort: apiData.draftingEffort || '',
+          drafterEmpId: apiData.drafterEmpId || '',
+          hoursSpent: apiData.hoursSpent || '',
+          agencyRecognizer: apiData.agencyRecognizer || '',
+          agencyCost: apiData.agencyCost || '',
+          reviewEffort: apiData.reviewEffort || '',
+          managerEmpId: apiData.managerEmpId || '',
+          
+          // Provisional Application fields
+          nodrafter: apiData.nodrafter || '',
+          noreviewer: apiData.noreviewer || '',
+          attachments: apiData.attachments || [],
+          bned: apiData.bned || '',
+          ifdescribed: apiData.ifdescribed || '',
+          toinvention: apiData.toinvention || '',
+          esfd: apiData.esfd || '',
+          pdrafter: apiData.pdrafter || '',
+          nohspent: apiData.nohspent || '',
+          eafd: apiData.eafd || '',
+          csoagency: apiData.csoagency || '',
+          eihfr: apiData.eihfr || '',
+          mres: apiData.mres || '',
+          
+          // PCT Application fields
+          isDirectPCT: apiData.isDirectPCT || '',
+          pctParentPermission: apiData.pctParentPermission || [],
+          pctProvisionalDate: apiData.pctProvisionalDate || '',
+          pctApplicationNumber: apiData.pctApplicationNumber || '',
+          pctDrafterName: apiData.pctDrafterName || '',
+          pctClaimSheet: apiData.pctClaimSheet || [],
+          pctFormsPrepared: apiData.pctFormsPrepared || '',
+          pctCountryFiling: apiData.pctCountryFiling || '',
+          pctReviewBy: apiData.pctReviewBy || '',
+          pctCitedPatent: apiData.pctCitedPatent || '',
+          pctIndependentClaim: apiData.pctIndependentClaim || '',
+          pctDependentClaim: apiData.pctDependentClaim || '',
+          pctBroadenedFeature: apiData.pctBroadenedFeature || '',
+          pctIsProfit: apiData.pctIsProfit || '',
+          pctIsDefensive: apiData.pctIsDefensive || '',
+          pctAllDrafts: apiData.pctAllDrafts || [],
+          pctDraftingEffort: apiData.pctDraftingEffort || '',
+          pctDrafterEmpId: apiData.pctDrafterEmpId || '',
+          pctHoursSpent: apiData.pctHoursSpent || '',
+          pctAgencyRecognizer: apiData.pctAgencyRecognizer || '',
+          pctAgencyCost: apiData.pctAgencyCost || '',
+          pctReviewEffort: apiData.pctReviewEffort || '',
+          pctManagerEmpId: apiData.pctManagerEmpId || '',
+          pctActivityStatus: apiData.pctActivityStatus || '',
+          
+          // National Phase fields
+          npPCTDate: apiData.npPCTDate || '',
+          npApplicationNumber: apiData.npApplicationNumber || '',
+          npPCTPublication: apiData.npPCTPublication || '',
+          npSearchReport: apiData.npSearchReport || [],
+          npPCTOrProvisionalDate: apiData.npPCTOrProvisionalDate || '',
+          npApplicationCountry: apiData.npApplicationCountry || '',
+          npDrafterName: apiData.npDrafterName || '',
+          npClaimSheet: apiData.npClaimSheet || [],
+          npFormsPrepared: apiData.npFormsPrepared || '',
+          npCountryFiling: apiData.npCountryFiling || '',
+          npReviewBy: apiData.npReviewBy || '',
+          npCitedPatent: apiData.npCitedPatent || '',
+          npIndependentClaim: apiData.npIndependentClaim || '',
+          npDependentClaim: apiData.npDependentClaim || '',
+          npBroadenedFeature: apiData.npBroadenedFeature || '',
+          npIsProfit: apiData.npIsProfit || '',
+          npIsDefensive: apiData.npIsDefensive || '',
+          npAllDrafts: apiData.npAllDrafts || [],
+          npDraftingEffort: apiData.npDraftingEffort || '',
+          npDrafterEmpId: apiData.npDrafterEmpId || '',
+          npHoursSpent: apiData.npHoursSpent || '',
+          npAgencyRecognizer: apiData.npAgencyRecognizer || '',
+          npAgencyCost: apiData.npAgencyCost || '',
+          npReviewEffort: apiData.npReviewEffort || '',
+          npManagerEmpId: apiData.npManagerEmpId || '',
+          npActivityStatus: apiData.npActivityStatus || ''
         };
         
       default:
