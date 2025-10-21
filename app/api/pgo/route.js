@@ -66,12 +66,47 @@ export async function POST(req) {
     // Map payload to Prisma-compatible field names and ensure array fields are arrays
     const data = {
       asset_id: payload.asset_id,
+      
+      // PGO Extractor Details fields (from old ExtractorDetails component)
+      extractorOne: payload.extractorOne || '',
+      extractortwo: payload.extractortwo || '',
+      iEDate: payload.iEDate || '',
+      iawpl: payload.iawpl || '',
+      nfeature: payload.nfeature || '',
+      ifeature: payload.ifeature || '',
+      idattachments: Array.isArray(payload.idattachments) ? payload.idattachments.filter(item => typeof item === 'string' && item.trim() !== '') : [],
+      scountry: payload.scountry || '',
+      oextractor: payload.oextractor || '',
+      
+      // PGO Innovation Analysis fields (from old Innovation component)
+      trainRun: payload.trainRun || '',
+      minuteOfMeeting: Array.isArray(payload.minuteOfMeeting) ? payload.minuteOfMeeting.filter(item => typeof item === 'string' && item.trim() !== '') : [],
+      innovationAttachments: Array.isArray(payload.innovationAttachments) ? payload.innovationAttachments.filter(item => typeof item === 'string' && item.trim() !== '') : [],
+      
+      // PGO Patentability Extractor fields (from old PAExtractor component)
+      psone: payload.psone || '',
+      pstwo: payload.pstwo || '',
+      rating: payload.rating || 0,
+      collaboration: payload.collaboration || '',
+      paNovelFeature: payload.paNovelFeature || '',
+      paInventiveFeature: payload.paInventiveFeature || '',
+      paSpecificCountry: payload.paSpecificCountry || '',
+      paOpinionOfExtractor: payload.paOpinionOfExtractor || '',
+      patentabilityAttachments: Array.isArray(payload.patentabilityAttachments) ? payload.patentabilityAttachments.filter(item => typeof item === 'string' && item.trim() !== '') : [],
+      
+      // PGO Decision Sheet fields (from old DecisionSheet component)
+      nodc: payload.nodc || '',
+      dibrief: payload.dibrief || '',
+      decisionAttachments: Array.isArray(payload.decisionAttachments) ? payload.decisionAttachments.filter(item => typeof item === 'string' && item.trim() !== '') : [],
+      
+      // PGO fields matching old formData7 structure
       patentApplicationNumber: payload.patentApplicationNumber || '',
       patentPublished: payload.patentPublished || '',
       publicationNumber: payload.publicationNumber || '',
       apopposed: payload.apopposed || '',
       oname: payload.oname || '',
       opposerAttachment: Array.isArray(payload.opposerAttachment) ? payload.opposerAttachment.filter(item => typeof item === 'string' && item.trim() !== '') : [],
+      cfbopposer: payload.cfbopposer || '',
       boaof: payload.boaof || '',
       rffo: payload.rffo || '',
       responseAttachment: Array.isArray(payload.responseAttachment) ? payload.responseAttachment.filter(item => typeof item === 'string' && item.trim() !== '') : [],
@@ -84,8 +119,9 @@ export async function POST(req) {
       agencyRecognizer: payload.agencyRecognizer || '',
       agencyCost: payload.agencyCost || '',
       reviewEffort: payload.reviewEffort || '',
+      reviewEffortHours: payload.reviewEffortHours || '',
       managerEmpId: payload.managerEmpId || '',
-      activityStatus: payload.activityStatus || '',
+      activityStatus: payload.activityStatus || ''
     };
 
     console.log('📊 Data being sent to Prisma:', JSON.stringify(data, null, 2));
@@ -101,12 +137,46 @@ export async function POST(req) {
       result = await prisma.PostGrantOpposition.update({
         where: { id: existingRecord.id },
         data: {
+          // PGO Extractor Details fields (from old ExtractorDetails component)
+          extractorOne: data.extractorOne,
+          extractortwo: data.extractortwo,
+          iEDate: data.iEDate,
+          iawpl: data.iawpl,
+          nfeature: data.nfeature,
+          ifeature: data.ifeature,
+          idattachments: data.idattachments,
+          scountry: data.scountry,
+          oextractor: data.oextractor,
+          
+          // PGO Innovation Analysis fields (from old Innovation component)
+          trainRun: data.trainRun,
+          minuteOfMeeting: data.minuteOfMeeting,
+          innovationAttachments: data.innovationAttachments,
+          
+          // PGO Patentability Extractor fields (from old PAExtractor component)
+          psone: data.psone,
+          pstwo: data.pstwo,
+          rating: data.rating,
+          collaboration: data.collaboration,
+          paNovelFeature: data.paNovelFeature,
+          paInventiveFeature: data.paInventiveFeature,
+          paSpecificCountry: data.paSpecificCountry,
+          paOpinionOfExtractor: data.paOpinionOfExtractor,
+          patentabilityAttachments: data.patentabilityAttachments,
+          
+          // PGO Decision Sheet fields (from old DecisionSheet component)
+          nodc: data.nodc,
+          dibrief: data.dibrief,
+          decisionAttachments: data.decisionAttachments,
+          
+          // PGO fields matching old formData7 structure
           patentApplicationNumber: data.patentApplicationNumber,
           patentPublished: data.patentPublished,
           publicationNumber: data.publicationNumber,
           apopposed: data.apopposed,
           oname: data.oname,
           opposerAttachment: data.opposerAttachment,
+          cfbopposer: data.cfbopposer,
           boaof: data.boaof,
           rffo: data.rffo,
           responseAttachment: data.responseAttachment,
@@ -119,8 +189,9 @@ export async function POST(req) {
           agencyRecognizer: data.agencyRecognizer,
           agencyCost: data.agencyCost,
           reviewEffort: data.reviewEffort,
+          reviewEffortHours: data.reviewEffortHours,
           managerEmpId: data.managerEmpId,
-          activityStatus: data.activityStatus,
+          activityStatus: data.activityStatus
         },
       });
     } else {

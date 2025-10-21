@@ -239,106 +239,373 @@ function getInitialFormData(page) {
     },
     
     patentFiling: {
-      // Patent Filing fields
-      filingDate: '',
-      applicationNumber: '',
-      filingJurisdiction: '',
-      filingType: '',
-      priorityClaim: '',
-      priorityDate: '',
-      priorityNumber: '',
+      // Patent Filing fields (matching API response)
+      activityStatus: '',
+      rating: 0,
+      draftType: '',
+      
+      // Extractor Details fields (for ExtractorDetailsV2 component)
+      extractorOne: '',
+      extractortwo: '',
+      iEDate: '',
+      iawpl: '',
+      idattachments: [],
+      
+      // Innovation Analysis fields
+      trainRun: '',
+      minuteOfMeeting: [],
+      attachments: [],
+      
+      // Patentability Extractor fields
+      psone: '',
+      pstwo: '',
+      collaboration: '',
+      paNfeature: '',
+      paIfeature: '',
+      attachment: [],
+      paScountry: '',
+      paOoextractor: '',
+      
+      // Decision Sheet fields
+      nodc: '',
+      dibrief: '',
+      
+      // Average Rating fields
+      patentApplicationNumber: '',
+      
+      // Effort Sheet fields (corrected field names)
+      ipRecognizer: '',
+      hoursSpent: '',
+      agencyRecognizer: '',
+      agencyCost: '',
+      reviewEffort: '',
+      managerEmpId: '',
+      extractionEffort: '',
+      
+      // Provisional fields
+      patentFilingName: '',
+      provisionalPatent: [],
+      dateProvision: '',
       applicantName: '',
-      inventorNames: [],
-      attorneyName: '',
-      filingFees: 0,
-      status: '',
-      examinationDate: '',
-      publicationDate: '',
-      grantDate: '',
-      expiryDate: '',
-      maintenanceFees: 0,
-      renewalDates: []
+      isProfilePatent: '',
+      isDefensivePatent: '',
+      claimingStartup: [],
+      poaOffice: '',
+      effortsSpent: '',
+      patentFiler: '',
+      managerResponsible: '',
+
+      // PCT fields
+      postDated: '',
+      applicationProvisionalNumber: '',
+      datePatentApplication: '',
+      pctFilingPermission: '',
+
+      // National Phase fields
+      dateProvisionalPatent: '',
+      dateCompletePatentApplication: '',
+      datePCTPatentApplication: '',
+      finalSubmitted: '',
+      filedForms: [],
+
+      // Complete fields
+      dateOfPatent: '',
+      provisionalNumber: '',
+      specificationFiling: '',
+      agentFiling: '',
+      filedDraft: [],
+      filedFormsComplete: [],
+      dateOfComplete: '',
+      isPostDated: '',
     },
     
     patentProsecution: {
-      // Patent Prosecution fields
-      prosecutionDate: '',
-      officeActionDate: '',
-      officeActionType: '',
-      responseDeadline: '',
-      responseDate: '',
-      responseContent: '',
-      examinerName: '',
-      examinerComments: '',
-      claimsAmended: false,
-      claimsAdded: 0,
-      claimsRemoved: 0,
-      finalRejection: false,
-      appealFiled: false,
-      appealDate: '',
-      prosecutionStatus: '',
-      nextAction: '',
-      estimatedCompletion: ''
+      // PP Invention Details fields (ppid_)
+      ppid_title: '',
+      ppid_common_name: '',
+      ppid_inventor_details: '',
+      ppid_entity: '',
+      ppid_date: '',
+      ppid_country: '',
+      ppid_creation_country: '',
+      ppid_collaboration: '',
+      ppid_collaborator_name: '',
+      ppid_collaborator_country: '',
+      ppid_stakeholders: '',
+      
+      // PP Extractor Details fields (pped_)
+      pped_one: '',
+      pped_two: '',
+      pped_extraction_date: '',
+      pped_available_with_prior_literature: '',
+      pped_novel_feature: '',
+      pped_inventive_feature: '',
+      pped_specific_country: '',
+      pped_opinion: '',
+      pped_attachments: [],
+      
+      // PP Patent Prosecution Details fields (pppd_)
+      pppd_published: '',
+      pppd_publication_number: '',
+      pppd_any_person_opposed: '',
+      pppd_opponent_name: '',
+      pppd_attachments: [],
+      pppd_case_filed_by_opposer: '',
+      pppd_basis_of_action_of_filing: '',
+      pppd_reason_for_filing_opposition: '',
+      pppd_opinion_rendered_by_you: '',
+      pppd_external_agency: '',
+      pppd_reviewed_by: '',
+      
+      // PP Patent Application Status fields (ppas_)
+      ppas_status: '',
+      ppas_number: '',
+      ppas_attachment: [],
+      ppas_grant_date: '',
+      ppas_rejection_reason_attachment: [],
+      
+      // PP FER fields (ppfer_)
+      ppfer_list: [],
+      
+      // PP Hearing fields (pph_)
+      pph_list: [],
+      
+      // PP Decision Sheet fields (ppds_)
+      ppds_name_of_decision_maker: '',
+      ppds_decision_in_brief: '',
+      ppds_attachments: [],
+      
+      // PP Innovation Analysis fields (ppi_)
+      ppi_more_than_invention: '',
+      ppi_prior_art_documents: [],
+      ppi_npl_documents: [],
+      
+      // PP Patentability Extractor fields (pppe_)
+      pppe_searcher1: '',
+      pppe_searcher2: '',
+      pppe_rating: 0,
+      pppe_invention_accordance: '',
+      pppe_novel_feature: '',
+      pppe_inventive_feature: '',
+      pppe_attachment: [],
+      pppe_specific_country: '',
+      pppe_opinion_of_extractor: '',
+      
+      // PP Average Patentability Rating fields (ppapr_)
+      ppapr_rating: 0,
+      ppapr_patent_application_number: '',
+      
+      // PP Effort Sheet fields (ppes_)
+      ppes_ip_recognizer: '',
+      ppes_hours_spent: '',
+      ppes_agency_recognizer: '',
+      ppes_agency_cost: '',
+      ppes_review_effort: '',
+      ppes_manager_emp_id: '',
+      
+      // PP Activity Status fields (ppact_)
+      ppact_status: '',
+      ppact_description: '',
+      ppact_last_updated: ''
     },
     
     patentMaintenance: {
-      // Patent Maintenance fields
-      maintenanceDate: '',
-      patentNumber: '',
-      maintenanceFees: 0,
-      paymentStatus: '',
-      dueDate: '',
-      gracePeriod: '',
-      lateFees: 0,
-      renewalPeriod: '',
-      nextRenewal: '',
-      maintenanceHistory: [],
-      costBreakdown: {},
-      paymentMethod: '',
-      reminderSet: false,
-      automaticRenewal: false,
-      status: ''
+      // PM Invention Details fields (pmInventionDetails prefix)
+      pmInventionDetailsTitle: '',
+      pmInventionDetailsCommonName: '',
+      pmInventionDetailsInventorDetails: '',
+      pmInventionDetailsEntity: '',
+      pmInventionDetailsDate: '',
+      pmInventionDetailsCountry: '',
+      pmInventionDetailsCreationCountry: '',
+      pmInventionDetailsCollaboration: '',
+      pmInventionDetailsCollaboratorName: '',
+      pmInventionDetailsCollaboratorCountry: '',
+      pmInventionDetailsStakeholders: '',
+      
+      // PM Extractor Details fields (pmExtractorDetails prefix)
+      pmExtractorDetailsOne: '',
+      pmExtractorDetailsTwo: '',
+      pmExtractorDetailsExtractionDate: '',
+      pmExtractorDetailsAvailableWithPriorLiterature: '',
+      pmExtractorDetailsNovelFeature: '',
+      pmExtractorDetailsInventiveFeature: '',
+      pmExtractorDetailsSpecificCountry: '',
+      pmExtractorDetailsOpinion: '',
+      pmExtractorDetailsAttachments: [],
+      
+      // PM Patent Prosecution Details fields (pmPatentProsecutionDetails prefix)
+      pmPatentProsecutionDetailsPublished: '',
+      pmPatentProsecutionDetailsPublicationNumber: '',
+      pmPatentProsecutionDetailsAnyPersonOpposed: '',
+      pmPatentProsecutionDetailsOpponentName: '',
+      pmPatentProsecutionDetailsAttachments: [],
+      pmPatentProsecutionDetailsCaseFiledByOpposer: '',
+      pmPatentProsecutionDetailsBasisOfActionOfFiling: '',
+      pmPatentProsecutionDetailsReasonForFilingOpposition: '',
+      pmPatentProsecutionDetailsOpinionRenderedByYou: '',
+      pmPatentProsecutionDetailsExternalAgency: '',
+      pmPatentProsecutionDetailsReviewedBy: '',
+      
+      // PM Patent Maintenance History fields (pmPatentMaintenanceHistory prefix)
+      pmPatentMaintenanceHistoryPriorityDate: '',
+      pmPatentMaintenanceHistoryGrantDate: '',
+      pmPatentMaintenanceHistoryYearsPaid: '',
+      pmPatentMaintenanceHistoryNextDueDate: '',
+      pmPatentMaintenanceHistoryMaintenanceStopped: '',
+      pmPatentMaintenanceHistoryAttachments: [],
+      pmPatentMaintenanceHistoryFilingDate: '',
+      pmPatentMaintenanceHistoryMaintenanceFee: '',
+      pmPatentMaintenanceHistoryExternalAgency: '',
+      pmPatentMaintenanceHistoryFilingAttachments: [],
+      
+      // PM PAN fields (pmPAN prefix)
+      pmPANPatentApplicationNumber: '',
+      
+      // PM Decision Sheet fields (pmDecisionSheet prefix)
+      pmDecisionSheetNameOfDecisionMaker: '',
+      pmDecisionSheetDecisionInBrief: '',
+      pmDecisionSheetAttachments: [],
+      
+      // PM Innovation Analysis fields (pmInnovationAnalysis prefix)
+      pmInnovationAnalysisMoreThanInvention: '',
+      pmInnovationAnalysisPriorArtDocuments: [],
+      pmInnovationAnalysisNPLDocuments: [],
+      
+      // PM Patentability Extractor fields (pmPatentabilityExtractor prefix)
+      pmPatentabilityExtractorSearcher1: '',
+      pmPatentabilityExtractorSearcher2: '',
+      pmPatentabilityExtractorRating: 0,
+      pmPatentabilityExtractorInventionAccordance: '',
+      pmPatentabilityExtractorNovelFeature: '',
+      pmPatentabilityExtractorInventiveFeature: '',
+      pmPatentabilityExtractorAttachment: [],
+      pmPatentabilityExtractorSpecificCountry: '',
+      pmPatentabilityExtractorOpinionOfExtractor: '',
+      
+      // PM Effort Sheet fields (pmEffortSheet prefix)
+      pmEffortSheetEffortsSpent: '',
+      pmEffortSheetEmployeeId: '',
+      pmEffortSheetHoursSpent: '',
+      pmEffortSheetAgencyManager: '',
+      pmEffortSheetAgencyCost: '',
+      pmEffortSheetReviewEfforts: '',
+      pmEffortSheetManagerResponsible: '',
+      
+      // PM Activity Status fields (pmActivityStatus prefix)
+      pmActivityStatusStatus: '',
+      pmActivityStatusDescription: '',
+      pmActivityStatusLastUpdated: ''
     },
     
     patentCommercialization: {
-      // Patent Commercialization fields
-      commercializationDate: '',
-      patentNumber: '',
-      commercializationStrategy: '',
-      targetMarkets: [],
-      licensingOpportunities: '',
-      potentialLicensees: [],
-      royaltyRates: {},
-      licensingTerms: '',
-      marketAnalysis: '',
-      competitiveAdvantage: '',
-      revenueProjections: {},
-      partnershipOpportunities: [],
-      technologyTransfer: '',
-      IPPortfolio: '',
-      valuation: 0,
-      commercializationStatus: ''
+      // PC Invention Details fields (pcInventionDetails prefix)
+      pcInventionDetailsTitle: '',
+      pcInventionDetailsCommonName: '',
+      pcInventionDetailsInventorDetails: '',
+      pcInventionDetailsEntity: '',
+      pcInventionDetailsDate: '',
+      pcInventionDetailsCountry: '',
+      pcInventionDetailsCreationCountry: '',
+      pcInventionDetailsCollaboration: '',
+      pcInventionDetailsCollaboratorName: '',
+      pcInventionDetailsCollaboratorCountry: '',
+      pcInventionDetailsStakeholders: '',
+      
+      // PC Patent Commercialization Child fields (pcPatentCommercializationChild prefix)
+      pcPatentCommercializationChildStage: '',
+      pcPatentCommercializationChildWorkingFiled: '',
+      pcPatentCommercializationChildImplementationFile: [],
+      pcPatentCommercializationChildFirstWorkingDate: '',
+      pcPatentCommercializationChildCommercializationStatus: '',
+      pcPatentCommercializationChildRevenueGenerated: '',
+      pcPatentCommercializationChildMarketValue: '',
+      pcPatentCommercializationChildLicensingFee: '',
+      pcPatentCommercializationChildRoyaltyRate: '',
+      pcPatentCommercializationChildPartnerName: '',
+      pcPatentCommercializationChildPartnershipType: '',
+      pcPatentCommercializationChildPartnershipDetails: '',
+      pcPatentCommercializationChildStartDate: '',
+      pcPatentCommercializationChildExpectedCompletionDate: '',
+      pcPatentCommercializationChildActualCompletionDate: '',
+      
+      // PC PAN fields (pcPAN prefix)
+      pcPANPatentApplicationNumber: '',
+      pcPANPatentNumber: '',
+      
+      // PC Patent Commercialization Efforts fields (pcPatentCommercializationEfforts prefix)
+      pcPatentCommercializationEffortsSalesFile: [],
+      pcPatentCommercializationEffortsPeriodicSales: '',
+      pcPatentCommercializationEffortsInvoiceFile: [],
+      pcPatentCommercializationEffortsCommercializationDate: '',
+      pcPatentCommercializationEffortsProductId: '',
+      pcPatentCommercializationEffortsIsLicensed: '',
+      pcPatentCommercializationEffortsIsCrossLicensed: '',
+      pcPatentCommercializationEffortsIsCompulsoryLicenseFiled: '',
+      
+      // PC Activity Status fields (pcActivityStatus prefix)
+      pcActivityStatusStatus: '',
+      pcActivityStatusDescription: '',
+      pcActivityStatusLastUpdated: ''
     },
     
     postGrantOpposition: {
-      // Post Grant Opposition fields
-      oppositionDate: '',
-      patentNumber: '',
-      opponentName: '',
-      oppositionGrounds: [],
-      evidenceFiled: [],
-      hearingDate: '',
-      decisionDate: '',
-      oppositionOutcome: '',
-      appealFiled: false,
-      appealDate: '',
-      finalDecision: '',
-      costsAwarded: 0,
-      status: '',
-      nextSteps: '',
-      legalRepresentation: '',
-      oppositionStrategy: ''
-    }
+      // PGO Extractor Details fields (from old ExtractorDetails component)
+      extractorOne: '',
+      extractortwo: '',
+      iEDate: '',
+      iawpl: '',
+      nfeature: '',
+      ifeature: '',
+      idattachments: [],
+      scountry: '',
+      oextractor: '',
+      
+      // PGO Innovation Analysis fields (from old Innovation component)
+      trainRun: '',
+      minuteOfMeeting: [],
+      innovationAttachments: [],
+      
+      // PGO Patentability Extractor fields (from old PAExtractor component)
+      psone: '',
+      pstwo: '',
+      rating: 0,
+      collaboration: '',
+      paNovelFeature: '',
+      paInventiveFeature: '',
+      paSpecificCountry: '',
+      paOpinionOfExtractor: '',
+      patentabilityAttachments: [],
+      
+      // PGO Decision Sheet fields (from old DecisionSheet component)
+      nodc: '',
+      dibrief: '',
+      decisionAttachments: [],
+      
+      // PGO fields matching old formData7 structure
+      patentApplicationNumber: '',
+      patentPublished: '',
+      publicationNumber: '',
+      apopposed: '',
+      oname: '',
+      opposerAttachment: [],
+      cfbopposer: '',
+      boaof: '',
+      rffo: '',
+      responseAttachment: [],
+      orpby: '',
+      eagency: '',
+      revby: '',
+      reviewAttachment: [],
+      ipRecognizer: '',
+      hoursSpent: '',
+      agencyRecognizer: '',
+      agencyCost: '',
+      reviewEffort: '',
+      reviewEffortHours: '',
+      managerEmpId: '',
+      activityStatus: ''
+    },
   };
   
   return initialData[page] || {};
@@ -358,6 +625,7 @@ const useV2Store = create((set, get) => ({
   
   currentAssetId: null,
   errors: {},
+  savedForms: new Set(), // Track which forms have been saved for current asset
 
   // Store actions
   updateFormData: (page, field, value) => {
@@ -372,6 +640,27 @@ const useV2Store = create((set, get) => ({
   setCurrentAssetId: (assetId) => {
     set({ currentAssetId: assetId });
     console.log('🆔 Asset ID set in store:', assetId);
+  },
+
+  // Track saved forms
+  markFormAsSaved: (formName) => {
+    set((state) => ({
+      savedForms: new Set([...state.savedForms, formName])
+    }));
+    console.log('✅ Form marked as saved:', formName);
+  },
+
+  isFormSaved: (formName) => {
+    return get().savedForms.has(formName);
+  },
+
+  getSavedForms: () => {
+    return Array.from(get().savedForms);
+  },
+
+  clearSavedForms: () => {
+    set({ savedForms: new Set() });
+    console.log('🧹 Cleared saved forms tracking');
   },
 
   setStoreData: (page, data) => {
@@ -406,6 +695,16 @@ const useV2Store = create((set, get) => ({
         apiEndpoint = `/api/patentability/get/${assetId}`;
       } else if (page === 'patentSpecification') {
         apiEndpoint = `/api/psp?assetId=${assetId}`;
+      } else if (page === 'patentFiling') {
+        apiEndpoint = `/api/patentFiling?assetId=${assetId}`;
+      } else if (page === 'patentProsecution') {
+        apiEndpoint = `/api/patentProsecution?assetId=${assetId}`;
+      } else if (page === 'postGrantOpposition') {
+        apiEndpoint = `/api/pgo?assetId=${assetId}`;
+      } else if (page === 'patentMaintenance') {
+        apiEndpoint = `/api/pm?assetId=${assetId}`;
+      } else if (page === 'patentCommercialization') {
+        apiEndpoint = `/api/pc?assetId=${assetId}`;
       } else {
         apiEndpoint = `/api/invention/get/${assetId}`;
       }
@@ -466,6 +765,16 @@ const useV2Store = create((set, get) => ({
             apiEndpoint = `/api/patentability/get/${assetId}`;
           } else if (page === 'patentSpecification') {
             apiEndpoint = `/api/psp?assetId=${assetId}`;
+          } else if (page === 'patentFiling') {
+            apiEndpoint = `/api/patentFiling?assetId=${assetId}`;
+          } else if (page === 'patentProsecution') {
+            apiEndpoint = `/api/patentProsecution?assetId=${assetId}`;
+          } else if (page === 'postGrantOpposition') {
+            apiEndpoint = `/api/pgo?assetId=${assetId}`;
+          } else if (page === 'patentMaintenance') {
+            apiEndpoint = `/api/pm?assetId=${assetId}`;
+          } else if (page === 'patentCommercialization') {
+            apiEndpoint = `/api/pc?assetId=${assetId}`;
           } else {
             apiEndpoint = `/api/invention/get/${assetId}`;
           }
@@ -560,9 +869,26 @@ const useV2Store = create((set, get) => ({
       console.log('🔄 Refreshing store data after API operation for Asset ID:', assetId, 'Page:', page);
       
       // Use different API endpoints based on page
-      const apiEndpoint = page === 'inventionExtraction' 
-        ? `/api/extraction/get/${assetId}`
-        : `/api/invention/get/${assetId}`;
+      let apiEndpoint;
+      if (page === 'inventionExtraction') {
+        apiEndpoint = `/api/extraction/get/${assetId}`;
+      } else if (page === 'patentabilityAnalysis') {
+        apiEndpoint = `/api/patentability/get/${assetId}`;
+      } else if (page === 'patentSpecification') {
+        apiEndpoint = `/api/psp?assetId=${assetId}`;
+      } else if (page === 'patentFiling') {
+        apiEndpoint = `/api/patentFiling?assetId=${assetId}`;
+      } else if (page === 'patentProsecution') {
+        apiEndpoint = `/api/patentProsecution?assetId=${assetId}`;
+      } else if (page === 'postGrantOpposition') {
+        apiEndpoint = `/api/pgo?assetId=${assetId}`;
+      } else if (page === 'patentMaintenance') {
+        apiEndpoint = `/api/pm?assetId=${assetId}`;
+      } else if (page === 'patentCommercialization') {
+        apiEndpoint = `/api/pc?assetId=${assetId}`;
+      } else {
+        apiEndpoint = `/api/invention/get/${assetId}`;
+      }
         
       const response = await fetch(apiEndpoint);
       
@@ -865,6 +1191,231 @@ const useV2Store = create((set, get) => ({
           npActivityStatus: apiData.npActivityStatus || ''
         };
         
+      case 'patentFiling':
+        return {
+          // Patent Filing fields (matching API response)
+          activityStatus: apiData.activityStatus || '',
+          rating: apiData.rating || 0,
+          draftType: apiData.draftType || '',
+          
+          // Provisional fields
+          patentFilingName: apiData.patentFilingName || '',
+          provisionalPatent: apiData.provisionalPatent || [],
+          attachment: apiData.attachment || [],
+          dateProvision: apiData.dateProvision || '',
+          applicantName: apiData.applicantName || '',
+          isProfilePatent: apiData.isProfilePatent || '',
+          isDefensivePatent: apiData.isDefensivePatent || '',
+          claimingStartup: apiData.claimingStartup || [],
+          poaOffice: apiData.poaOffice || '',
+          effortsSpent: apiData.effortsSpent || '',
+          patentFiler: apiData.patentFiler || '',
+          hoursSpent: apiData.hoursSpent || '',
+          agencyRecognizer: apiData.agencyRecognizer || '',
+          agencyCost: apiData.agencyCost || '',
+          managerResponsible: apiData.managerResponsible || '',
+
+          // PCT fields
+          postDated: apiData.postDated || '',
+          applicationProvisionalNumber: apiData.applicationProvisionalNumber || '',
+          datePatentApplication: apiData.datePatentApplication || '',
+          pctFilingPermission: apiData.pctFilingPermission || '',
+
+          // National Phase fields
+          dateProvisionalPatent: apiData.dateProvisionalPatent || '',
+          dateCompletePatentApplication: apiData.dateCompletePatentApplication || '',
+          datePCTPatentApplication: apiData.datePCTPatentApplication || '',
+          finalSubmitted: apiData.finalSubmitted || '',
+          filedForms: apiData.filedForms || [],
+
+          // Complete fields
+          dateOfPatent: apiData.dateOfPatent || '',
+          provisionalNumber: apiData.provisionalNumber || '',
+          specificationFiling: apiData.specificationFiling || '',
+          agentFiling: apiData.agentFiling || '',
+          filedDraft: apiData.filedDraft || [],
+          filedFormsComplete: apiData.filedFormsComplete || [],
+          dateOfComplete: apiData.dateOfComplete || '',
+          isPostDated: apiData.isPostDated || '',
+        };
+        
+      case 'patentProsecution':
+        return {
+          // Patent Prosecution Details fields (matching old component)
+          patentPublished: apiData.patentPublished || '',
+          publicationNumber: apiData.publicationNumber || '',
+          apopposed: apiData.apopposed || '',
+          oname: apiData.oname || '',
+          attachments: apiData.attachments || [],
+          cfbopposer: apiData.cfbopposer || '',
+          boaof: apiData.boaof || '',
+          rffo: apiData.rffo || '',
+          orpby: apiData.orpby || '',
+          eagency: apiData.eagency || '',
+          revby: apiData.revby || '',
+          
+          // Patent Application Status fields
+          patentStatus: apiData.patentStatus || 'yes',
+          patentNumber: apiData.patentNumber || '',
+          patentAttachment: apiData.patentAttachment || [],
+          patentGrantDate: apiData.patentGrantDate || '',
+          rejectionReasonAttachment: apiData.rejectionReasonAttachment || [],
+          
+          // FER (First Examination Report) fields - as array
+          ferList: apiData.ferList || [],
+          
+          // Hearing Details fields - as array
+          hearingList: apiData.hearingList || [],
+          
+          // Decision Sheet fields - with decision prefix
+          decisionNodc: apiData.decisionNodc || '',
+          decisionDibrief: apiData.decisionDibrief || '',
+          decisionAttachments: apiData.decisionAttachments || [],
+          
+          // Also map old field names for backward compatibility
+          ppNodc: apiData.decisionNodc || '',
+          ppDibrief: apiData.decisionDibrief || '',
+          ppDecisionAttachments: apiData.decisionAttachments || [],
+          
+          // Innovation Analysis fields (pp prefix)
+          ppTrainRun: apiData.ppTrainRun || '',
+          ppMinuteOfMeeting: apiData.ppMinuteOfMeeting || [],
+          ppInnovationAttachments: apiData.ppInnovationAttachments || [],
+          
+          // Patentability Extractor fields (pp prefix)
+          ppPsone: apiData.ppPsone || '',
+          ppPstwo: apiData.ppPstwo || '',
+          ppCollaboration: apiData.ppCollaboration || '',
+          ppNfeature: apiData.ppNfeature || '',
+          ppIfeature: apiData.ppIfeature || '',
+          ppAttachment: apiData.ppAttachment || [],
+          ppScountry: apiData.ppScountry || '',
+          ppOextractor: apiData.ppOextractor || '',
+          
+          // Average Patentability Rating fields (pp prefix)
+          ppRating: apiData.ppRating || 0,
+          ppPatentApplicationNumber: apiData.ppPatentApplicationNumber || '',
+          
+          // Effort Sheet fields (pp prefix)
+          ppIpRecognizer: apiData.ppIpRecognizer || '',
+          ppHoursSpent: apiData.ppHoursSpent || '',
+          ppAgencyRecognizer: apiData.ppAgencyRecognizer || '',
+          ppAgencyCost: apiData.ppAgencyCost || '',
+          ppReviewEffort: apiData.ppReviewEffort || '',
+          ppManagerEmpId: apiData.ppManagerEmpId || '',
+          ppExtractionEffort: apiData.ppExtractionEffort || '',
+
+          ipRecognizer: apiData.ipRecognizer || '',
+          hoursSpent: apiData.hoursSpent || '',
+          agencyRecognizer: apiData.agencyRecognizer || '',
+          agencyCost: apiData.agencyCost || '',
+          activityStatus: apiData.activityStatus || ''
+        };
+        
+      case 'postGrantOpposition':
+        return {
+          // PGO Extractor Details fields
+          extractorOne: apiData.extractorOne || '',
+          extractortwo: apiData.extractortwo || '',
+          iEDate: apiData.iEDate || '',
+          iawpl: apiData.iawpl || '',
+          nfeature: apiData.nfeature || '',
+          ifeature: apiData.ifeature || '',
+          idattachments: apiData.idattachments || [],
+          scountry: apiData.scountry || '',
+          oextractor: apiData.oextractor || '',
+          
+          // PGO Innovation Analysis fields
+          trainRun: apiData.trainRun || '',
+          minuteOfMeeting: apiData.minuteOfMeeting || [],
+          innovationAttachments: apiData.innovationAttachments || [],
+          
+          // PGO Patentability Extractor fields
+          psone: apiData.psone || '',
+          pstwo: apiData.pstwo || '',
+          rating: apiData.rating || 0,
+          collaboration: apiData.collaboration || '',
+          paNovelFeature: apiData.paNovelFeature || '',
+          paInventiveFeature: apiData.paInventiveFeature || '',
+          paSpecificCountry: apiData.paSpecificCountry || '',
+          paOpinionOfExtractor: apiData.paOpinionOfExtractor || '',
+          patentabilityAttachments: apiData.patentabilityAttachments || [],
+          
+          // PGO Decision Sheet fields
+          nodc: apiData.nodc || '',
+          dibrief: apiData.dibrief || '',
+          decisionAttachments: apiData.decisionAttachments || [],
+          
+          // PGO fields matching old formData7 structure
+          patentApplicationNumber: apiData.patentApplicationNumber || '',
+          patentPublished: apiData.patentPublished || '',
+          publicationNumber: apiData.publicationNumber || '',
+          apopposed: apiData.apopposed || '',
+          oname: apiData.oname || '',
+          opposerAttachment: apiData.opposerAttachment || [],
+          cfbopposer: apiData.cfbopposer || '',
+          boaof: apiData.boaof || '',
+          rffo: apiData.rffo || '',
+          responseAttachment: apiData.responseAttachment || [],
+          orpby: apiData.orpby || '',
+          eagency: apiData.eagency || '',
+          revby: apiData.revby || '',
+          reviewAttachment: apiData.reviewAttachment || [],
+          ipRecognizer: apiData.ipRecognizer || '',
+          hoursSpent: apiData.hoursSpent || '',
+          agencyRecognizer: apiData.agencyRecognizer || '',
+          agencyCost: apiData.agencyCost || '',
+          reviewEffort: apiData.reviewEffort || '',
+          reviewEffortHours: apiData.reviewEffortHours || '',
+          managerEmpId: apiData.managerEmpId || '',
+          activityStatus: apiData.activityStatus || ''
+        };
+        
+      case 'patentMaintenance':
+        return {
+          // Patent Maintenance fields
+          maintenanceDate: apiData.maintenanceDate || '',
+          patentNumber: apiData.patentNumber || '',
+          maintenanceFees: apiData.maintenanceFees || 0,
+          paymentStatus: apiData.paymentStatus || '',
+          dueDate: apiData.dueDate || '',
+          gracePeriod: apiData.gracePeriod || '',
+          lateFees: apiData.lateFees || 0,
+          renewalPeriod: apiData.renewalPeriod || '',
+          nextRenewal: apiData.nextRenewal || '',
+          maintenanceHistory: apiData.maintenanceHistory || [],
+          costBreakdown: apiData.costBreakdown || {},
+          paymentMethod: apiData.paymentMethod || '',
+          reminderSet: apiData.reminderSet || false,
+          automaticRenewal: apiData.automaticRenewal || false,
+          status: apiData.status || '',
+          rating: apiData.rating || 0,
+          activityStatus: apiData.activityStatus || ''
+        };
+        
+      case 'patentCommercialization':
+        return {
+          // Patent Commercialization fields
+          commercializationDate: apiData.commercializationDate || '',
+          patentNumber: apiData.patentNumber || '',
+          commercializationStrategy: apiData.commercializationStrategy || '',
+          targetMarkets: apiData.targetMarkets || [],
+          licensingOpportunities: apiData.licensingOpportunities || '',
+          potentialLicensees: apiData.potentialLicensees || [],
+          royaltyRates: apiData.royaltyRates || {},
+          licensingTerms: apiData.licensingTerms || '',
+          marketAnalysis: apiData.marketAnalysis || '',
+          competitiveAdvantage: apiData.competitiveAdvantage || '',
+          revenueProjections: apiData.revenueProjections || {},
+          partnershipOpportunities: apiData.partnershipOpportunities || [],
+          technologyTransfer: apiData.technologyTransfer || '',
+          IPPortfolio: apiData.IPPortfolio || '',
+          valuation: apiData.valuation || 0,
+          commercializationStatus: apiData.commercializationStatus || '',
+          rating: apiData.rating || 0,
+          activityStatus: apiData.activityStatus || ''
+        };
+        
       default:
         console.log('⚠️ Unknown page for mapping:', page);
         return {};
@@ -902,6 +1453,243 @@ const useV2Store = create((set, get) => ({
       errors: {}
     });
     console.log('🗑️ All store data and asset ID cleared');
+  },
+
+  // Form 9 (Patent Commercialization) - Complete Field Names Reference
+  getPCFieldNames: () => {
+    return {
+      // PC Invention Details fields (pcInventionDetails prefix)
+      inventionDetails: [
+        'pcInventionDetailsTitle',
+        'pcInventionDetailsCommonName',
+        'pcInventionDetailsInventorDetails',
+        'pcInventionDetailsEntity',
+        'pcInventionDetailsDate',
+        'pcInventionDetailsCountry',
+        'pcInventionDetailsCreationCountry',
+        'pcInventionDetailsCollaboration',
+        'pcInventionDetailsCollaboratorName',
+        'pcInventionDetailsCollaboratorCountry',
+        'pcInventionDetailsStakeholders'
+      ],
+      
+      // PC Patent Commercialization Child fields (pcPatentCommercializationChild prefix)
+      patentCommercializationChild: [
+        'pcPatentCommercializationChildStage',
+        'pcPatentCommercializationChildWorkingFiled',
+        'pcPatentCommercializationChildImplementationFile',
+        'pcPatentCommercializationChildFirstWorkingDate',
+        'pcPatentCommercializationChildCommercializationStatus',
+        'pcPatentCommercializationChildRevenueGenerated',
+        'pcPatentCommercializationChildMarketValue',
+        'pcPatentCommercializationChildLicensingFee',
+        'pcPatentCommercializationChildRoyaltyRate',
+        'pcPatentCommercializationChildPartnerName',
+        'pcPatentCommercializationChildPartnershipType',
+        'pcPatentCommercializationChildPartnershipDetails',
+        'pcPatentCommercializationChildStartDate',
+        'pcPatentCommercializationChildExpectedCompletionDate',
+        'pcPatentCommercializationChildActualCompletionDate'
+      ],
+      
+      // PC PAN fields (pcPAN prefix)
+      pan: [
+        'pcPANPatentApplicationNumber',
+        'pcPANPatentNumber'
+      ],
+      
+      // PC Patent Commercialization Efforts fields (pcPatentCommercializationEfforts prefix)
+      patentCommercializationEfforts: [
+        'pcPatentCommercializationEffortsSalesFile',
+        'pcPatentCommercializationEffortsPeriodicSales',
+        'pcPatentCommercializationEffortsInvoiceFile',
+        'pcPatentCommercializationEffortsCommercializationDate',
+        'pcPatentCommercializationEffortsProductId',
+        'pcPatentCommercializationEffortsIsLicensed',
+        'pcPatentCommercializationEffortsIsCrossLicensed',
+        'pcPatentCommercializationEffortsIsCompulsoryLicenseFiled'
+      ],
+      
+      // PC Activity Status fields (pcActivityStatus prefix)
+      activityStatus: [
+        'pcActivityStatusStatus',
+        'pcActivityStatusDescription',
+        'pcActivityStatusLastUpdated'
+      ],
+      
+      // All PC fields combined
+      all: [
+        // Invention Details
+        'pcInventionDetailsTitle', 'pcInventionDetailsCommonName', 'pcInventionDetailsInventorDetails',
+        'pcInventionDetailsEntity', 'pcInventionDetailsDate', 'pcInventionDetailsCountry',
+        'pcInventionDetailsCreationCountry', 'pcInventionDetailsCollaboration',
+        'pcInventionDetailsCollaboratorName', 'pcInventionDetailsCollaboratorCountry',
+        'pcInventionDetailsStakeholders',
+        
+        // Patent Commercialization Child
+        'pcPatentCommercializationChildStage', 'pcPatentCommercializationChildWorkingFiled',
+        'pcPatentCommercializationChildImplementationFile', 'pcPatentCommercializationChildFirstWorkingDate',
+        'pcPatentCommercializationChildCommercializationStatus', 'pcPatentCommercializationChildRevenueGenerated',
+        'pcPatentCommercializationChildMarketValue', 'pcPatentCommercializationChildLicensingFee',
+        'pcPatentCommercializationChildRoyaltyRate', 'pcPatentCommercializationChildPartnerName',
+        'pcPatentCommercializationChildPartnershipType', 'pcPatentCommercializationChildPartnershipDetails',
+        'pcPatentCommercializationChildStartDate', 'pcPatentCommercializationChildExpectedCompletionDate',
+        'pcPatentCommercializationChildActualCompletionDate',
+        
+        // PAN
+        'pcPANPatentApplicationNumber', 'pcPANPatentNumber',
+        
+        // Patent Commercialization Efforts
+        'pcPatentCommercializationEffortsSalesFile', 'pcPatentCommercializationEffortsPeriodicSales',
+        'pcPatentCommercializationEffortsInvoiceFile', 'pcPatentCommercializationEffortsCommercializationDate',
+        'pcPatentCommercializationEffortsProductId', 'pcPatentCommercializationEffortsIsLicensed',
+        'pcPatentCommercializationEffortsIsCrossLicensed', 'pcPatentCommercializationEffortsIsCompulsoryLicenseFiled',
+        
+        // Activity Status
+        'pcActivityStatusStatus', 'pcActivityStatusDescription', 'pcActivityStatusLastUpdated'
+      ]
+    };
+  },
+
+  // Form 7 (Post Grant Opposition) - Complete Field Names Reference
+  getPGOFieldNames: () => {
+    return {
+      // PGO Invention Details fields (pgoInventionDetails prefix)
+      inventionDetails: [
+        'pgoInventionDetailsTitle',
+        'pgoInventionDetailsCommonName',
+        'pgoInventionDetailsInventorDetails',
+        'pgoInventionDetailsEntity',
+        'pgoInventionDetailsDate',
+        'pgoInventionDetailsCountry',
+        'pgoInventionDetailsCreationCountry',
+        'pgoInventionDetailsCollaboration',
+        'pgoInventionDetailsCollaboratorName',
+        'pgoInventionDetailsCollaboratorCountry',
+        'pgoInventionDetailsStakeholders'
+      ],
+      
+      // PGO Extractor Details fields (pgoExtractorDetails prefix)
+      extractorDetails: [
+        'pgoExtractorDetailsOne',
+        'pgoExtractorDetailsTwo',
+        'pgoExtractorDetailsExtractionDate',
+        'pgoExtractorDetailsAvailableWithPriorLiterature',
+        'pgoExtractorDetailsNovelFeature',
+        'pgoExtractorDetailsInventiveFeature',
+        'pgoExtractorDetailsSpecificCountry',
+        'pgoExtractorDetailsOpinion',
+        'pgoExtractorDetailsAttachments'
+      ],
+      
+      // PGO Patent Prosecution Details fields (pgoPatentProsecutionDetails prefix)
+      patentProsecutionDetails: [
+        'pgoPatentProsecutionDetailsPublished',
+        'pgoPatentProsecutionDetailsPublicationNumber',
+        'pgoPatentProsecutionDetailsAnyPersonOpposed',
+        'pgoPatentProsecutionDetailsOpponentName',
+        'pgoPatentProsecutionDetailsAttachments',
+        'pgoPatentProsecutionDetailsCaseFiledByOpposer',
+        'pgoPatentProsecutionDetailsBasisOfActionOfFiling',
+        'pgoPatentProsecutionDetailsReasonForFilingOpposition',
+        'pgoPatentProsecutionDetailsOpinionRenderedByYou',
+        'pgoPatentProsecutionDetailsExternalAgency',
+        'pgoPatentProsecutionDetailsReviewedBy'
+      ],
+      
+      // PGO PAN fields (pgoPAN prefix)
+      pan: [
+        'pgoPANPatentApplicationNumber',
+        'pgoPANPatentNumber'
+      ],
+      
+      // PGO Decision Sheet fields (pgoDecisionSheet prefix)
+      decisionSheet: [
+        'pgoDecisionSheetNameOfDecisionMaker',
+        'pgoDecisionSheetDecisionInBrief',
+        'pgoDecisionSheetAttachments'
+      ],
+      
+      // PGO Innovation Analysis fields (pgoInnovationAnalysis prefix)
+      innovationAnalysis: [
+        'pgoInnovationAnalysisMoreThanInvention',
+        'pgoInnovationAnalysisPriorArtDocuments',
+        'pgoInnovationAnalysisNPLDocuments'
+      ],
+      
+      // PGO Patentability Extractor fields (pgoPatentabilityExtractor prefix)
+      patentabilityExtractor: [
+        'pgoPatentabilityExtractorRating',
+        'pgoPatentabilityExtractorInventionAccordance',
+        'pgoPatentabilityExtractorNoveltyAssessment',
+        'pgoPatentabilityExtractorInventiveStep',
+        'pgoPatentabilityExtractorIndustrialApplicability'
+      ],
+      
+      // PGO Effort Sheet Details fields (pgoEffortSheetDetails prefix)
+      effortSheetDetails: [
+        'pgoEffortSheetDetailsEffortHours',
+        'pgoEffortSheetDetailsCostIncurred',
+        'pgoEffortSheetDetailsResourcesUsed',
+        'pgoEffortSheetDetailsTeamMembers',
+        'pgoEffortSheetDetailsStartDate',
+        'pgoEffortSheetDetailsEndDate',
+        'pgoEffortSheetDetailsAttachments'
+      ],
+      
+      // PGO Activity Status fields (pgoActivityStatus prefix)
+      activityStatus: [
+        'pgoActivityStatusStatus',
+        'pgoActivityStatusDescription',
+        'pgoActivityStatusLastUpdated'
+      ],
+      
+      // All PGO fields combined
+      all: [
+        // Invention Details
+        'pgoInventionDetailsTitle', 'pgoInventionDetailsCommonName', 'pgoInventionDetailsInventorDetails',
+        'pgoInventionDetailsEntity', 'pgoInventionDetailsDate', 'pgoInventionDetailsCountry',
+        'pgoInventionDetailsCreationCountry', 'pgoInventionDetailsCollaboration',
+        'pgoInventionDetailsCollaboratorName', 'pgoInventionDetailsCollaboratorCountry',
+        'pgoInventionDetailsStakeholders',
+        
+        // Extractor Details
+        'pgoExtractorDetailsOne', 'pgoExtractorDetailsTwo', 'pgoExtractorDetailsExtractionDate',
+        'pgoExtractorDetailsAvailableWithPriorLiterature', 'pgoExtractorDetailsNovelFeature',
+        'pgoExtractorDetailsInventiveFeature', 'pgoExtractorDetailsSpecificCountry',
+        'pgoExtractorDetailsOpinion', 'pgoExtractorDetailsAttachments',
+        
+        // Patent Prosecution Details
+        'pgoPatentProsecutionDetailsPublished', 'pgoPatentProsecutionDetailsPublicationNumber',
+        'pgoPatentProsecutionDetailsAnyPersonOpposed', 'pgoPatentProsecutionDetailsOpponentName',
+        'pgoPatentProsecutionDetailsAttachments', 'pgoPatentProsecutionDetailsCaseFiledByOpposer',
+        'pgoPatentProsecutionDetailsBasisOfActionOfFiling', 'pgoPatentProsecutionDetailsReasonForFilingOpposition',
+        'pgoPatentProsecutionDetailsOpinionRenderedByYou', 'pgoPatentProsecutionDetailsExternalAgency',
+        'pgoPatentProsecutionDetailsReviewedBy',
+        
+        // PAN
+        'pgoPANPatentApplicationNumber', 'pgoPANPatentNumber',
+        
+        // Decision Sheet
+        'pgoDecisionSheetNameOfDecisionMaker', 'pgoDecisionSheetDecisionInBrief', 'pgoDecisionSheetAttachments',
+        
+        // Innovation Analysis
+        'pgoInnovationAnalysisMoreThanInvention', 'pgoInnovationAnalysisPriorArtDocuments', 'pgoInnovationAnalysisNPLDocuments',
+        
+        // Patentability Extractor
+        'pgoPatentabilityExtractorRating', 'pgoPatentabilityExtractorInventionAccordance',
+        'pgoPatentabilityExtractorNoveltyAssessment', 'pgoPatentabilityExtractorInventiveStep',
+        'pgoPatentabilityExtractorIndustrialApplicability',
+        
+        // Effort Sheet Details
+        'pgoEffortSheetDetailsEffortHours', 'pgoEffortSheetDetailsCostIncurred', 'pgoEffortSheetDetailsResourcesUsed',
+        'pgoEffortSheetDetailsTeamMembers', 'pgoEffortSheetDetailsStartDate', 'pgoEffortSheetDetailsEndDate',
+        'pgoEffortSheetDetailsAttachments',
+        
+        // Activity Status
+        'pgoActivityStatusStatus', 'pgoActivityStatusDescription', 'pgoActivityStatusLastUpdated'
+      ]
+    };
   },
 
   // Inventor management functions

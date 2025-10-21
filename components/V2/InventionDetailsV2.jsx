@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Star, Plus, Edit3, Save, X } from 'lucide-react';
 import useV2Store from '@/store/v2Store';
 
@@ -28,12 +28,12 @@ const InventionDetailsV2 = ({
   
   const [localData, setLocalData] = useState(formData);
 
-  // Update local data when formData changes
-  useEffect(() => {
-    setLocalData(formData);
-  }, [formData]);
-
   const handleChange = (field, value) => {
+    // Don't update store if not editable
+    if (!isEditable) {
+      return;
+    }
+    
     // Validate rating field
     if (field === 'rating') {
       // Allow empty string or valid numbers between 0-5

@@ -34,6 +34,7 @@ const emptyFER = {
 const FER = ({ formKey, updateFunction }) => {
   const formData = useFormStore((state) => state[formKey]);
   const updateFormData = useFormStore((state) => state[updateFunction]);
+  const safeFormData = formData || {};
 
   const ferList = safeFormData.ferList || [];
 

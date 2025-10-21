@@ -136,7 +136,7 @@ function AssetsV2Content() {
       console.log('🔄 Fetching all asset data for:', assetId);
       
       // Get store functions
-      const { setStoreData, mapAPIDataToStore } = useV2Store.getState();
+      const { setStoreData, mapAPIDataToStore, getSavedForms } = useV2Store.getState();
       
       // Define all API endpoints for different pages
       const apiEndpoints = [
@@ -144,11 +144,11 @@ function AssetsV2Content() {
         { page: 'inventionExtraction', endpoint: `/api/extraction/get/${assetId}`, displayName: 'Invention Extraction' },
         { page: 'patentabilityAnalysis', endpoint: `/api/patentability/get/${assetId}`, displayName: 'Patentability Analysis' },
         { page: 'patentSpecification', endpoint: `/api/psp?assetId=${assetId}`, displayName: 'Patent Specification' },
-        { page: 'patentFiling', endpoint: `/api/patentFiling/get/${assetId}`, displayName: 'Patent Filing' },
-        { page: 'patentProsecution', endpoint: `/api/patentProsecution/get/${assetId}`, displayName: 'Patent Prosecution' },
-        { page: 'patentMaintenance', endpoint: `/api/patentMaintenance/get/${assetId}`, displayName: 'Patent Maintenance' },
-        { page: 'patentCommercialization', endpoint: `/api/patentCommercialization/get/${assetId}`, displayName: 'Patent Commercialization' },
-        { page: 'postGrantOpposition', endpoint: `/api/postGrantOpposition/get/${assetId}`, displayName: 'Post Grant Opposition' }
+        { page: 'patentFiling', endpoint: `/api/patentFiling?assetId=${assetId}`, displayName: 'Patent Filing' },
+        { page: 'patentProsecution', endpoint: `/api/patentProsecution?assetId=${assetId}`, displayName: 'Patent Prosecution' },
+        { page: 'patentMaintenance', endpoint: `/api/pm?assetId=${assetId}`, displayName: 'Patent Maintenance' },
+        { page: 'patentCommercialization', endpoint: `/api/pc?assetId=${assetId}`, displayName: 'Patent Commercialization' },
+        { page: 'postGrantOpposition', endpoint: `/api/pgo?assetId=${assetId}`, displayName: 'Post Grant Opposition' }
       ];
 
       // Fetch data from all endpoints in parallel
@@ -198,8 +198,16 @@ function AssetsV2Content() {
       console.log(`📊 Data fetch complete: ${successful.length} successful, ${failed.length} failed`);
       console.log(`📋 Available pages:`, availablePages.map(r => r.page));
       
+      // Get saved forms from store and combine with API results
+      const savedForms = getSavedForms();
+      console.log(`💾 Saved forms from store:`, savedForms);
+      
+      // Combine API results with saved forms tracking
+      const allAvailablePages = [...new Set([...availablePages.map(r => r.page), ...savedForms])];
+      console.log(`🎯 All available pages (API + Saved):`, allAvailablePages);
+      
       // Update available pages state
-      setAvailablePages(availablePages.map(r => r.page));
+      setAvailablePages(allAvailablePages);
       
       // Set current asset ID in store
       useV2Store.getState().setCurrentAssetId(assetId);
@@ -255,6 +263,8 @@ function AssetsV2Content() {
               <button 
                 onClick={() => {
                   localStorage.removeItem('v2-asset-storage');
+                  // Clear saved forms tracking for new asset
+                  useV2Store.getState().clearSavedForms();
                   window.location.href = '/v2/invention-recognition?new=true';
                 }}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 shadow-lg hover:shadow-xl"
@@ -326,6 +336,8 @@ function AssetsV2Content() {
                     <button 
                       onClick={() => {
                         localStorage.removeItem('v2-asset-storage');
+                        // Clear saved forms tracking for new asset
+                        useV2Store.getState().clearSavedForms();
                         window.location.href = '/v2/invention-recognition?new=true';
                       }}
                       className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200"
@@ -493,7 +505,7 @@ function AssetsV2Content() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
                         <span className="text-green-800 font-medium">
-                          Asset data loaded successfully! {availablePages.length} of 9 pages have data. Ready for navigation.
+                          Asset data loaded successfully! {availablePages.length} of 9 pages have data (including saved forms). Ready for navigation.
                         </span>
                       </div>
                     </div>

@@ -34,6 +34,7 @@ function InventionRecognitionV2Content() {
   const ensurePageDataLoaded = useV2Store((state) => state.ensurePageDataLoaded);
   const refreshStoreAfterAPI = useV2Store((state) => state.refreshStoreAfterAPI);
   const clearAllDataAndAssetId = useV2Store((state) => state.clearAllDataAndAssetId);
+  const markFormAsSaved = useV2Store((state) => state.markFormAsSaved);
   
   const errors = useV2Store((state) => state.errors);
   const [notification, setNotification] = useState({ show: false, message: '', type: '' });
@@ -227,6 +228,9 @@ function InventionRecognitionV2Content() {
           
           // Update the store with the returned data
           setStoreData('inventionRecognition', mappedData);
+          
+          // Mark Form 1 as saved
+          markFormAsSaved('inventionRecognition');
           
           // Determine if this was a create or update based on API response
           const isUpdate = dbResponse.data.message && dbResponse.data.message.includes('updated');

@@ -77,6 +77,43 @@ export async function POST(req) {
       rating: payload.rating || 0,
       draftType: payload.draftType || '',
       
+      // ExtractorDetailsV2 fields (Patent Filing Extractor Details)
+      extractorOne: payload.extractorOne || '',
+      extractortwo: payload.extractortwo || '',
+      iEDate: payload.iEDate || '',
+      iawpl: payload.iawpl || '',
+      idattachments: Array.isArray(payload.idattachments) ? payload.idattachments : [],
+      
+      // Innovation Analysis fields
+      trainRun: payload.trainRun || '',
+      minuteOfMeeting: Array.isArray(payload.minuteOfMeeting) ? payload.minuteOfMeeting : [],
+      attachments: Array.isArray(payload.attachments) ? payload.attachments : [],
+      
+      // Patentability Extractor fields
+      psone: payload.psone || '',
+      pstwo: payload.pstwo || '',
+      collaboration: payload.collaboration || '',
+      paNfeature: payload.paNfeature || '',
+      paIfeature: payload.paIfeature || '',
+      paScountry: payload.paScountry || '',
+      paOoextractor: payload.paOoextractor || '',
+      
+      // Decision Sheet fields
+      nodc: payload.nodc || '',
+      dibrief: payload.dibrief || '',
+      
+      // Average Rating fields
+      patentApplicationNumber: payload.patentApplicationNumber || '',
+      
+      // Effort Sheet fields
+      ipRecognizer: payload.ipRecognizer || '',
+      hoursSpent: payload.hoursSpent || '',
+      agencyRecognizer: payload.agencyRecognizer || '',
+      agencyCost: payload.agencyCost || '',
+      reviewEffort: payload.reviewEffort || '',
+      managerEmpId: payload.managerEmpId || '',
+      extractionEffort: payload.extractionEffort || '',
+      
       // Provisional fields
       patentFilingName: payload.patentFilingName || '',
       provisionalPatent: Array.isArray(payload.provisionalPatent) ? payload.provisionalPatent.filter(item => typeof item === 'string' && item.trim() !== '') : [],
@@ -89,9 +126,6 @@ export async function POST(req) {
       poaOffice: payload.poaOffice || '',
       effortsSpent: payload.effortsSpent || '',
       patentFiler: payload.patentFiler || '',
-      hoursSpent: payload.hoursSpent || '',
-      agencyRecognizer: payload.agencyRecognizer || '',
-      agencyCost: payload.agencyCost || '',
       managerResponsible: payload.managerResponsible || '',
 
       // PCT fields
@@ -134,6 +168,45 @@ export async function POST(req) {
           activityStatus: data.activityStatus,
           rating: data.rating,
           draftType: data.draftType,
+          
+          // ExtractorDetailsV2 fields
+          extractorOne: data.extractorOne,
+          extractortwo: data.extractortwo,
+          iEDate: data.iEDate,
+          iawpl: data.iawpl,
+          idattachments: data.idattachments,
+          
+          // Innovation Analysis fields
+          trainRun: data.trainRun,
+          minuteOfMeeting: data.minuteOfMeeting,
+          attachments: data.attachments,
+          
+          // Patentability Extractor fields
+          psone: data.psone,
+          pstwo: data.pstwo,
+          collaboration: data.collaboration,
+          paNfeature: data.paNfeature,
+          paIfeature: data.paIfeature,
+          paScountry: data.paScountry,
+          paOoextractor: data.paOoextractor,
+          
+          // Decision Sheet fields
+          nodc: data.nodc,
+          dibrief: data.dibrief,
+          
+          // Average Rating fields
+          patentApplicationNumber: data.patentApplicationNumber,
+          
+          // Effort Sheet fields
+          ipRecognizer: data.ipRecognizer,
+          hoursSpent: data.hoursSpent,
+          agencyRecognizer: data.agencyRecognizer,
+          agencyCost: data.agencyCost,
+          reviewEffort: data.reviewEffort,
+          managerEmpId: data.managerEmpId,
+          extractionEffort: data.extractionEffort,
+          
+          // Provisional fields
           patentFilingName: data.patentFilingName,
           provisionalPatent: data.provisionalPatent,
           attachment: data.attachment,
@@ -145,19 +218,22 @@ export async function POST(req) {
           poaOffice: data.poaOffice,
           effortsSpent: data.effortsSpent,
           patentFiler: data.patentFiler,
-          hoursSpent: data.hoursSpent,
-          agencyRecognizer: data.agencyRecognizer,
-          agencyCost: data.agencyCost,
           managerResponsible: data.managerResponsible,
+          
+          // PCT fields
           postDated: data.postDated,
           applicationProvisionalNumber: data.applicationProvisionalNumber,
           datePatentApplication: data.datePatentApplication,
           pctFilingPermission: data.pctFilingPermission,
+          
+          // National Phase fields
           dateProvisionalPatent: data.dateProvisionalPatent,
           dateCompletePatentApplication: data.dateCompletePatentApplication,
           datePCTPatentApplication: data.datePCTPatentApplication,
           finalSubmitted: data.finalSubmitted,
           filedForms: data.filedForms,
+          
+          // Complete fields
           dateOfPatent: data.dateOfPatent,
           provisionalNumber: data.provisionalNumber,
           specificationFiling: data.specificationFiling,

@@ -66,28 +66,55 @@ export async function POST(req) {
     // Map payload to Prisma-compatible field names and ensure array fields are arrays
     const data = {
       asset_id: payload.asset_id,
-      inventionTitle: payload.inventionTitle || '',
-      inventorName: payload.inventorName || '',
-      inventorDepartment: payload.inventorDepartment || '',
-      inventionSummary: payload.inventionSummary || '',
-      patentApplicationNumber: payload.patentApplicationNumber || '',
-      patentNumber: payload.patentNumber || '',
-      commercializationType: payload.commercializationType || '',
-      commercializationStatus: payload.commercializationStatus || '',
-      commercializationDate: payload.commercializationDate || '',
-      commercializationRevenue: payload.commercializationRevenue || '',
-      effortsSpent: payload.effortsSpent || '',
-      employeeId: payload.employeeId || '',
-      hoursSpent: payload.hoursSpent || '',
-      agencyManager: payload.agencyManager || '',
-      agencyCost: payload.agencyCost || '',
-      reviewEfforts: payload.reviewEfforts || '',
-      managerResponsible: payload.managerResponsible || '',
-      activityStatus: payload.activityStatus || '',
-      // Ensure file fields are arrays
-      salesFile: Array.isArray(payload.salesFile) ? payload.salesFile.filter(item => typeof item === 'string' && item.trim() !== '') : [],
-      invoiceFile: Array.isArray(payload.invoiceFile) ? payload.invoiceFile.filter(item => typeof item === 'string' && item.trim() !== '') : [],
-      implementationFile: Array.isArray(payload.implementationFile) ? payload.implementationFile.filter(item => typeof item === 'string' && item.trim() !== '') : [],
+      
+      // PC Invention Details fields (pcInventionDetails prefix)
+      pcInventionDetailsTitle: payload.pcInventionDetailsTitle || '',
+      pcInventionDetailsCommonName: payload.pcInventionDetailsCommonName || '',
+      pcInventionDetailsInventorDetails: payload.pcInventionDetailsInventorDetails || '',
+      pcInventionDetailsEntity: payload.pcInventionDetailsEntity || '',
+      pcInventionDetailsDate: payload.pcInventionDetailsDate || '',
+      pcInventionDetailsCountry: payload.pcInventionDetailsCountry || '',
+      pcInventionDetailsCreationCountry: payload.pcInventionDetailsCreationCountry || '',
+      pcInventionDetailsCollaboration: payload.pcInventionDetailsCollaboration || '',
+      pcInventionDetailsCollaboratorName: payload.pcInventionDetailsCollaboratorName || '',
+      pcInventionDetailsCollaboratorCountry: payload.pcInventionDetailsCollaboratorCountry || '',
+      pcInventionDetailsStakeholders: payload.pcInventionDetailsStakeholders || '',
+      
+      // PC Patent Commercialization Child fields (pcPatentCommercializationChild prefix)
+      pcPatentCommercializationChildStage: payload.pcPatentCommercializationChildStage || '',
+      pcPatentCommercializationChildWorkingFiled: payload.pcPatentCommercializationChildWorkingFiled || '',
+      pcPatentCommercializationChildImplementationFile: Array.isArray(payload.pcPatentCommercializationChildImplementationFile) ? payload.pcPatentCommercializationChildImplementationFile.filter(item => typeof item === 'string' && item.trim() !== '') : [],
+      pcPatentCommercializationChildFirstWorkingDate: payload.pcPatentCommercializationChildFirstWorkingDate || '',
+      pcPatentCommercializationChildCommercializationStatus: payload.pcPatentCommercializationChildCommercializationStatus || '',
+      pcPatentCommercializationChildRevenueGenerated: payload.pcPatentCommercializationChildRevenueGenerated || '',
+      pcPatentCommercializationChildMarketValue: payload.pcPatentCommercializationChildMarketValue || '',
+      pcPatentCommercializationChildLicensingFee: payload.pcPatentCommercializationChildLicensingFee || '',
+      pcPatentCommercializationChildRoyaltyRate: payload.pcPatentCommercializationChildRoyaltyRate || '',
+      pcPatentCommercializationChildPartnerName: payload.pcPatentCommercializationChildPartnerName || '',
+      pcPatentCommercializationChildPartnershipType: payload.pcPatentCommercializationChildPartnershipType || '',
+      pcPatentCommercializationChildPartnershipDetails: payload.pcPatentCommercializationChildPartnershipDetails || '',
+      pcPatentCommercializationChildStartDate: payload.pcPatentCommercializationChildStartDate || '',
+      pcPatentCommercializationChildExpectedCompletionDate: payload.pcPatentCommercializationChildExpectedCompletionDate || '',
+      pcPatentCommercializationChildActualCompletionDate: payload.pcPatentCommercializationChildActualCompletionDate || '',
+      
+      // PC PAN fields (pcPAN prefix)
+      pcPANPatentApplicationNumber: payload.pcPANPatentApplicationNumber || '',
+      pcPANPatentNumber: payload.pcPANPatentNumber || '',
+      
+      // PC Patent Commercialization Efforts fields (pcPatentCommercializationEfforts prefix)
+      pcPatentCommercializationEffortsSalesFile: Array.isArray(payload.pcPatentCommercializationEffortsSalesFile) ? payload.pcPatentCommercializationEffortsSalesFile.filter(item => typeof item === 'string' && item.trim() !== '') : [],
+      pcPatentCommercializationEffortsPeriodicSales: payload.pcPatentCommercializationEffortsPeriodicSales || '',
+      pcPatentCommercializationEffortsInvoiceFile: Array.isArray(payload.pcPatentCommercializationEffortsInvoiceFile) ? payload.pcPatentCommercializationEffortsInvoiceFile.filter(item => typeof item === 'string' && item.trim() !== '') : [],
+      pcPatentCommercializationEffortsCommercializationDate: payload.pcPatentCommercializationEffortsCommercializationDate || '',
+      pcPatentCommercializationEffortsProductId: payload.pcPatentCommercializationEffortsProductId || '',
+      pcPatentCommercializationEffortsIsLicensed: payload.pcPatentCommercializationEffortsIsLicensed || '',
+      pcPatentCommercializationEffortsIsCrossLicensed: payload.pcPatentCommercializationEffortsIsCrossLicensed || '',
+      pcPatentCommercializationEffortsIsCompulsoryLicenseFiled: payload.pcPatentCommercializationEffortsIsCompulsoryLicenseFiled || '',
+      
+      // PC Activity Status fields (pcActivityStatus prefix)
+      pcActivityStatusStatus: payload.pcActivityStatusStatus || '',
+      pcActivityStatusDescription: payload.pcActivityStatusDescription || '',
+      pcActivityStatusLastUpdated: payload.pcActivityStatusLastUpdated || ''
     };
 
     console.log('📊 Data being sent to Prisma:', JSON.stringify(data, null, 2));
@@ -103,27 +130,54 @@ export async function POST(req) {
       result = await prisma.PatentCommercialisation.update({
         where: { id: existingRecord.id },
         data: {
-          inventionTitle: data.inventionTitle,
-          inventorName: data.inventorName,
-          inventorDepartment: data.inventorDepartment,
-          inventionSummary: data.inventionSummary,
-          patentApplicationNumber: data.patentApplicationNumber,
-          patentNumber: data.patentNumber,
-          commercializationType: data.commercializationType,
-          commercializationStatus: data.commercializationStatus,
-          commercializationDate: data.commercializationDate,
-          commercializationRevenue: data.commercializationRevenue,
-          effortsSpent: data.effortsSpent,
-          employeeId: data.employeeId,
-          hoursSpent: data.hoursSpent,
-          agencyManager: data.agencyManager,
-          agencyCost: data.agencyCost,
-          reviewEfforts: data.reviewEfforts,
-          managerResponsible: data.managerResponsible,
-          activityStatus: data.activityStatus,
-          salesFile: data.salesFile,
-          invoiceFile: data.invoiceFile,
-          implementationFile: data.implementationFile,
+          // PC Invention Details fields (pcInventionDetails prefix)
+          pcInventionDetailsTitle: data.pcInventionDetailsTitle,
+          pcInventionDetailsCommonName: data.pcInventionDetailsCommonName,
+          pcInventionDetailsInventorDetails: data.pcInventionDetailsInventorDetails,
+          pcInventionDetailsEntity: data.pcInventionDetailsEntity,
+          pcInventionDetailsDate: data.pcInventionDetailsDate,
+          pcInventionDetailsCountry: data.pcInventionDetailsCountry,
+          pcInventionDetailsCreationCountry: data.pcInventionDetailsCreationCountry,
+          pcInventionDetailsCollaboration: data.pcInventionDetailsCollaboration,
+          pcInventionDetailsCollaboratorName: data.pcInventionDetailsCollaboratorName,
+          pcInventionDetailsCollaboratorCountry: data.pcInventionDetailsCollaboratorCountry,
+          pcInventionDetailsStakeholders: data.pcInventionDetailsStakeholders,
+          
+          // PC Patent Commercialization Child fields (pcPatentCommercializationChild prefix)
+          pcPatentCommercializationChildStage: data.pcPatentCommercializationChildStage,
+          pcPatentCommercializationChildWorkingFiled: data.pcPatentCommercializationChildWorkingFiled,
+          pcPatentCommercializationChildImplementationFile: data.pcPatentCommercializationChildImplementationFile,
+          pcPatentCommercializationChildFirstWorkingDate: data.pcPatentCommercializationChildFirstWorkingDate,
+          pcPatentCommercializationChildCommercializationStatus: data.pcPatentCommercializationChildCommercializationStatus,
+          pcPatentCommercializationChildRevenueGenerated: data.pcPatentCommercializationChildRevenueGenerated,
+          pcPatentCommercializationChildMarketValue: data.pcPatentCommercializationChildMarketValue,
+          pcPatentCommercializationChildLicensingFee: data.pcPatentCommercializationChildLicensingFee,
+          pcPatentCommercializationChildRoyaltyRate: data.pcPatentCommercializationChildRoyaltyRate,
+          pcPatentCommercializationChildPartnerName: data.pcPatentCommercializationChildPartnerName,
+          pcPatentCommercializationChildPartnershipType: data.pcPatentCommercializationChildPartnershipType,
+          pcPatentCommercializationChildPartnershipDetails: data.pcPatentCommercializationChildPartnershipDetails,
+          pcPatentCommercializationChildStartDate: data.pcPatentCommercializationChildStartDate,
+          pcPatentCommercializationChildExpectedCompletionDate: data.pcPatentCommercializationChildExpectedCompletionDate,
+          pcPatentCommercializationChildActualCompletionDate: data.pcPatentCommercializationChildActualCompletionDate,
+          
+          // PC PAN fields (pcPAN prefix)
+          pcPANPatentApplicationNumber: data.pcPANPatentApplicationNumber,
+          pcPANPatentNumber: data.pcPANPatentNumber,
+          
+          // PC Patent Commercialization Efforts fields (pcPatentCommercializationEfforts prefix)
+          pcPatentCommercializationEffortsSalesFile: data.pcPatentCommercializationEffortsSalesFile,
+          pcPatentCommercializationEffortsPeriodicSales: data.pcPatentCommercializationEffortsPeriodicSales,
+          pcPatentCommercializationEffortsInvoiceFile: data.pcPatentCommercializationEffortsInvoiceFile,
+          pcPatentCommercializationEffortsCommercializationDate: data.pcPatentCommercializationEffortsCommercializationDate,
+          pcPatentCommercializationEffortsProductId: data.pcPatentCommercializationEffortsProductId,
+          pcPatentCommercializationEffortsIsLicensed: data.pcPatentCommercializationEffortsIsLicensed,
+          pcPatentCommercializationEffortsIsCrossLicensed: data.pcPatentCommercializationEffortsIsCrossLicensed,
+          pcPatentCommercializationEffortsIsCompulsoryLicenseFiled: data.pcPatentCommercializationEffortsIsCompulsoryLicenseFiled,
+          
+          // PC Activity Status fields (pcActivityStatus prefix)
+          pcActivityStatusStatus: data.pcActivityStatusStatus,
+          pcActivityStatusDescription: data.pcActivityStatusDescription,
+          pcActivityStatusLastUpdated: data.pcActivityStatusLastUpdated
         },
       });
     } else {

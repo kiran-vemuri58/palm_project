@@ -24,6 +24,7 @@ const PostGrantOppositionContent = () => {
   const setAssetId = useFormStore((state) => state.setAssetId);
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [isLoadingData, setIsLoadingData] = useState(false);
 
   // Handle assetId from query parameter
   useEffect(() => {
