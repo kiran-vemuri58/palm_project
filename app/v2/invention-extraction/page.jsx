@@ -11,7 +11,7 @@ import CryptoJS from 'crypto-js';
 
 // Import V2 components for Invention Extraction
 import InventionDetailsV2 from '@/components/V2/InventionDetailsV2';
-import ExtractorDetailsV2 from '@/components/V2/ExtractorDetailsV2';
+import IE2ExtractorDetailsV2 from '@/components/V2/IE2ExtractorDetailsV2';
 import UpdatesNBAV2 from '@/components/V2/UpdatesNBAV2';
 import EffortSheetV2 from '@/components/V2/EffortSheetV2';
 import ActivityStatusV2 from '@/components/V2/ActivityStatusV2';
@@ -355,9 +355,11 @@ function InventionExtractionV2Content() {
             </div>
 
             {/* Extraction Details */}
-            <ExtractorDetailsV2 
+            <IE2ExtractorDetailsV2 
               page="inventionExtraction"
               errors={errors}
+              formData={formData}
+              updateFormData={updateFormData}
             />
             
 

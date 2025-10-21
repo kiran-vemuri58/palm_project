@@ -98,7 +98,7 @@ model Invention {
   PatentFiling              PatentFiling[]              @relation("PatentFiling")
   PostGrantOpposition       PostGrantOpposition[]       @relation("PostGrantOppositionToInvention")
   PatentProsecution         PatentProsecution[]         @relation("PatentProsecution")
-  PatentManagement          PatentManagement[]          @relation("PatentManagement")
+  PatentMaintenance          PatentMaintenance[]          @relation("PatentMaintenanceToInvention")
   patentCommercialisation   PatentCommercialisation[]   @relation("PatentCommercialisation")
 }
 
@@ -622,98 +622,81 @@ model PatentProsecution {
   updatedAt DateTime @updatedAt
 }
 
-model PatentManagement {
-  id                      String  @id @default(uuid())
+model PatentMaintenance {
+  id                      String  @id @default(cuid())
   asset_id                String
   
-  // PM Invention Details fields (pmInventionDetails prefix)
-  pmInventionDetailsTitle                    String?
-  pmInventionDetailsCommonName               String?
-  pmInventionDetailsInventorDetails          String?
-  pmInventionDetailsEntity                   String?
-  pmInventionDetailsDate                     String?
-  pmInventionDetailsCountry                  String?
-  pmInventionDetailsCreationCountry          String?
-  pmInventionDetailsCollaboration            String?
-  pmInventionDetailsCollaboratorName         String?
-  pmInventionDetailsCollaboratorCountry      String?
-  pmInventionDetailsStakeholders             String?
+  // PM Extractor Details fields (same as PGO but separate storage)
+  extractorOne            String?
+  extractortwo            String?
+  iEDate                  String?
+  iawpl                   String?
+  nfeature                String?
+  ifeature                String?
+  idattachments           String[] @default([])
+  scountry                String?
+  oextractor              String?
   
-  // PM Extractor Details fields (pmExtractorDetails prefix)
-  pmExtractorDetailsOne                      String?
-  pmExtractorDetailsTwo                      String?
-  pmExtractorDetailsExtractionDate           String?
-  pmExtractorDetailsAvailableWithPriorLiterature String?
-  pmExtractorDetailsNovelFeature             String?
-  pmExtractorDetailsInventiveFeature         String?
-  pmExtractorDetailsSpecificCountry          String?
-  pmExtractorDetailsOpinion                  String?
-  pmExtractorDetailsAttachments              String[] @default([])
+  // PM Patent Prosecution Details fields (same as PGO but separate storage)
+  patentPublished         String?
+  publicationNumber       String?
+  apopposed              String?
+  oname                  String?
+  opposerAttachment      String[] @default([])
+  cfbopposer             String?
+  boaof                  String?
+  rffo                   String?
+  responseAttachment     String[] @default([])
+  orpby                  String?
+  eagency                String?
+  revby                  String?
+  reviewAttachment       String[] @default([])
   
-  // PM Patent Prosecution Details fields (pmPatentProsecutionDetails prefix)
-  pmPatentProsecutionDetailsPublished        String?
-  pmPatentProsecutionDetailsPublicationNumber String?
-  pmPatentProsecutionDetailsAnyPersonOpposed String?
-  pmPatentProsecutionDetailsOpponentName     String?
-  pmPatentProsecutionDetailsAttachments      String[] @default([])
-  pmPatentProsecutionDetailsCaseFiledByOpposer String?
-  pmPatentProsecutionDetailsBasisOfActionOfFiling String?
-  pmPatentProsecutionDetailsReasonForFilingOpposition String?
-  pmPatentProsecutionDetailsOpinionRenderedByYou String?
-  pmPatentProsecutionDetailsExternalAgency  String?
-  pmPatentProsecutionDetailsReviewedBy       String?
+  // PM Patent Maintenance History fields
+  priorityDate           String?
+  grantDate              String?
+  yearsPaid              String?
+  nextDueDate            String?
+  maintenanceStopped     String?
+  attachments            String[] @default([])
+  collaboration          String?
+  filingDate             String?
+  filingAttachments      String[] @default([])
+  maintenanceFee         String?
+  externalAgency         String?
   
-  // PM Patent Maintenance History fields (pmPatentMaintenanceHistory prefix)
-  pmPatentMaintenanceHistoryPriorityDate    String?
-  pmPatentMaintenanceHistoryGrantDate        String?
-  pmPatentMaintenanceHistoryYearsPaid        String?
-  pmPatentMaintenanceHistoryNextDueDate      String?
-  pmPatentMaintenanceHistoryMaintenanceStopped String?
-  pmPatentMaintenanceHistoryAttachments      String[] @default([])
-  pmPatentMaintenanceHistoryFilingDate       String?
-  pmPatentMaintenanceHistoryMaintenanceFee   String?
-  pmPatentMaintenanceHistoryExternalAgency   String?
-  pmPatentMaintenanceHistoryFilingAttachments String[] @default([])
+  // PM fields matching old formData8 structure
+  patentApplicationNumber String?
+  ipRecognizer           String?
+  hoursSpent             String?
+  agencyRecognizer       String?
+  agencyCost             String?
+  reviewEffort           String?
+  managerEmpId           String?
+  reviewEffortHours      String?
+  activityStatus         String?
   
-  // PM PAN fields (pmPAN prefix)
-  pmPANPatentApplicationNumber               String?
+  // PM Decision Sheet fields
+  nodc                   String?
+  dibrief                String?
+  decisionAttachments    String[] @default([])
   
-  // PM Decision Sheet fields (pmDecisionSheet prefix)
-  pmDecisionSheetNameOfDecisionMaker          String?
-  pmDecisionSheetDecisionInBrief             String?
-  pmDecisionSheetAttachments                 String[] @default([])
+  // PM Innovation Analysis fields
+  trainRun               String?
+  minuteOfMeeting        String[] @default([])
+  innovationAttachments  String[] @default([])
   
-  // PM Innovation Analysis fields (pmInnovationAnalysis prefix)
-  pmInnovationAnalysisMoreThanInvention       String?
-  pmInnovationAnalysisPriorArtDocuments      String[] @default([])
-  pmInnovationAnalysisNPLDocuments           String[] @default([])
-  
-  // PM Patentability Extractor fields (pmPatentabilityExtractor prefix)
-  pmPatentabilityExtractorSearcher1          String?
-  pmPatentabilityExtractorSearcher2          String?
-  pmPatentabilityExtractorRating             Int?
-  pmPatentabilityExtractorInventionAccordance String?
-  pmPatentabilityExtractorNovelFeature       String?
-  pmPatentabilityExtractorInventiveFeature   String?
-  pmPatentabilityExtractorAttachment         String[] @default([])
-  pmPatentabilityExtractorSpecificCountry    String?
-  pmPatentabilityExtractorOpinionOfExtractor String?
-  
-  // PM Effort Sheet fields (pmEffortSheet prefix)
-  pmEffortSheetEffortsSpent                  String?
-  pmEffortSheetEmployeeId                   String?
-  pmEffortSheetHoursSpent                   String?
-  pmEffortSheetAgencyManager                String?
-  pmEffortSheetAgencyCost                   String?
-  pmEffortSheetReviewEfforts                String?
-  pmEffortSheetManagerResponsible           String?
-  
-  // PM Activity Status fields (pmActivityStatus prefix)
-  pmActivityStatusStatus                     String?
-  pmActivityStatusDescription                String?
-  pmActivityStatusLastUpdated                String?
+  // PM Patentability Extractor fields
+  psone                  String?
+  pstwo                  String?
+  rating                 Int?
+  paNovelFeature         String?
+  paInventiveFeature     String?
+  paSpecificCountry      String?
+  paOpinionOfExtractor   String?
+  patentabilityAttachments String[] @default([])
 
-  invention Invention @relation("PatentManagement", fields: [asset_id], references: [asset_id], onDelete: Cascade)
+  invention Invention @relation("PatentMaintenanceToInvention", fields: [asset_id], references: [asset_id], onDelete: Cascade)
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -8,6 +8,7 @@ function getInitialFormData(page) {
       inventiontitle: '',
       commonname: '',
       inventordetails: '',
+      inventors: [],
       rating: 0,
       
       // Entity Details
@@ -410,92 +411,80 @@ function getInitialFormData(page) {
     },
     
     patentMaintenance: {
-      // PM Invention Details fields (pmInventionDetails prefix)
-      pmInventionDetailsTitle: '',
-      pmInventionDetailsCommonName: '',
-      pmInventionDetailsInventorDetails: '',
-      pmInventionDetailsEntity: '',
-      pmInventionDetailsDate: '',
-      pmInventionDetailsCountry: '',
-      pmInventionDetailsCreationCountry: '',
-      pmInventionDetailsCollaboration: '',
-      pmInventionDetailsCollaboratorName: '',
-      pmInventionDetailsCollaboratorCountry: '',
-      pmInventionDetailsStakeholders: '',
+      // PM Extractor Details fields (same as PGO but separate storage)
+      extractorOne: '',
+      extractortwo: '',
+      iEDate: '',
+      iawpl: '',
+      nfeature: '',
+      ifeature: '',
+      idattachments: [],
+      scountry: '',
+      oextractor: '',
       
-      // PM Extractor Details fields (pmExtractorDetails prefix)
-      pmExtractorDetailsOne: '',
-      pmExtractorDetailsTwo: '',
-      pmExtractorDetailsExtractionDate: '',
-      pmExtractorDetailsAvailableWithPriorLiterature: '',
-      pmExtractorDetailsNovelFeature: '',
-      pmExtractorDetailsInventiveFeature: '',
-      pmExtractorDetailsSpecificCountry: '',
-      pmExtractorDetailsOpinion: '',
-      pmExtractorDetailsAttachments: [],
+      // PM Patent Prosecution Details fields (same as PGO but separate storage)
+      patentPublished: '',
+      publicationNumber: '',
+      apopposed: '',
+      oname: '',
+      opposerAttachment: [],
+      cfbopposer: '',
+      boaof: '',
+      rffo: '',
+      responseAttachment: [],
+      orpby: '',
+      eagency: '',
+      revby: '',
+      reviewAttachment: [],
       
-      // PM Patent Prosecution Details fields (pmPatentProsecutionDetails prefix)
-      pmPatentProsecutionDetailsPublished: '',
-      pmPatentProsecutionDetailsPublicationNumber: '',
-      pmPatentProsecutionDetailsAnyPersonOpposed: '',
-      pmPatentProsecutionDetailsOpponentName: '',
-      pmPatentProsecutionDetailsAttachments: [],
-      pmPatentProsecutionDetailsCaseFiledByOpposer: '',
-      pmPatentProsecutionDetailsBasisOfActionOfFiling: '',
-      pmPatentProsecutionDetailsReasonForFilingOpposition: '',
-      pmPatentProsecutionDetailsOpinionRenderedByYou: '',
-      pmPatentProsecutionDetailsExternalAgency: '',
-      pmPatentProsecutionDetailsReviewedBy: '',
+      // PM Patent Maintenance History fields
+      priorityDate: '',
+      grantDate: '',
+      yearsPaid: '',
+      nextDueDate: '',
+      maintenanceStopped: '',
+      attachments: [],
+      collaboration: '',
+      filingDate: '',
+      filingAttachments: [],
+      maintenanceFee: '',
+      externalAgency: '',
       
-      // PM Patent Maintenance History fields (pmPatentMaintenanceHistory prefix)
-      pmPatentMaintenanceHistoryPriorityDate: '',
-      pmPatentMaintenanceHistoryGrantDate: '',
-      pmPatentMaintenanceHistoryYearsPaid: '',
-      pmPatentMaintenanceHistoryNextDueDate: '',
-      pmPatentMaintenanceHistoryMaintenanceStopped: '',
-      pmPatentMaintenanceHistoryAttachments: [],
-      pmPatentMaintenanceHistoryFilingDate: '',
-      pmPatentMaintenanceHistoryMaintenanceFee: '',
-      pmPatentMaintenanceHistoryExternalAgency: '',
-      pmPatentMaintenanceHistoryFilingAttachments: [],
+      // PM PAN fields
+      patentApplicationNumber: '',
       
-      // PM PAN fields (pmPAN prefix)
-      pmPANPatentApplicationNumber: '',
+      // PM Decision Sheet fields
+      nodc: '',
+      dibrief: '',
+      decisionAttachments: [],
       
-      // PM Decision Sheet fields (pmDecisionSheet prefix)
-      pmDecisionSheetNameOfDecisionMaker: '',
-      pmDecisionSheetDecisionInBrief: '',
-      pmDecisionSheetAttachments: [],
+      // PM Innovation Analysis fields
+      trainRun: '',
+      minuteOfMeeting: [],
+      innovationAttachments: [],
       
-      // PM Innovation Analysis fields (pmInnovationAnalysis prefix)
-      pmInnovationAnalysisMoreThanInvention: '',
-      pmInnovationAnalysisPriorArtDocuments: [],
-      pmInnovationAnalysisNPLDocuments: [],
+      // PM Patentability Extractor fields
+      psone: '',
+      pstwo: '',
+      rating: 0,
+      collaboration: '',
+      paNovelFeature: '',
+      paInventiveFeature: '',
+      paSpecificCountry: '',
+      paOpinionOfExtractor: '',
+      patentabilityAttachments: [],
       
-      // PM Patentability Extractor fields (pmPatentabilityExtractor prefix)
-      pmPatentabilityExtractorSearcher1: '',
-      pmPatentabilityExtractorSearcher2: '',
-      pmPatentabilityExtractorRating: 0,
-      pmPatentabilityExtractorInventionAccordance: '',
-      pmPatentabilityExtractorNovelFeature: '',
-      pmPatentabilityExtractorInventiveFeature: '',
-      pmPatentabilityExtractorAttachment: [],
-      pmPatentabilityExtractorSpecificCountry: '',
-      pmPatentabilityExtractorOpinionOfExtractor: '',
+      // PM Effort Sheet Details fields
+      ipRecognizer: '',
+      hoursSpent: '',
+      agencyRecognizer: '',
+      agencyCost: '',
+      reviewEffort: '',
+      managerEmpId: '',
+      reviewEffortHours: '',
       
-      // PM Effort Sheet fields (pmEffortSheet prefix)
-      pmEffortSheetEffortsSpent: '',
-      pmEffortSheetEmployeeId: '',
-      pmEffortSheetHoursSpent: '',
-      pmEffortSheetAgencyManager: '',
-      pmEffortSheetAgencyCost: '',
-      pmEffortSheetReviewEfforts: '',
-      pmEffortSheetManagerResponsible: '',
-      
-      // PM Activity Status fields (pmActivityStatus prefix)
-      pmActivityStatusStatus: '',
-      pmActivityStatusDescription: '',
-      pmActivityStatusLastUpdated: ''
+      // PM Activity Status fields
+      activityStatus: ''
     },
     
     patentCommercialization: {
@@ -955,6 +944,14 @@ const useV2Store = create((set, get) => ({
           inventiontitle: apiData.inventiontitle || '',
           commonname: apiData.commonname || '',
           inventordetails: apiData.inventordetails || '',
+          inventors: (() => {
+            // Handle nested inventors structure from backend
+            if (apiData.inventors && typeof apiData.inventors === 'object' && apiData.inventors.inventors) {
+              return apiData.inventors.inventors;
+            }
+            
+            return apiData.inventors || [];
+          })(),
           rating: apiData.rating || 0,
           
           // Entity Details
@@ -1373,23 +1370,79 @@ const useV2Store = create((set, get) => ({
         
       case 'patentMaintenance':
         return {
-          // Patent Maintenance fields
-          maintenanceDate: apiData.maintenanceDate || '',
-          patentNumber: apiData.patentNumber || '',
-          maintenanceFees: apiData.maintenanceFees || 0,
-          paymentStatus: apiData.paymentStatus || '',
-          dueDate: apiData.dueDate || '',
-          gracePeriod: apiData.gracePeriod || '',
-          lateFees: apiData.lateFees || 0,
-          renewalPeriod: apiData.renewalPeriod || '',
-          nextRenewal: apiData.nextRenewal || '',
-          maintenanceHistory: apiData.maintenanceHistory || [],
-          costBreakdown: apiData.costBreakdown || {},
-          paymentMethod: apiData.paymentMethod || '',
-          reminderSet: apiData.reminderSet || false,
-          automaticRenewal: apiData.automaticRenewal || false,
-          status: apiData.status || '',
+          // PM Extractor Details fields
+          extractorOne: apiData.extractorOne || '',
+          extractortwo: apiData.extractortwo || '',
+          iEDate: apiData.iEDate || '',
+          iawpl: apiData.iawpl || '',
+          nfeature: apiData.nfeature || '',
+          ifeature: apiData.ifeature || '',
+          idattachments: apiData.idattachments || [],
+          scountry: apiData.scountry || '',
+          oextractor: apiData.oextractor || '',
+          
+          // PM Patent Prosecution Details fields
+          patentPublished: apiData.patentPublished || '',
+          publicationNumber: apiData.publicationNumber || '',
+          apopposed: apiData.apopposed || '',
+          oname: apiData.oname || '',
+          opposerAttachment: apiData.opposerAttachment || [],
+          cfbopposer: apiData.cfbopposer || '',
+          boaof: apiData.boaof || '',
+          rffo: apiData.rffo || '',
+          responseAttachment: apiData.responseAttachment || [],
+          orpby: apiData.orpby || '',
+          eagency: apiData.eagency || '',
+          revby: apiData.revby || '',
+          reviewAttachment: apiData.reviewAttachment || [],
+          
+          // PM Patent Maintenance History fields
+          priorityDate: apiData.priorityDate || '',
+          grantDate: apiData.grantDate || '',
+          yearsPaid: apiData.yearsPaid || '',
+          nextDueDate: apiData.nextDueDate || '',
+          maintenanceStopped: apiData.maintenanceStopped || '',
+          attachments: apiData.attachments || [],
+          collaboration: apiData.collaboration || '',
+          filingDate: apiData.filingDate || '',
+          filingAttachments: apiData.filingAttachments || [],
+          maintenanceFee: apiData.maintenanceFee || '',
+          externalAgency: apiData.externalAgency || '',
+          
+          // PM PAN fields
+          patentApplicationNumber: apiData.patentApplicationNumber || '',
+          
+          // PM Decision Sheet fields
+          nodc: apiData.nodc || '',
+          dibrief: apiData.dibrief || '',
+          decisionAttachments: apiData.decisionAttachments || [],
+          
+          // PM Innovation Analysis fields
+          trainRun: apiData.trainRun || '',
+          minuteOfMeeting: apiData.minuteOfMeeting || [],
+          innovationAttachments: apiData.innovationAttachments || [],
+          
+          // PM Patentability Extractor fields
+          psone: apiData.psone || '',
+          pstwo: apiData.pstwo || '',
           rating: apiData.rating || 0,
+          collaboration: apiData.collaboration || '',
+          paNovelFeature: apiData.paNovelFeature || '',
+          paInventiveFeature: apiData.paInventiveFeature || '',
+          paSpecificCountry: apiData.paSpecificCountry || '',
+          paOpinionOfExtractor: apiData.paOpinionOfExtractor || '',
+          patentabilityAttachments: apiData.patentabilityAttachments || [],
+          
+          // PM Effort Sheet Details fields
+          ipRecognizer: apiData.ipRecognizer || '',
+          hoursSpent: apiData.hoursSpent || '',
+          agencyRecognizer: apiData.agencyRecognizer || '',
+          agencyCost: apiData.agencyCost || '',
+          reviewEffort: apiData.reviewEffort || '',
+          managerEmpId: apiData.managerEmpId || '',
+          reviewEffortHours: apiData.reviewEffortHours || '',
+          
+          // PM Activity Status fields
           activityStatus: apiData.activityStatus || ''
         };
         

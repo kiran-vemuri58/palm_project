@@ -114,7 +114,7 @@ export async function POST(req) {
       asset_id: newAssetId,
       inventiontitle: payload.inventiontitle || '',
       commonname: payload.commonName || '',
-      inventors: payload.inventors || null,
+      inventors: payload.inventors || [],
       inventordetails: payload.inventordetails || '',
       incrementalrenovation: payload.incrementalRenovation || null,
       patentnumbers: payload.patentNumbers || null,

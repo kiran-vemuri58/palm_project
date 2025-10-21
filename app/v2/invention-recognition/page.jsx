@@ -223,11 +223,9 @@ function InventionRecognitionV2Content() {
           // Update store with the data returned from save API (no need for separate GET call)
           const saveResponseData = dbResponse.data.data;
           
-          // Map the saved data back to store format and update store
-          const mappedData = mapAPIDataToStore(saveResponseData, 'inventionRecognition');
-          
-          // Update the store with the returned data
-          setStoreData('inventionRecognition', mappedData);
+          // Instead of mapping save response, reload data from API to ensure correct format
+          console.log('🔄 Reloading data from API after save to ensure correct format');
+          await loadFormDataFromAPI(assetNumber, 'inventionRecognition');
           
           // Mark Form 1 as saved
           markFormAsSaved('inventionRecognition');
@@ -300,10 +298,11 @@ function InventionRecognitionV2Content() {
         setCurrentAssetId(assetId);
       }
       
-      // Ensure page data is loaded (check store first, then API if needed)
-      await ensurePageDataLoaded(targetAssetId, 'inventionRecognition');
+      // Always reload data from API to ensure we have the latest data
+      console.log('🔄 Force reloading Form 1 data from API for Asset ID:', targetAssetId);
+      await loadFormDataFromAPI(targetAssetId, 'inventionRecognition');
     }
-  }, [assetId, currentAssetId, setCurrentAssetId, ensurePageDataLoaded]);
+  }, [assetId, currentAssetId, setCurrentAssetId, loadFormDataFromAPI]);
 
   // Set asset ID and ensure data is loaded when component mounts
   useEffect(() => {
