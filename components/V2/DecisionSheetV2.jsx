@@ -83,8 +83,8 @@ const DecisionSheetV2 = ({ page }) => {
               </label>
               <input
                 type="text"
-                value={safeFormData.decisionNodc || ''}
-                onChange={(e) => handleChange('decisionNodc', e.target.value)}
+                value={safeFormData.nodc || ''}
+                onChange={(e) => handleChange('nodc', e.target.value)}
                 className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:border-blue-500 focus:ring-blue-500/20"
                 placeholder="Enter Name of Decision Maker"
               />
@@ -96,8 +96,8 @@ const DecisionSheetV2 = ({ page }) => {
               </label>
               <input
                 type="text"
-                value={safeFormData.decisionDibrief || ''}
-                onChange={(e) => handleChange('decisionDibrief', e.target.value)}
+                value={safeFormData.dibrief || ''}
+                onChange={(e) => handleChange('dibrief', e.target.value)}
                 className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:border-blue-500 focus:ring-blue-500/20"
                 placeholder="Enter decision in brief"
               />

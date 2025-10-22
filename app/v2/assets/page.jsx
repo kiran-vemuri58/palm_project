@@ -10,6 +10,12 @@ import InventionTooltip from '@/components/V2/InventionTooltip';
 import ExtractionTooltip from '@/components/V2/ExtractionTooltip';
 import PatentabilityTooltip from '@/components/V2/PatentabilityTooltip';
 import SmartTooltip from '@/components/V2/SmartTooltip';
+import PatentSpecificationTooltip from '@/components/V2/PatentSpecificationTooltip';
+import PatentFilingTooltip from '@/components/V2/PatentFilingTooltip';
+import PatentProsecutionTooltip from '@/components/V2/PatentProsecutionTooltip';
+import PatentMaintenanceTooltip from '@/components/V2/PatentMaintenanceTooltip';
+import PatentCommercializationTooltip from '@/components/V2/PatentCommercializationTooltip';
+import PostGrantOppositionTooltip from '@/components/V2/PostGrantOppositionTooltip';
 
 function AssetsV2Content() {
   const router = useRouter();
@@ -40,7 +46,6 @@ function AssetsV2Content() {
       if (response.data.success) {
         setAssets(response.data.data);
         setFilteredAssets(response.data.data);
-        console.log('📋 Assets loaded:', response.data.data);
       }
     } catch (error) {
       console.error('Error fetching assets:', error);
@@ -98,12 +103,10 @@ function AssetsV2Content() {
   };
 
   const handleViewAsset = (assetId) => {
-    console.log('👁️ Viewing asset:', assetId);
     router.push(`/v2/invention-recognition?assetId=${assetId}&edit=true`);
   };
 
   const handleNavigateToPage = (page, assetId) => {
-    console.log(`🧭 Navigating to ${page} for asset:`, assetId);
     setShowViewModal(false);
     setAssetToView(null);
     
@@ -133,7 +136,6 @@ function AssetsV2Content() {
 
   const fetchAllAssetData = async (assetId) => {
     try {
-      console.log('🔄 Fetching all asset data for:', assetId);
       
       // Get store functions
       const { setStoreData, mapAPIDataToStore, getSavedForms } = useV2Store.getState();
@@ -154,28 +156,23 @@ function AssetsV2Content() {
       // Fetch data from all endpoints in parallel
       const promises = apiEndpoints.map(async ({ page, endpoint, displayName }) => {
         try {
-          console.log(`📡 Fetching ${page} data from ${endpoint}`);
           const response = await axios.get(endpoint);
           
           if (response.data.success && response.data.data) {
-            console.log(`✅ ${page} data loaded:`, response.data.data);
             
             // Map API data to store format
             const mappedData = mapAPIDataToStore(response.data.data, page);
-            console.log(`🔄 Mapped ${page} data for store:`, mappedData);
             
             // Update store with the data
             setStoreData(page, mappedData);
             
             return { page, displayName, success: true, data: mappedData, hasData: true };
           } else {
-            console.log(`⚠️ No data found for ${page}`);
             return { page, displayName, success: false, data: null, hasData: false };
           }
         } catch (error) {
           // Check if it's a 404 error
           const is404 = error.response?.status === 404;
-          console.log(`❌ Error fetching ${page}:`, error.message, is404 ? '(404 - No data found)' : '');
           return { 
             page, 
             displayName, 
@@ -195,16 +192,12 @@ function AssetsV2Content() {
       const failed = results.filter(r => !r.success);
       const availablePages = results.filter(r => r.hasData);
       
-      console.log(`📊 Data fetch complete: ${successful.length} successful, ${failed.length} failed`);
-      console.log(`📋 Available pages:`, availablePages.map(r => r.page));
       
       // Get saved forms from store and combine with API results
       const savedForms = getSavedForms();
-      console.log(`💾 Saved forms from store:`, savedForms);
       
       // Combine API results with saved forms tracking
       const allAvailablePages = [...new Set([...availablePages.map(r => r.page), ...savedForms])];
-      console.log(`🎯 All available pages (API + Saved):`, allAvailablePages);
       
       // Update available pages state
       setAvailablePages(allAvailablePages);
@@ -229,7 +222,6 @@ function AssetsV2Content() {
       setDeleting(assetToDelete.asset_id);
       const response = await axios.delete(`/api/assets/${assetToDelete.asset_id}`);
       if (response.data.success) {
-        console.log('✅ Asset deleted:', assetToDelete.asset_id);
         // Refresh the assets list
         await fetchAssets();
         setShowDeleteModal(false);
@@ -640,232 +632,274 @@ function AssetsV2Content() {
                   </PatentabilityTooltip>
 
                   {/* Page 4 - Patent Specification */}
-                  <button
-                    onClick={() => handleNavigateToPage('patent-specification', assetToView.asset_id)}
-                    disabled={!availablePages.includes('patentSpecification')}
-                    className={`group p-4 border rounded-lg transition-all duration-200 shadow-sm ${
-                      availablePages.includes('patentSpecification')
-                        ? 'bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200 hover:from-orange-100 hover:to-orange-200 hover:shadow-md'
-                        : 'bg-gray-50 border-gray-200 cursor-not-allowed opacity-60'
-                    }`}
+                  <PatentSpecificationTooltip 
+                    assetId={assetToView.asset_id}
+                    tileIndex={3}
+                    totalTiles={9}
+                    isEnabled={availablePages.includes('patentSpecification')}
                   >
-                    <div className="flex items-center space-x-3">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-200 ${
+                    <button
+                      onClick={() => handleNavigateToPage('patent-specification', assetToView.asset_id)}
+                      disabled={!availablePages.includes('patentSpecification')}
+                      className={`group p-4 border rounded-lg transition-all duration-200 shadow-sm ${
                         availablePages.includes('patentSpecification')
-                          ? 'bg-orange-600 group-hover:scale-110'
-                          : 'bg-gray-400'
-                      }`}>
-                        <span className="text-white font-bold text-sm">4</span>
-                      </div>
-                      <div className="text-left">
-                        <div className={`font-semibold ${
+                          ? 'bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200 hover:from-orange-100 hover:to-orange-200 hover:shadow-md'
+                          : 'bg-gray-50 border-gray-200 cursor-not-allowed opacity-60'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-200 ${
                           availablePages.includes('patentSpecification')
-                            ? 'text-gray-900 group-hover:text-orange-700'
-                            : 'text-gray-500'
+                            ? 'bg-orange-600 group-hover:scale-110'
+                            : 'bg-gray-400'
                         }`}>
-                          Patent Specification
-                          {!availablePages.includes('patentSpecification') && ' (No Data)'}
+                          <span className="text-white font-bold text-sm">4</span>
                         </div>
-                        <div className={`text-sm ${
-                          availablePages.includes('patentSpecification')
-                            ? 'text-gray-600'
-                            : 'text-gray-400'
-                        }`}>
-                          Prepare specifications
+                        <div className="text-left">
+                          <div className={`font-semibold ${
+                            availablePages.includes('patentSpecification')
+                              ? 'text-gray-900 group-hover:text-orange-700'
+                              : 'text-gray-500'
+                          }`}>
+                            Patent Specification
+                            {!availablePages.includes('patentSpecification') && ' (No Data)'}
+                          </div>
+                          <div className={`text-sm ${
+                            availablePages.includes('patentSpecification')
+                              ? 'text-gray-600'
+                              : 'text-gray-400'
+                          }`}>
+                            Prepare specifications
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </button>
+                    </button>
+                  </PatentSpecificationTooltip>
 
                   {/* Page 5 - Patent Filing */}
-                  <button
-                    onClick={() => handleNavigateToPage('patent-filing', assetToView.asset_id)}
-                    disabled={!availablePages.includes('patentFiling')}
-                    className={`group p-4 border rounded-lg transition-all duration-200 shadow-sm ${
-                      availablePages.includes('patentFiling')
-                        ? 'bg-gradient-to-br from-red-50 to-red-100 border-red-200 hover:from-red-100 hover:to-red-200 hover:shadow-md'
-                        : 'bg-gray-50 border-gray-200 cursor-not-allowed opacity-60'
-                    }`}
+                  <PatentFilingTooltip 
+                    assetId={assetToView.asset_id}
+                    tileIndex={4}
+                    totalTiles={9}
+                    isEnabled={availablePages.includes('patentFiling')}
                   >
-                    <div className="flex items-center space-x-3">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-200 ${
+                    <button
+                      onClick={() => handleNavigateToPage('patent-filing', assetToView.asset_id)}
+                      disabled={!availablePages.includes('patentFiling')}
+                      className={`group p-4 border rounded-lg transition-all duration-200 shadow-sm ${
                         availablePages.includes('patentFiling')
-                          ? 'bg-red-600 group-hover:scale-110'
-                          : 'bg-gray-400'
-                      }`}>
-                        <span className="text-white font-bold text-sm">5</span>
-                      </div>
-                      <div className="text-left">
-                        <div className={`font-semibold ${
+                          ? 'bg-gradient-to-br from-red-50 to-red-100 border-red-200 hover:from-red-100 hover:to-red-200 hover:shadow-md'
+                          : 'bg-gray-50 border-gray-200 cursor-not-allowed opacity-60'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-200 ${
                           availablePages.includes('patentFiling')
-                            ? 'text-gray-900 group-hover:text-red-700'
-                            : 'text-gray-500'
+                            ? 'bg-red-600 group-hover:scale-110'
+                            : 'bg-gray-400'
                         }`}>
-                          Patent Filing
-                          {!availablePages.includes('patentFiling') && ' (No Data)'}
+                          <span className="text-white font-bold text-sm">5</span>
                         </div>
-                        <div className={`text-sm ${
-                          availablePages.includes('patentFiling')
-                            ? 'text-gray-600'
-                            : 'text-gray-400'
-                        }`}>
-                          File patent applications
+                        <div className="text-left">
+                          <div className={`font-semibold ${
+                            availablePages.includes('patentFiling')
+                              ? 'text-gray-900 group-hover:text-red-700'
+                              : 'text-gray-500'
+                          }`}>
+                            Patent Filing
+                            {!availablePages.includes('patentFiling') && ' (No Data)'}
+                          </div>
+                          <div className={`text-sm ${
+                            availablePages.includes('patentFiling')
+                              ? 'text-gray-600'
+                              : 'text-gray-400'
+                          }`}>
+                            File patent applications
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </button>
+                    </button>
+                  </PatentFilingTooltip>
 
                   {/* Page 6 - Patent Prosecution */}
-                  <button
-                    onClick={() => handleNavigateToPage('patent-prosecution', assetToView.asset_id)}
-                    disabled={!availablePages.includes('patentProsecution')}
-                    className={`group p-4 border rounded-lg transition-all duration-200 shadow-sm ${
-                      availablePages.includes('patentProsecution')
-                        ? 'bg-gradient-to-br from-indigo-50 to-indigo-100 border-indigo-200 hover:from-indigo-100 hover:to-indigo-200 hover:shadow-md'
-                        : 'bg-gray-50 border-gray-200 cursor-not-allowed opacity-60'
-                    }`}
+                  <PatentProsecutionTooltip 
+                    assetId={assetToView.asset_id}
+                    tileIndex={5}
+                    totalTiles={9}
+                    isEnabled={availablePages.includes('patentProsecution')}
                   >
-                    <div className="flex items-center space-x-3">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-200 ${
+                    <button
+                      onClick={() => handleNavigateToPage('patent-prosecution', assetToView.asset_id)}
+                      disabled={!availablePages.includes('patentProsecution')}
+                      className={`group p-4 border rounded-lg transition-all duration-200 shadow-sm ${
                         availablePages.includes('patentProsecution')
-                          ? 'bg-indigo-600 group-hover:scale-110'
-                          : 'bg-gray-400'
-                      }`}>
-                        <span className="text-white font-bold text-sm">6</span>
-                      </div>
-                      <div className="text-left">
-                        <div className={`font-semibold ${
+                          ? 'bg-gradient-to-br from-indigo-50 to-indigo-100 border-indigo-200 hover:from-indigo-100 hover:to-indigo-200 hover:shadow-md'
+                          : 'bg-gray-50 border-gray-200 cursor-not-allowed opacity-60'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-200 ${
                           availablePages.includes('patentProsecution')
-                            ? 'text-gray-900 group-hover:text-indigo-700'
-                            : 'text-gray-500'
+                            ? 'bg-indigo-600 group-hover:scale-110'
+                            : 'bg-gray-400'
                         }`}>
-                          Patent Prosecution
-                          {!availablePages.includes('patentProsecution') && ' (No Data)'}
+                          <span className="text-white font-bold text-sm">6</span>
                         </div>
-                        <div className={`text-sm ${
-                          availablePages.includes('patentProsecution')
-                            ? 'text-gray-600'
-                            : 'text-gray-400'
-                        }`}>
-                          Handle prosecution process
+                        <div className="text-left">
+                          <div className={`font-semibold ${
+                            availablePages.includes('patentProsecution')
+                              ? 'text-gray-900 group-hover:text-indigo-700'
+                              : 'text-gray-500'
+                          }`}>
+                            Patent Prosecution
+                            {!availablePages.includes('patentProsecution') && ' (No Data)'}
+                          </div>
+                          <div className={`text-sm ${
+                            availablePages.includes('patentProsecution')
+                              ? 'text-gray-600'
+                              : 'text-gray-400'
+                          }`}>
+                            Handle prosecution process
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </button>
+                    </button>
+                  </PatentProsecutionTooltip>
 
                   {/* Page 7 - Patent Maintenance */}
-                  <button
-                    onClick={() => handleNavigateToPage('patent-maintenance', assetToView.asset_id)}
-                    disabled={!availablePages.includes('patentMaintenance')}
-                    className={`group p-4 border rounded-lg transition-all duration-200 shadow-sm ${
-                      availablePages.includes('patentMaintenance')
-                        ? 'bg-gradient-to-br from-teal-50 to-teal-100 border-teal-200 hover:from-teal-100 hover:to-teal-200 hover:shadow-md'
-                        : 'bg-gray-50 border-gray-200 cursor-not-allowed opacity-60'
-                    }`}
+                  <PatentMaintenanceTooltip 
+                    assetId={assetToView.asset_id}
+                    tileIndex={6}
+                    totalTiles={9}
+                    isEnabled={availablePages.includes('patentMaintenance')}
                   >
-                    <div className="flex items-center space-x-3">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-200 ${
+                    <button
+                      onClick={() => handleNavigateToPage('patent-maintenance', assetToView.asset_id)}
+                      disabled={!availablePages.includes('patentMaintenance')}
+                      className={`group p-4 border rounded-lg transition-all duration-200 shadow-sm ${
                         availablePages.includes('patentMaintenance')
-                          ? 'bg-teal-600 group-hover:scale-110'
-                          : 'bg-gray-400'
-                      }`}>
-                        <span className="text-white font-bold text-sm">7</span>
-                      </div>
-                      <div className="text-left">
-                        <div className={`font-semibold ${
+                          ? 'bg-gradient-to-br from-teal-50 to-teal-100 border-teal-200 hover:from-teal-100 hover:to-teal-200 hover:shadow-md'
+                          : 'bg-gray-50 border-gray-200 cursor-not-allowed opacity-60'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-200 ${
                           availablePages.includes('patentMaintenance')
-                            ? 'text-gray-900 group-hover:text-teal-700'
-                            : 'text-gray-500'
+                            ? 'bg-teal-600 group-hover:scale-110'
+                            : 'bg-gray-400'
                         }`}>
-                          Patent Maintenance
-                          {!availablePages.includes('patentMaintenance') && ' (No Data)'}
+                          <span className="text-white font-bold text-sm">7</span>
                         </div>
-                        <div className={`text-sm ${
-                          availablePages.includes('patentMaintenance')
-                            ? 'text-gray-600'
-                            : 'text-gray-400'
-                        }`}>
-                          Maintain patent status
+                        <div className="text-left">
+                          <div className={`font-semibold ${
+                            availablePages.includes('patentMaintenance')
+                              ? 'text-gray-900 group-hover:text-teal-700'
+                              : 'text-gray-500'
+                          }`}>
+                            Patent Maintenance
+                            {!availablePages.includes('patentMaintenance') && ' (No Data)'}
+                          </div>
+                          <div className={`text-sm ${
+                            availablePages.includes('patentMaintenance')
+                              ? 'text-gray-600'
+                              : 'text-gray-400'
+                          }`}>
+                            Maintain patent status
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </button>
+                    </button>
+                  </PatentMaintenanceTooltip>
 
                   {/* Page 8 - Patent Commercialization */}
-                  <button
-                    onClick={() => handleNavigateToPage('patent-commercialization', assetToView.asset_id)}
-                    disabled={!availablePages.includes('patentCommercialization')}
-                    className={`group p-4 border rounded-lg transition-all duration-200 shadow-sm ${
-                      availablePages.includes('patentCommercialization')
-                        ? 'bg-gradient-to-br from-pink-50 to-pink-100 border-pink-200 hover:from-pink-100 hover:to-pink-200 hover:shadow-md'
-                        : 'bg-gray-50 border-gray-200 cursor-not-allowed opacity-60'
-                    }`}
+                  <PatentCommercializationTooltip 
+                    assetId={assetToView.asset_id}
+                    tileIndex={7}
+                    totalTiles={9}
+                    isEnabled={availablePages.includes('patentCommercialization')}
                   >
-                    <div className="flex items-center space-x-3">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-200 ${
+                    <button
+                      onClick={() => handleNavigateToPage('patent-commercialization', assetToView.asset_id)}
+                      disabled={!availablePages.includes('patentCommercialization')}
+                      className={`group p-4 border rounded-lg transition-all duration-200 shadow-sm ${
                         availablePages.includes('patentCommercialization')
-                          ? 'bg-pink-600 group-hover:scale-110'
-                          : 'bg-gray-400'
-                      }`}>
-                        <span className="text-white font-bold text-sm">8</span>
-                      </div>
-                      <div className="text-left">
-                        <div className={`font-semibold ${
+                          ? 'bg-gradient-to-br from-pink-50 to-pink-100 border-pink-200 hover:from-pink-100 hover:to-pink-200 hover:shadow-md'
+                          : 'bg-gray-50 border-gray-200 cursor-not-allowed opacity-60'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-200 ${
                           availablePages.includes('patentCommercialization')
-                            ? 'text-gray-900 group-hover:text-pink-700'
-                            : 'text-gray-500'
+                            ? 'bg-pink-600 group-hover:scale-110'
+                            : 'bg-gray-400'
                         }`}>
-                          Patent Commercialization
-                          {!availablePages.includes('patentCommercialization') && ' (No Data)'}
+                          <span className="text-white font-bold text-sm">8</span>
                         </div>
-                        <div className={`text-sm ${
-                          availablePages.includes('patentCommercialization')
-                            ? 'text-gray-600'
-                            : 'text-gray-400'
-                        }`}>
-                          Commercialize patents
+                        <div className="text-left">
+                          <div className={`font-semibold ${
+                            availablePages.includes('patentCommercialization')
+                              ? 'text-gray-900 group-hover:text-pink-700'
+                              : 'text-gray-500'
+                          }`}>
+                            Patent Commercialization
+                            {!availablePages.includes('patentCommercialization') && ' (No Data)'}
+                          </div>
+                          <div className={`text-sm ${
+                            availablePages.includes('patentCommercialization')
+                              ? 'text-gray-600'
+                              : 'text-gray-400'
+                          }`}>
+                            Commercialize patents
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </button>
+                    </button>
+                  </PatentCommercializationTooltip>
 
                   {/* Page 9 - Post Grant Opposition */}
-                  <button
-                    onClick={() => handleNavigateToPage('post-grant-opposition', assetToView.asset_id)}
-                    disabled={!availablePages.includes('postGrantOpposition')}
-                    className={`group p-4 border rounded-lg transition-all duration-200 shadow-sm ${
-                      availablePages.includes('postGrantOpposition')
-                        ? 'bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200 hover:from-gray-100 hover:to-gray-200 hover:shadow-md'
-                        : 'bg-gray-50 border-gray-200 cursor-not-allowed opacity-60'
-                    }`}
+                  <PostGrantOppositionTooltip 
+                    assetId={assetToView.asset_id}
+                    tileIndex={8}
+                    totalTiles={9}
+                    isEnabled={availablePages.includes('postGrantOpposition')}
                   >
-                    <div className="flex items-center space-x-3">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-200 ${
+                    <button
+                      onClick={() => handleNavigateToPage('post-grant-opposition', assetToView.asset_id)}
+                      disabled={!availablePages.includes('postGrantOpposition')}
+                      className={`group p-4 border rounded-lg transition-all duration-200 shadow-sm ${
                         availablePages.includes('postGrantOpposition')
-                          ? 'bg-gray-600 group-hover:scale-110'
-                          : 'bg-gray-400'
-                      }`}>
-                        <span className="text-white font-bold text-sm">9</span>
-                      </div>
-                      <div className="text-left">
-                        <div className={`font-semibold ${
+                          ? 'bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200 hover:from-gray-100 hover:to-gray-200 hover:shadow-md'
+                          : 'bg-gray-50 border-gray-200 cursor-not-allowed opacity-60'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-200 ${
                           availablePages.includes('postGrantOpposition')
-                            ? 'text-gray-900 group-hover:text-gray-700'
-                            : 'text-gray-500'
+                            ? 'bg-gray-600 group-hover:scale-110'
+                            : 'bg-gray-400'
                         }`}>
-                          Post Grant Opposition
-                          {!availablePages.includes('postGrantOpposition') && ' (No Data)'}
+                          <span className="text-white font-bold text-sm">9</span>
                         </div>
-                        <div className={`text-sm ${
-                          availablePages.includes('postGrantOpposition')
-                            ? 'text-gray-600'
-                            : 'text-gray-400'
-                        }`}>
-                          Handle oppositions
+                        <div className="text-left">
+                          <div className={`font-semibold ${
+                            availablePages.includes('postGrantOpposition')
+                              ? 'text-gray-900 group-hover:text-gray-700'
+                              : 'text-gray-500'
+                          }`}>
+                            Post Grant Opposition
+                            {!availablePages.includes('postGrantOpposition') && ' (No Data)'}
+                          </div>
+                          <div className={`text-sm ${
+                            availablePages.includes('postGrantOpposition')
+                              ? 'text-gray-600'
+                              : 'text-gray-400'
+                          }`}>
+                            Handle oppositions
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </button>
+                    </button>
+                  </PostGrantOppositionTooltip>
                 </div>
               </div>
 

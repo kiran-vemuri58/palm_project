@@ -4,10 +4,8 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export async function GET(request, { params }) {
-  console.log('🔍 Get Extraction API called');
   try {
     const { assetId } = params;
-    console.log('🔍 Fetching extraction data for Asset ID:', assetId);
     
     if (!assetId) {
       return NextResponse.json(
@@ -26,7 +24,6 @@ export async function GET(request, { params }) {
       }
     });
 
-    console.log('🔍 Extraction data found:', !!extractionData);
 
     if (!extractionData) {
       return NextResponse.json(
@@ -37,6 +34,7 @@ export async function GET(request, { params }) {
         { status: 404 }
       );
     }
+
 
     return NextResponse.json({ 
       success: true, 

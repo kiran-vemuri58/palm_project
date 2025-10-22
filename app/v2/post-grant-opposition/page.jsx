@@ -13,26 +13,34 @@ import PGOPatentabilityExtractorV2 from '@/components/V2/PostGrantOpposition/PGO
 import PGOEffortSheetDetailsV2 from '@/components/V2/PostGrantOpposition/PGOEffortSheetDetailsV2';
 import PGOActivityStatusV2 from '@/components/V2/PostGrantOpposition/PGOActivityStatusV2';
 import useV2Store from '@/store/v2Store';
-import { toast } from 'sonner';
 import axios from 'axios';
 
 const PostGrantOppositionV2 = () => {
   const router = useRouter();
   const { 
     currentAssetId, 
-    postGrantOpposition, 
     updateFormData, 
     setStoreData, 
     markFormAsSaved,
-    loadFormDataFromAPI 
+  // No need for API loading functions - data is pre-loaded from assets page 
   } = useV2Store();
+  
+  const postGrantOpposition = useV2Store((state) => state.getFormData('postGrantOpposition'));
   const [mounted, setMounted] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
   // Prevent hydration mismatch
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const showNotification = (message, type = 'success') => {
+    setNotification({ show: true, message, type });
+    setTimeout(() => {
+      setNotification({ show: false, message: '', type: '' });
+    }, 3000); // Hide after 3 seconds - same as Forms 1, 2, 3 & 4
+  };
 
   // Redirect if no assetId
   useEffect(() => {
@@ -41,35 +49,18 @@ const PostGrantOppositionV2 = () => {
     }
   }, [mounted, currentAssetId, router]);
 
-  // Load data from API when component mounts
-  useEffect(() => {
-    if (mounted && currentAssetId) {
-      loadDataFromAPI();
-    }
-  }, [mounted, currentAssetId]);
+  // No need to load data - it's already in store from assets page
+  // Data is pre-loaded when user clicks "View" from assets page
 
   // Create a wrapper function for updateFormData
   const handleUpdateFormData = (field, value) => {
-    console.log('🔄 PGO Form Update:', { field, value });
     updateFormData('postGrantOpposition', field, value);
-  };
-
-  // Load data from API
-  const loadDataFromAPI = async () => {
-    try {
-      const mappedData = await loadFormDataFromAPI(currentAssetId, 'postGrantOpposition');
-      if (mappedData) {
-        console.log('✅ PGO data loaded from API:', mappedData);
-      }
-    } catch (error) {
-      console.error('❌ Error loading PGO data from API:', error);
-    }
   };
 
   // Save data to API
   const handleSave = async () => {
     if (!currentAssetId) {
-      toast.error('No Asset ID found. Please create an asset first.');
+      showNotification('No Asset ID found. Please create an asset first.', 'error');
       return;
     }
 
@@ -81,8 +72,6 @@ const PostGrantOppositionV2 = () => {
         asset_id: currentAssetId,
         ...postGrantOpposition
       };
-
-      console.log('📦 PGO payload being sent:', payload);
 
       // Send data to API
       const response = await axios.post('/api/pgo', payload);
@@ -103,9 +92,8 @@ const PostGrantOppositionV2 = () => {
           ? `Post Grant Opposition updated successfully!`
           : `Post Grant Opposition saved successfully!`;
         
-        toast.success(message);
+        showNotification(message, 'success');
         
-        console.log('✅ PGO data saved and mapped to store:', savedData);
       } else {
         throw new Error(response.data.message || 'Save failed');
       }
@@ -114,11 +102,11 @@ const PostGrantOppositionV2 = () => {
       
       if (error.response) {
         const errorMessage = error.response.data?.message || 'Database error occurred';
-        toast.error(errorMessage);
+        showNotification(errorMessage, 'error');
       } else if (error.request) {
-        toast.error('Network error. Please check your connection and try again.');
+        showNotification('Network error. Please check your connection and try again.', 'error');
       } else {
-        toast.error('Error saving data. Please try again.');
+        showNotification('Error saving data. Please try again.', 'error');
       }
     } finally {
       setIsSaving(false);
@@ -264,8 +252,45 @@ const PostGrantOppositionV2 = () => {
               )}
             </button>
           </div>
+
         </div>
       </div>
+
+      {/* Beautiful Notification Popup - Same as Forms 1, 2, 3 & 4 */}
+      {notification.show && (
+        <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-right duration-300">
+          <div className={`px-6 py-4 rounded-lg shadow-lg border-l-4 flex items-center space-x-3 ${
+            notification.type === 'success' 
+              ? 'bg-green-50 border-green-400 text-green-800' 
+              : 'bg-red-50 border-red-400 text-red-800'
+          }`}>
+            <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+              notification.type === 'success' ? 'bg-green-100' : 'bg-red-100'
+            }`}>
+              {notification.type === 'success' ? (
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+              )}
+            </div>
+            <div>
+              <p className="font-semibold text-sm">{notification.message}</p>
+            </div>
+            <button
+              onClick={() => setNotification({ show: false, message: '', type: '' })}
+              className="ml-4 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

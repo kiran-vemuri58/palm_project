@@ -1,9 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
-import { toast } from 'sonner';
+// Removed toast import - using custom notification instead
 import SimpleProtectedRoute from '@/components/SimpleProtectedRoute';
 import V2Navigation from '@/components/V2Navigation';
 import InventionDetailsV2 from '@/components/V2/InventionDetailsV2';
@@ -16,31 +15,34 @@ import NationalPhaseV2 from '@/components/V2/NationalPhaseV2';
 import useV2Store from '@/store/v2Store';
 
 function PatentSpecificationV2Content() {
-  const searchParams = useSearchParams();
-  const assetId = searchParams.get('assetId');
-  const isNew = searchParams.get('new');
-  const isEdit = searchParams.get('edit');
   
   // Get form data and actions from store
   const formData = useV2Store((state) => state.getFormData('patentSpecification'));
   const updateFormData = useV2Store((state) => state.updateFormData);
   const currentAssetId = useV2Store((state) => state.currentAssetId);
   const setCurrentAssetId = useV2Store((state) => state.setCurrentAssetId);
-  const ensurePageDataLoaded = useV2Store((state) => state.ensurePageDataLoaded);
-  const ensurePage1DataLoaded = useV2Store((state) => state.ensurePage1DataLoaded);
+  // No need for API loading functions - data is pre-loaded from assets page
   const errors = useV2Store((state) => state.errors);
-  const [isLoadingData, setIsLoadingData] = useState(false);
+  // No loading state needed - data is pre-loaded from assets page
   const [isSaving, setIsSaving] = useState(false);
+  const [notification, setNotification] = useState({ show: false, message: '', type: '' });
   
   // Get Page 1 data for Invention Details display
   const page1Data = useV2Store((state) => state.getFormData('inventionRecognition'));
   
+  const showNotification = (message, type = 'success') => {
+    setNotification({ show: true, message, type });
+    setTimeout(() => {
+      setNotification({ show: false, message: '', type: '' });
+    }, 3000); // Hide after 3 seconds - same as Forms 1, 2 & 3
+  };
+  
   // Handle Save
   const handleSave = async () => {
-    const targetAssetId = assetId || currentAssetId;
+    const targetAssetId = currentAssetId;
     
     if (!targetAssetId) {
-      toast.error('Cannot save: No Asset ID available. Please save Form 1 first.');
+      showNotification('Cannot save: No Asset ID available. Please save Form 1 first.', 'error');
       return;
     }
     
@@ -64,7 +66,7 @@ function PatentSpecificationV2Content() {
       });
       
       if (response.data.success) {
-        toast.success(response.data.message || 'Patent Specification saved successfully!');
+        showNotification(response.data.message || 'Patent Specification saved successfully!', 'success');
         console.log('✅ Patent Specification saved:', response.data);
         
         // Update store with the data returned from API (ensures store matches DB)
@@ -83,11 +85,11 @@ function PatentSpecificationV2Content() {
           console.log('✅ Store updated with latest data from API');
         }
       } else {
-        toast.error(response.data.message || 'Failed to save Patent Specification');
+        showNotification(response.data.message || 'Failed to save Patent Specification', 'error');
       }
     } catch (error) {
       console.error('❌ Error saving Patent Specification:', error);
-      toast.error(error.response?.data?.message || error.message || 'Failed to save Patent Specification');
+      showNotification(error.response?.data?.message || error.message || 'Failed to save Patent Specification', 'error');
     } finally {
       setIsSaving(false);
     }
@@ -102,51 +104,16 @@ function PatentSpecificationV2Content() {
   };
 
   // Memoize the initialization function to prevent unnecessary re-renders
-  const initializeData = useCallback(async () => {
-    const targetAssetId = assetId || currentAssetId;
-    
-    if (assetId && !currentAssetId) {
-      setCurrentAssetId(assetId);
-    }
-    
-    // Only make API calls if we have an asset ID (not for new assets)
-    if (targetAssetId) {
-      setIsLoadingData(true);
-      try {
-        await ensurePageDataLoaded(targetAssetId, 'patentSpecification');
-        
-        // Ensure Page 1 data is loaded for Invention Details display
-        await ensurePage1DataLoaded(targetAssetId);
-        
-        // Force a re-render by getting fresh data
-        const freshPage1Data = useV2Store.getState().getFormData('inventionRecognition');
-      } catch (error) {
-        console.error('Error loading data:', error);
-      } finally {
-        setIsLoadingData(false);
-      }
-    }
-    // For new assets (no assetId), just use store data without API calls
-  }, [assetId, currentAssetId, setCurrentAssetId, ensurePageDataLoaded, ensurePage1DataLoaded]);
+  // No need to load data - it's already in store from assets page
+  // Data is pre-loaded when user clicks "View" from assets page
 
-  // Set asset ID and ensure data is loaded when component mounts
-  useEffect(() => {
-    initializeData();
-  }, [initializeData]);
+  // No useEffect needed - data is pre-loaded from assets page
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <V2Navigation />
       
-      {/* Loading indicator */}
-      {isLoadingData && (
-        <div className="fixed top-20 right-4 z-50 bg-blue-100 text-blue-800 px-4 py-3 rounded-md text-sm font-medium shadow-lg">
-          <div className="flex items-center space-x-2">
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-            <span>Loading data from server...</span>
-          </div>
-        </div>
-      )}
+      {/* No loading indicator needed - data is pre-loaded from assets page */}
       
       <div className="p-8">
         <div className="max-w-6xl mx-auto">
@@ -304,8 +271,45 @@ function PatentSpecificationV2Content() {
             </button>
           </div>
 
+
         </div>
       </div>
+
+      {/* Beautiful Notification Popup - Same as Forms 1, 2 & 3 */}
+      {notification.show && (
+        <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-right duration-300">
+          <div className={`px-6 py-4 rounded-lg shadow-lg border-l-4 flex items-center space-x-3 ${
+            notification.type === 'success' 
+              ? 'bg-green-50 border-green-400 text-green-800' 
+              : 'bg-red-50 border-red-400 text-red-800'
+          }`}>
+            <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+              notification.type === 'success' ? 'bg-green-100' : 'bg-red-100'
+            }`}>
+              {notification.type === 'success' ? (
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+              )}
+            </div>
+            <div>
+              <p className="font-semibold text-sm">{notification.message}</p>
+            </div>
+            <button
+              onClick={() => setNotification({ show: false, message: '', type: '' })}
+              className="ml-4 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

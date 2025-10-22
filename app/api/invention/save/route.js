@@ -4,10 +4,8 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export async function POST(request) {
-  console.log('💾 Save Invention API called');
   try {
     const data = await request.json();
-    console.log('💾 Received data:', data);
     
     // Validate required fields
     if (!data.asset_id || !data.inventiontitle || !data.commonname || !data.inventordetails) {
@@ -21,21 +19,18 @@ export async function POST(request) {
     }
 
     // Check if asset already exists
-    const existingInvention = await prisma.invention.findUnique({
+    const existingInvention = await prisma.Invention.findUnique({
       where: {
         asset_id: data.asset_id
       }
     });
 
-    console.log('🔍 Existing invention found:', !!existingInvention);
-    console.log('🔍 Asset ID:', data.asset_id);
 
     let result;
 
     if (existingInvention) {
       // Update existing invention
-      console.log('🔄 Updating existing invention...');
-      result = await prisma.invention.update({
+      result = await prisma.Invention.update({
         where: {
           asset_id: data.asset_id
         },
@@ -77,8 +72,7 @@ export async function POST(request) {
       });
     } else {
       // Create new invention
-      console.log('➕ Creating new invention...');
-      result = await prisma.invention.create({
+      result = await prisma.Invention.create({
         data: {
           asset_id: data.asset_id,
           inventiontitle: data.inventiontitle,

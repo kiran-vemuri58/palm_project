@@ -16,14 +16,8 @@ const IE2ExtractorDetailsV2 = ({ formData, updateFormData, page }) => {
   }, [safeFormData.idattachments]);
 
   const handleChange = (field, value) => {
-    if (page) {
-      // Use page-based store integration
-      const storeUpdateFormData = useV2Store.getState().updateFormData;
-      storeUpdateFormData(page, field, value);
-    } else {
-      // Fallback to direct updateFormData prop
-      updateFormData(field, value);
-    }
+    // Always use the updateFormData prop passed from the parent
+    updateFormData(field, value);
   };
 
   const handleFileChange = (fileList) => {

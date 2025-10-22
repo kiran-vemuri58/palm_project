@@ -10,18 +10,18 @@ const PatentFilingAverageRatingV2 = ({ page }) => {
   const updateFormData = useV2Store((state) => state.updateFormData);
 
   const safeFormData = formData || {};
-  const [rating, setRating] = useState(safeFormData.rating || 0);
+  const [rating, setRating] = useState(safeFormData.averageRating || 0);
 
   // Update local state when formData changes
   useEffect(() => {
-    if (safeFormData.rating) {
-      setRating(safeFormData.rating);
+    if (safeFormData.averageRating) {
+      setRating(safeFormData.averageRating);
     }
-  }, [safeFormData.rating]);
+  }, [safeFormData.averageRating]);
 
   const handleRatingChange = (newRating) => {
     setRating(newRating);
-    updateFormData(page, 'rating', newRating);
+    updateFormData(page, 'averageRating', newRating);
   };
 
   const handleChange = (field, value) => {

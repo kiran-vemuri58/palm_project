@@ -9,7 +9,6 @@ export async function GET(req) {
     const assetId = searchParams.get('assetId');
     
     await prisma.$connect();
-    console.log('✅ Database connection successful');
 
     if (assetId) {
       const data = await prisma.PatentProsecution.findFirst({
@@ -46,7 +45,6 @@ export async function GET(req) {
 
 export async function POST(req) {
   try {
-    console.log('🔄 POST /api/patentProsecution called');
     
     // Check if request has body
     const contentType = req.headers.get('content-type');
@@ -68,7 +66,6 @@ export async function POST(req) {
       }, { status: 400 });
     }
     
-    console.log('📦 PatentProsecution payload received:', JSON.stringify(payload, null, 2));
 
     // Map payload to Prisma-compatible field names and ensure array fields are arrays
     const data = {
@@ -98,18 +95,20 @@ export async function POST(req) {
       pped_opinion: payload.pped_opinion || '',
       pped_attachments: payload.pped_attachments || [],
       
-      // PP Patent Prosecution Details fields (pppd_) - Map from old field names
-      pppd_published: payload.patentPublished || '',
-      pppd_publication_number: payload.publicationNumber || '',
-      pppd_any_person_opposed: payload.apopposed || '',
-      pppd_opponent_name: payload.oname || '',
+      // PP Patent Prosecution Details fields (pppd_)
+      pppd_published: payload.pppd_published || '',
+      pppd_publication_number: payload.pppd_publication_number || '',
+      pppd_any_person_opposed: payload.pppd_any_person_opposed || '',
+      pppd_opponent_name: payload.pppd_opponent_name || '',
       pppd_attachments: payload.pppd_attachments || [],
-      pppd_case_filed_by_opposer: payload.cfbopposer || '',
-      pppd_basis_of_action_of_filing: payload.boaof || '',
-      pppd_reason_for_filing_opposition: payload.rffo || '',
-      pppd_opinion_rendered_by_you: payload.orpby || '',
-      pppd_external_agency: payload.eagency || '',
-      pppd_reviewed_by: payload.revby || '',
+      pppd_response_attachments: payload.pppd_response_attachments || [],
+      pppd_review_attachments: payload.pppd_review_attachments || [],
+      pppd_case_filed_by_opposer: payload.pppd_case_filed_by_opposer || '',
+      pppd_basis_of_action_of_filing: payload.pppd_basis_of_action_of_filing || '',
+      pppd_reason_for_filing_opposition: payload.pppd_reason_for_filing_opposition || '',
+      pppd_opinion_rendered_by_you: payload.pppd_opinion_rendered_by_you || '',
+      pppd_external_agency: payload.pppd_external_agency || '',
+      pppd_reviewed_by: payload.pppd_reviewed_by || '',
       
       // PP Patent Application Status fields (ppas_)
       ppas_status: payload.ppas_status || '',
@@ -118,21 +117,21 @@ export async function POST(req) {
       ppas_grant_date: payload.ppas_grant_date || '',
       ppas_rejection_reason_attachment: payload.ppas_rejection_reason_attachment || [],
       
-      // PP FER fields (ppfer_) - Map from old field names
-      ppfer_list: payload.ferList || [],
+      // PP FER fields (ppfer_)
+      ppfer_list: payload.ppfer_list || [],
       
-      // PP Hearing fields (pph_) - Map from old field names
-      pph_list: payload.hearingList || [],
+      // PP Hearing fields (pph_)
+      pph_list: payload.pph_list || [],
       
-      // PP Decision Sheet fields (ppds_) - Map from old field names
-      ppds_name_of_decision_maker: payload.decisionNodc || '',
-      ppds_decision_in_brief: payload.decisionDibrief || '',
-      ppds_attachments: payload.decisionAttachments || [],
+      // PP Decision Sheet fields (ppds_)
+      ppds_name_of_decision_maker: payload.ppds_name_of_decision_maker || '',
+      ppds_decision_in_brief: payload.ppds_decision_in_brief || '',
+      ppds_attachments: payload.ppds_attachments || [],
       
-      // PP Innovation Analysis fields (ppi_) - Map from old field names
-      ppi_more_than_invention: payload.trainRun || '',
-      ppi_prior_art_documents: payload.minuteOfMeeting || [],
-      ppi_npl_documents: payload.attachments || [],
+      // PP Innovation Analysis fields (ppi_)
+      ppi_more_than_invention: payload.ppi_more_than_invention || '',
+      ppi_prior_art_documents: payload.ppi_prior_art_documents || [],
+      ppi_npl_documents: payload.ppi_npl_documents || [],
       
       // PP Patentability Extractor fields (pppe_)
       pppe_searcher1: payload.pppe_searcher1 || '',
@@ -145,17 +144,17 @@ export async function POST(req) {
       pppe_specific_country: payload.pppe_specific_country || '',
       pppe_opinion_of_extractor: payload.pppe_opinion_of_extractor || '',
       
-      // PP Average Patentability Rating fields (ppapr_) - Map from old field names
-      ppapr_rating: payload.rating || 0,
-      ppapr_patent_application_number: payload.patentApplicationNumber || '',
+      // PP Average Patentability Rating fields (ppapr_)
+      ppapr_rating: payload.ppapr_rating || 0,
+      ppapr_patent_application_number: payload.ppapr_patent_application_number || '',
       
-      // PP Effort Sheet fields (ppes_) - Map from old field names
-      ppes_ip_recognizer: payload.ppEffortSheetIpRecognizer || '',
-      ppes_hours_spent: payload.ppEffortSheetHoursSpent || '',
-      ppes_agency_recognizer: payload.ppEffortSheetAgencyRecognizer || '',
-      ppes_agency_cost: payload.ppEffortSheetAgencyCost || '',
-      ppes_review_effort: payload.ppEffortSheetReviewEffort || '',
-      ppes_manager_emp_id: payload.ppEffortSheetManagerEmpId || '',
+      // PP Effort Sheet fields (ppes_)
+      ppes_ip_recognizer: payload.ppes_ip_recognizer || '',
+      ppes_hours_spent: payload.ppes_hours_spent || '',
+      ppes_agency_recognizer: payload.ppes_agency_recognizer || '',
+      ppes_agency_cost: payload.ppes_agency_cost || '',
+      ppes_review_effort: payload.ppes_review_effort || '',
+      ppes_manager_emp_id: payload.ppes_manager_emp_id || '',
       
       // PP Activity Status fields (ppact_)
       ppact_status: payload.ppact_status || '',
@@ -163,13 +162,6 @@ export async function POST(req) {
       ppact_last_updated: payload.ppact_last_updated || ''
     };
 
-    console.log('📊 Data being sent to Prisma:', JSON.stringify(data, null, 2));
-    console.log('🔍 Specific fields check:');
-    console.log('  - ppfer_list:', data.ppfer_list);
-    console.log('  - pph_list:', data.pph_list);
-    console.log('  - ppds_decision_in_brief:', data.ppds_decision_in_brief);
-    console.log('  - pped_one:', data.pped_one);
-    console.log('  - pppe_rating:', data.pppe_rating);
     
     // Check if record exists, then create or update
     const existingRecord = await prisma.PatentProsecution.findFirst({
@@ -212,6 +204,8 @@ export async function POST(req) {
           pppd_any_person_opposed: data.pppd_any_person_opposed,
           pppd_opponent_name: data.pppd_opponent_name,
           pppd_attachments: data.pppd_attachments,
+          pppd_response_attachments: data.pppd_response_attachments,
+          pppd_review_attachments: data.pppd_review_attachments,
           pppd_case_filed_by_opposer: data.pppd_case_filed_by_opposer,
           pppd_basis_of_action_of_filing: data.pppd_basis_of_action_of_filing,
           pppd_reason_for_filing_opposition: data.pppd_reason_for_filing_opposition,
@@ -278,11 +272,6 @@ export async function POST(req) {
       });
     }
 
-    console.log('✅ PatentProsecution upserted successfully:', result);
-    console.log('🔍 Response data check:');
-    console.log('  - ppFerList in response:', result.ppFerList);
-    console.log('  - ppHearingList in response:', result.ppHearingList);
-    console.log('  - ppDecisionInBrief in response:', result.ppDecisionInBrief);
     return NextResponse.json({ 
       success: true, 
       data: result,

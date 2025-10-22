@@ -9,7 +9,6 @@ export async function GET(req) {
     const assetId = searchParams.get('assetId');
     
     await prisma.$connect();
-    console.log('✅ Database connection successful');
 
     if (assetId) {
       const data = await prisma.PatentSpecificInformation.findFirst({
@@ -22,6 +21,7 @@ export async function GET(req) {
           message: 'Patent Specific Information not found' 
         }, { status: 404 });
       }
+
 
       return NextResponse.json({ 
         success: true, 
@@ -46,7 +46,6 @@ export async function GET(req) {
 
 export async function POST(req) {
   try {
-    console.log('🔄 POST /api/psp called');
     
     // Check if request has body
     const contentType = req.headers.get('content-type');
@@ -68,7 +67,6 @@ export async function POST(req) {
       }, { status: 400 });
     }
     
-    console.log('📦 PSP payload received:', JSON.stringify(payload, null, 2));
 
     // Map payload to Prisma-compatible field names and ensure array fields are arrays
     const data = {
@@ -169,7 +167,6 @@ export async function POST(req) {
       mres: payload.mres || '',
     };
 
-    console.log('📊 Data being sent to Prisma:', JSON.stringify(data, null, 2));
     
     // Check if record exists, then create or update
     const existingRecord = await prisma.PatentSpecificInformation.findFirst({
@@ -277,11 +274,10 @@ export async function POST(req) {
       });
     }
 
-    console.log('✅ PatentSpecificInformation upserted successfully:', result);
     return NextResponse.json({ 
       success: true, 
       data: result,
-      message: result.createdAt === result.updatedAt ? 'Patent Specific Information created successfully' : 'Patent Specific Information updated successfully'
+      message: existingRecord ? 'Patent Specific Information updated successfully' : 'Patent Specific Information created successfully'
     }, { status: 200 });
   } catch (err) {
     console.error('❌ Error inserting PatentSpecificInformation:', err);

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import SimpleProtectedRoute from '@/components/SimpleProtectedRoute';
 import V2Navigation from '@/components/V2Navigation';
@@ -17,11 +17,7 @@ import EffortSheetV2 from '@/components/V2/EffortSheetV2';
 import ActivityStatusV2 from '@/components/V2/ActivityStatusV2';
 
 function InventionExtractionV2Content() {
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const assetId = searchParams.get('assetId');
-  const isNew = searchParams.get('new');
-  const isEdit = searchParams.get('edit');
   
   // Get form data and actions from store
   const formData = useV2Store((state) => state.getFormData('inventionExtraction'));
@@ -29,27 +25,29 @@ function InventionExtractionV2Content() {
   const setCurrentAssetId = useV2Store((state) => state.setCurrentAssetId);
   const setErrors = useV2Store((state) => state.setErrors);
   const currentAssetId = useV2Store((state) => state.currentAssetId);
+  const mapAPIDataToStore = useV2Store((state) => state.mapAPIDataToStore);
+  const setStoreData = useV2Store((state) => state.setStoreData);
+
+  // Wrapper function to handle updateFormData calls from components
+  const handleUpdateFormData = (field, value) => {
+    updateFormData('inventionExtraction', field, value);
+  };
 
   // Redirect to Page 1 if no asset ID is present
   useEffect(() => {
-    if (!assetId && !currentAssetId) {
+    if (!currentAssetId) {
       setIsRedirecting(true);
       router.push('/v2/invention-recognition?new=true');
     }
-  }, [assetId, currentAssetId, router]);
-  const loadFormDataFromAPI = useV2Store((state) => state.loadFormDataFromAPI);
-  const mapAPIDataToStore = useV2Store((state) => state.mapAPIDataToStore);
-  const setStoreData = useV2Store((state) => state.setStoreData);
-  const ensurePageDataLoaded = useV2Store((state) => state.ensurePageDataLoaded);
-  const ensurePage1DataLoaded = useV2Store((state) => state.ensurePage1DataLoaded);
-  const refreshStoreAfterAPI = useV2Store((state) => state.refreshStoreAfterAPI);
-  const clearAllDataAndAssetId = useV2Store((state) => state.clearAllDataAndAssetId);
+  }, [currentAssetId, router]);
+  // No need for API loading functions - data is pre-loaded from assets page
   
   // Get Page 1 data for Invention Details display
   const page1Data = useV2Store((state) => state.getFormData('inventionRecognition'));
   
   const errors = useV2Store((state) => state.errors);
   const [notification, setNotification] = useState({ show: false, message: '', type: '' });
+  const [isSaving, setIsSaving] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
 
@@ -91,6 +89,7 @@ function InventionExtractionV2Content() {
   };
 
   const handleSave = async () => {
+    setIsSaving(true);
     
     // No mandatory fields validation for Page 2 - all fields are optional
     const newErrors = {};
@@ -99,10 +98,10 @@ function InventionExtractionV2Content() {
         // Type casting and validation
         const convertedData = convertForDatabase(formData);
         
-        let assetNumber = currentAssetId || assetId;
+        let assetNumber = currentAssetId;
         
-        // Generate new asset ID only for new assets
-        if (isNew === 'true' && !assetNumber) {
+        // Generate new asset ID only for new assets (when no current asset ID)
+        if (!assetNumber) {
           try {
             const response = await axios.get('/api/invention/generate-asset-id');
             
@@ -208,47 +207,20 @@ function InventionExtractionV2Content() {
         } else {
           // Other errors
           showNotification('Error saving data. Please try again.', 'error');
-        }
       }
+    }
+    
+    setIsSaving(false);
   };
 
   // Load data from API when we have an Asset ID
-  const loadDataFromAPI = async (assetIdToLoad) => {
-    try {
-      setIsLoadingData(true);
-      
-      // Use store's automatic data loading and mapping
-      const mappedData = await loadFormDataFromAPI(assetIdToLoad, 'inventionExtraction');
-      
-      if (mappedData) {
-      }
-    } catch (error) {
-      console.error('❌ Error loading data from API:', error);
-    } finally {
-      setIsLoadingData(false);
-    }
-  };
+  // No need to load data - it's already in store from assets page
 
   // Memoize the initialization function to prevent unnecessary re-renders
   const initializeData = useCallback(async () => {
-    const targetAssetId = assetId || currentAssetId;
-    
-    if (assetId && !currentAssetId) {
-      setCurrentAssetId(assetId);
-    }
-    
-    // Only make API calls if we have an asset ID (not for new assets)
-    if (targetAssetId) {
-      await ensurePageDataLoaded(targetAssetId, 'inventionExtraction');
-      
-      // Ensure Page 1 data is loaded for Invention Details display
-      await ensurePage1DataLoaded(targetAssetId);
-      
-      // Force a re-render by getting fresh data
-      const freshPage1Data = useV2Store.getState().getFormData('inventionRecognition');
-    }
-    // For new assets (no assetId), just use store data without API calls
-  }, [assetId, currentAssetId, setCurrentAssetId, ensurePageDataLoaded, ensurePage1DataLoaded]);
+    // No API calls needed - data is pre-loaded from assets page
+    // Data is already in store when user navigates from assets page
+  }, []);
 
   // Set asset ID and ensure data is loaded when component mounts
   useEffect(() => {
@@ -271,15 +243,7 @@ function InventionExtractionV2Content() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <V2Navigation />
       
-      {/* Loading indicator */}
-      {isLoadingData && (
-        <div className="fixed top-20 right-4 z-50 bg-blue-100 text-blue-800 px-4 py-3 rounded-md text-sm font-medium shadow-lg">
-          <div className="flex items-center space-x-2">
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-            <span>Loading data from server...</span>
-          </div>
-        </div>
-      )}
+      {/* No loading indicator needed - data is pre-loaded from assets page */}
       
       {/* Notification Toast */}
       {notification.show && (
@@ -314,13 +278,13 @@ function InventionExtractionV2Content() {
             </div>
             
             {/* Asset ID Display */}
-            {(currentAssetId || assetId) && (
+            {currentAssetId && (
               <div className="bg-blue-100 border border-blue-200 rounded-lg px-4 py-3">
                 <div className="flex items-center space-x-2">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                   <span className="text-sm font-medium text-blue-700">Asset ID:</span>
                   <span className="text-lg font-bold text-blue-900 font-mono">
-                    {currentAssetId || assetId}
+                    {currentAssetId}
                   </span>
                 </div>
               </div>
@@ -359,7 +323,7 @@ function InventionExtractionV2Content() {
               page="inventionExtraction"
               errors={errors}
               formData={formData}
-              updateFormData={updateFormData}
+              updateFormData={handleUpdateFormData}
             />
             
 
@@ -388,11 +352,24 @@ function InventionExtractionV2Content() {
           <div className="mt-8 flex justify-center">
             <button
               onClick={handleSave}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              disabled={isSaving}
+              className={`px-8 py-4 font-semibold text-lg rounded-xl transition-all duration-200 shadow-lg transform hover:-translate-y-1 cursor-pointer ${
+                isSaving 
+                  ? 'bg-gray-400 text-gray-200 cursor-not-allowed opacity-70' 
+                  : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-xl'
+              }`}
             >
-              💾 Save Extraction Details
+              {isSaving ? (
+                <>
+                  <span className="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></span>
+                  Saving...
+                </>
+              ) : (
+                '💾 Save Extraction Details'
+              )}
             </button>
           </div>
+
 
         </div>
       </div>

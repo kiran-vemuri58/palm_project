@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { useSearchParams } from 'next/navigation';
 import SimpleProtectedRoute from '@/components/SimpleProtectedRoute';
 import V2Navigation from '@/components/V2Navigation';
 import InventionDetailsV2 from '@/components/V2/InventionDetailsV2';
@@ -17,10 +16,6 @@ import axios from 'axios';
 import CryptoJS from 'crypto-js';
 
 function InventionRecognitionV2Content() {
-  const searchParams = useSearchParams();
-  const assetId = searchParams.get('assetId');
-  const isNew = searchParams.get('new');
-  const isEdit = searchParams.get('edit');
   
   // Get form data and actions from store
   const formData = useV2Store((state) => state.getFormData('inventionRecognition'));
@@ -28,17 +23,12 @@ function InventionRecognitionV2Content() {
   const setCurrentAssetId = useV2Store((state) => state.setCurrentAssetId);
   const setErrors = useV2Store((state) => state.setErrors);
   const currentAssetId = useV2Store((state) => state.currentAssetId);
-  const loadFormDataFromAPI = useV2Store((state) => state.loadFormDataFromAPI);
-  const mapAPIDataToStore = useV2Store((state) => state.mapAPIDataToStore);
-  const setStoreData = useV2Store((state) => state.setStoreData);
-  const ensurePageDataLoaded = useV2Store((state) => state.ensurePageDataLoaded);
-  const refreshStoreAfterAPI = useV2Store((state) => state.refreshStoreAfterAPI);
-  const clearAllDataAndAssetId = useV2Store((state) => state.clearAllDataAndAssetId);
   const markFormAsSaved = useV2Store((state) => state.markFormAsSaved);
   
   const errors = useV2Store((state) => state.errors);
   const [notification, setNotification] = useState({ show: false, message: '', type: '' });
-  const [isLoadingData, setIsLoadingData] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  // No loading state needed - data is pre-loaded from assets page
 
   const showNotification = (message, type = 'success') => {
     setNotification({ show: true, message, type });
@@ -99,6 +89,7 @@ function InventionRecognitionV2Content() {
   };
 
   const handleSave = async () => {
+    setIsSaving(true);
     
     // Basic validation for all required fields
     const newErrors = {};
@@ -125,10 +116,10 @@ function InventionRecognitionV2Content() {
         // Type casting and validation
         const convertedData = convertForDatabase(formData);
         
-        let assetNumber = currentAssetId || assetId;
+        let assetNumber = currentAssetId;
         
-        // Generate new asset ID only for new assets
-        if (isNew === 'true' && !assetNumber) {
+        // Generate new asset ID only for new assets (when no current asset ID)
+        if (!assetNumber) {
           try {
             const response = await axios.get('/api/invention/generate-asset-id');
             
@@ -163,10 +154,9 @@ function InventionRecognitionV2Content() {
               }
               
               assetNumber = finalAssetId;
-              setCurrentAssetId(assetNumber);
+              // Don't set currentAssetId yet - wait until database save is complete
               
-              // Refresh store after asset ID generation to ensure consistency
-              await refreshStoreAfterAPI(assetNumber, 'inventionRecognition');
+              // No need to refresh store - data will be mapped after save
             } else {
               throw new Error('Failed to generate asset ID');
             }
@@ -225,10 +215,13 @@ function InventionRecognitionV2Content() {
           
           // Instead of mapping save response, reload data from API to ensure correct format
           console.log('🔄 Reloading data from API after save to ensure correct format');
-          await loadFormDataFromAPI(assetNumber, 'inventionRecognition');
+        // No need to reload data - it's already in store
           
           // Mark Form 1 as saved
           markFormAsSaved('inventionRecognition');
+          
+          // NOW set the currentAssetId to enable navigation - after successful save
+          setCurrentAssetId(assetNumber);
           
           // Determine if this was a create or update based on API response
           const isUpdate = dbResponse.data.message && dbResponse.data.message.includes('updated');
@@ -270,39 +263,18 @@ function InventionRecognitionV2Content() {
       const missingList = missingFields.join(', ');
       showNotification(`Required fields are missing: ${missingList}`, 'error');
     }
+    
+    setIsSaving(false);
   };
 
   // Load data from API when we have an Asset ID
-  const loadDataFromAPI = async (assetIdToLoad) => {
-    try {
-      setIsLoadingData(true);
-      
-      // Use store's automatic data loading and mapping
-      const mappedData = await loadFormDataFromAPI(assetIdToLoad, 'inventionRecognition');
-      
-      if (mappedData) {
-      }
-    } catch (error) {
-      console.error('❌ Error loading data from API:', error);
-    } finally {
-      setIsLoadingData(false);
-    }
-  };
 
   // Memoize the initialization function to prevent unnecessary re-renders
   const initializeData = useCallback(async () => {
-    const targetAssetId = assetId || currentAssetId;
-    
-    if (targetAssetId) {
-      if (assetId && !currentAssetId) {
-        setCurrentAssetId(assetId);
-      }
-      
-      // Always reload data from API to ensure we have the latest data
-      console.log('🔄 Force reloading Form 1 data from API for Asset ID:', targetAssetId);
-      await loadFormDataFromAPI(targetAssetId, 'inventionRecognition');
-    }
-  }, [assetId, currentAssetId, setCurrentAssetId, loadFormDataFromAPI]);
+    // No need to load data - it's already in store from assets page
+    // Data is pre-loaded when user clicks "View" from assets page
+    console.log('✅ Form 1 initialized with Asset ID:', currentAssetId);
+  }, [currentAssetId]);
 
   // Set asset ID and ensure data is loaded when component mounts
   useEffect(() => {
@@ -315,15 +287,7 @@ function InventionRecognitionV2Content() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <V2Navigation />
       
-      {/* Loading indicator */}
-      {isLoadingData && (
-        <div className="fixed top-20 right-4 z-50 bg-blue-100 text-blue-800 px-4 py-3 rounded-md text-sm font-medium shadow-lg">
-          <div className="flex items-center space-x-2">
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-            <span>Loading data from server...</span>
-          </div>
-        </div>
-      )}
+      {/* No loading indicator needed - data is pre-loaded from assets page */}
       
       {/* Notification Toast */}
       {notification.show && (
@@ -372,13 +336,13 @@ function InventionRecognitionV2Content() {
               </div>
               
               {/* Asset ID Display */}
-              {(currentAssetId || assetId) && (
+              {currentAssetId && (
                 <div className="bg-blue-100 border border-blue-200 rounded-lg px-4 py-3">
                   <div className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                     <span className="text-sm font-medium text-blue-700">Asset ID:</span>
                     <span className="text-lg font-bold text-blue-900 font-mono">
-                      {currentAssetId || assetId}
+                      {currentAssetId}
                     </span>
                   </div>
                 </div>
@@ -393,7 +357,7 @@ function InventionRecognitionV2Content() {
               errors={errors}
               isEditable={true}
               showOnlyBasicFields={true}
-              isNewAsset={isNew === 'true'}
+              isNewAsset={!currentAssetId}
             />
 
             {/* Add Inventor Section */}
@@ -401,7 +365,7 @@ function InventionRecognitionV2Content() {
               <AddInventorV2
                 page="inventionRecognition"
                 isEditable={true}
-                isNewAsset={isNew === 'true'}
+                isNewAsset={!currentAssetId}
               />
             </div>
 
@@ -411,7 +375,7 @@ function InventionRecognitionV2Content() {
                 page="inventionRecognition"
                 errors={errors}
                 isEditable={true}
-                isNewAsset={isNew === 'true'}
+                isNewAsset={!currentAssetId}
               />
             </div>
 
@@ -421,7 +385,7 @@ function InventionRecognitionV2Content() {
                 page="inventionRecognition"
                 errors={errors}
                 isEditable={true}
-                isNewAsset={isNew === 'true'}
+                isNewAsset={!currentAssetId}
               />
             </div>
 
@@ -431,7 +395,7 @@ function InventionRecognitionV2Content() {
                 page="inventionRecognition"
                 errors={errors}
                 isEditable={true}
-                isNewAsset={isNew === 'true'}
+                isNewAsset={!currentAssetId}
               />
             </div>
 
@@ -441,7 +405,7 @@ function InventionRecognitionV2Content() {
                 page="inventionRecognition"
                 errors={errors}
                 isEditable={true}
-                isNewAsset={isNew === 'true'}
+                isNewAsset={!currentAssetId}
                 title="Effort Sheet Details"
                 description="Track time, costs, and responsibilities for invention recognition process"
               />
@@ -453,7 +417,7 @@ function InventionRecognitionV2Content() {
                 page="inventionRecognition"
                 errors={errors}
                 isEditable={true}
-                isNewAsset={isNew === 'true'}
+                isNewAsset={!currentAssetId}
                 title="Activity Status"
                 description="Track the current status of invention recognition process"
               />
@@ -464,11 +428,24 @@ function InventionRecognitionV2Content() {
           <div className="flex justify-center mt-8">
             <button
               onClick={handleSave}
-              className="px-8 py-4 bg-blue-600 text-white font-semibold text-lg rounded-xl hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              disabled={isSaving}
+              className={`px-8 py-4 font-semibold text-lg rounded-xl transition-all duration-200 shadow-lg transform hover:-translate-y-1 cursor-pointer ${
+                isSaving 
+                  ? 'bg-gray-400 text-gray-200 cursor-not-allowed opacity-70' 
+                  : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-xl'
+              }`}
             >
-              💾 Save Invention Recognition
+              {isSaving ? (
+                <>
+                  <span className="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></span>
+                  Saving...
+                </>
+              ) : (
+                '💾 Save Invention Recognition'
+              )}
             </button>
           </div>
+
 
         </div>
       </div>

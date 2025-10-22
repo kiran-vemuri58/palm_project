@@ -385,6 +385,10 @@ model PatentFiling {
   
   // Average Rating fields
   patentApplicationNumber    String?
+  averageRating             Int?
+  
+  // Patentability Extractor Rating field
+  patentabilityRating       Int?
   
   // Effort Sheet fields
   ipRecognizer               String?
@@ -414,6 +418,30 @@ model PatentFiling {
   applicationProvisionalNumber String?
   datePatentApplication      String?
   pctFilingPermission        String?
+  
+  // Additional PCT fields
+  pctAgencyCost              String?
+  pctAgencyRecognizer        String?
+  pctApplicationNumber       String?
+  pctBroadenedFeature        String?
+  pctCitedPatent             String?
+  pctCountryFiling           String?
+  pctDependentClaim          String?
+  pctDrafterEmpId            String?
+  pctDrafterName             String?
+  pctDraftingEffort          String?
+  pctHoursSpent              String?
+  pctIndependentClaim        String?
+  pctIsProfit                String?
+  pctManagerEmpId            String?
+  pctReviewBy                String?
+  pctReviewEffort            String?
+  
+  // Additional Patentability Analysis fields
+  nfeature                   String?
+  ifeature                   String?
+  oextractor                 String?
+  scountry                   String?
 
   // National Phase fields
   dateProvisionalPatent      String?
@@ -421,6 +449,29 @@ model PatentFiling {
   datePCTPatentApplication   String?
   finalSubmitted             String?
   filedForms                 String[] @default([])
+  
+  // Additional National Phase fields
+  npAgencyCost               String?
+  npAgencyRecognizer         String?
+  npApplicationCountry       String?
+  npApplicationNumber        String?
+  npBroadenedFeature         String?
+  npCitedPatent              String?
+  npDependentClaim           String?
+  npDrafterEmpId             String?
+  npDrafterName              String?
+  npDraftingEffort           String?
+  npFormsPrepared            String?
+  npHoursSpent               String?
+  npIndependentClaim         String?
+  npIsDefensive              String?
+  npIsProfit                 String?
+  npManagerEmpId             String?
+  npPCTDate                  String?
+  npPCTOrProvisionalDate     String?
+  npPCTPublication           String?
+  npReviewBy                 String?
+  npReviewEffort             String?
 
   // Complete fields
   dateOfPatent               String?
@@ -431,6 +482,37 @@ model PatentFiling {
   filedFormsComplete         String[] @default([])
   dateOfComplete             String?
   isPostDated                String?
+  
+  // Additional Complete Specification fields
+  isProvisionalFiled         String?
+  provisionalSpecDate        String?
+  applicationNumber          String?
+  isPCTFiled                 String?
+  pctFilingDate              String?
+  citedPatent                String?
+  independentClaim           String?
+  dependentClaim             String?
+  broadenedFeature           String?
+  draftingEffort             String?
+  drafterEmpId               String?
+  
+  // Additional Provisional Application fields
+  nodrafter                  String?
+  noreviewer                 String?
+  bned                       String?
+  ifdescribed                String?
+  toinvention                String?
+  esfd                       String?
+  pdrafter                   String?
+  nohspent                   String?
+  eafd                       String?
+  csoagency                  String?
+  eihfr                      String?
+  mres                       String?
+  
+  // Additional PCT Application fields
+  isDirectPCT                String?
+  pctProvisionalDate         String?
 
   invention      Invention @relation("PatentFiling", fields: [asset_id], references: [asset_id], onDelete: Cascade)
   
@@ -538,6 +620,8 @@ model PatentProsecution {
   pppd_any_person_opposed        String?
   pppd_opponent_name            String?
   pppd_attachments               String[] @default([])
+  pppd_response_attachments      String[] @default([])
+  pppd_review_attachments        String[] @default([])
   pppd_case_filed_by_opposer     String?
   pppd_basis_of_action_of_filing String?
   pppd_reason_for_filing_opposition String?

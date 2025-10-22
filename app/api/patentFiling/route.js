@@ -9,7 +9,6 @@ export async function GET(req) {
     const assetId = searchParams.get('assetId');
     
     await prisma.$connect();
-    console.log('✅ Database connection successful');
 
     if (assetId) {
       const data = await prisma.PatentFiling.findFirst({
@@ -46,7 +45,6 @@ export async function GET(req) {
 
 export async function POST(req) {
   try {
-    console.log('🔄 POST /api/patentFiling called');
     
     // Check if request has body
     const contentType = req.headers.get('content-type');
@@ -68,7 +66,6 @@ export async function POST(req) {
       }, { status: 400 });
     }
     
-    console.log('📦 PatentFiling payload received:', JSON.stringify(payload, null, 2));
 
     // Map payload to Prisma-compatible field names and ensure array fields are arrays
     const data = {
@@ -104,6 +101,10 @@ export async function POST(req) {
       
       // Average Rating fields
       patentApplicationNumber: payload.patentApplicationNumber || '',
+      averageRating: payload.averageRating || 0,
+      
+      // Patentability Extractor Rating field
+      patentabilityRating: payload.patentabilityRating || 0,
       
       // Effort Sheet fields
       ipRecognizer: payload.ipRecognizer || '',
@@ -133,6 +134,30 @@ export async function POST(req) {
       applicationProvisionalNumber: payload.applicationProvisionalNumber || '',
       datePatentApplication: payload.datePatentApplication || '',
       pctFilingPermission: payload.pctFilingPermission || '',
+      
+      // Additional PCT fields
+      pctAgencyCost: payload.pctAgencyCost || '',
+      pctAgencyRecognizer: payload.pctAgencyRecognizer || '',
+      pctApplicationNumber: payload.pctApplicationNumber || '',
+      pctBroadenedFeature: payload.pctBroadenedFeature || '',
+      pctCitedPatent: payload.pctCitedPatent || '',
+      pctCountryFiling: payload.pctCountryFiling || '',
+      pctDependentClaim: payload.pctDependentClaim || '',
+      pctDrafterEmpId: payload.pctDrafterEmpId || '',
+      pctDrafterName: payload.pctDrafterName || '',
+      pctDraftingEffort: payload.pctDraftingEffort || '',
+      pctHoursSpent: payload.pctHoursSpent || '',
+      pctIndependentClaim: payload.pctIndependentClaim || '',
+      pctIsProfit: payload.pctIsProfit || '',
+      pctManagerEmpId: payload.pctManagerEmpId || '',
+      pctReviewBy: payload.pctReviewBy || '',
+      pctReviewEffort: payload.pctReviewEffort || '',
+      
+      // Additional Patentability Analysis fields
+      nfeature: payload.nfeature || '',
+      ifeature: payload.ifeature || '',
+      oextractor: payload.oextractor || '',
+      scountry: payload.scountry || '',
 
       // National Phase fields
       dateProvisionalPatent: payload.dateProvisionalPatent || '',
@@ -140,6 +165,29 @@ export async function POST(req) {
       datePCTPatentApplication: payload.datePCTPatentApplication || '',
       finalSubmitted: payload.finalSubmitted || '',
       filedForms: Array.isArray(payload.filedForms) ? payload.filedForms.filter(item => typeof item === 'string' && item.trim() !== '') : [],
+      
+      // Additional National Phase fields
+      npAgencyCost: payload.npAgencyCost || '',
+      npAgencyRecognizer: payload.npAgencyRecognizer || '',
+      npApplicationCountry: payload.npApplicationCountry || '',
+      npApplicationNumber: payload.npApplicationNumber || '',
+      npBroadenedFeature: payload.npBroadenedFeature || '',
+      npCitedPatent: payload.npCitedPatent || '',
+      npDependentClaim: payload.npDependentClaim || '',
+      npDrafterEmpId: payload.npDrafterEmpId || '',
+      npDrafterName: payload.npDrafterName || '',
+      npDraftingEffort: payload.npDraftingEffort || '',
+      npFormsPrepared: payload.npFormsPrepared || '',
+      npHoursSpent: payload.npHoursSpent || '',
+      npIndependentClaim: payload.npIndependentClaim || '',
+      npIsDefensive: payload.npIsDefensive || '',
+      npIsProfit: payload.npIsProfit || '',
+      npManagerEmpId: payload.npManagerEmpId || '',
+      npPCTDate: payload.npPCTDate || '',
+      npPCTOrProvisionalDate: payload.npPCTOrProvisionalDate || '',
+      npPCTPublication: payload.npPCTPublication || '',
+      npReviewBy: payload.npReviewBy || '',
+      npReviewEffort: payload.npReviewEffort || '',
 
       // Complete fields
       dateOfPatent: payload.dateOfPatent || '',
@@ -150,9 +198,59 @@ export async function POST(req) {
       filedFormsComplete: Array.isArray(payload.filedFormsComplete) ? payload.filedFormsComplete.filter(item => typeof item === 'string' && item.trim() !== '') : [],
       dateOfComplete: payload.dateOfComplete || '',
       isPostDated: payload.isPostDated || '',
+      
+      // Additional Complete Specification fields
+      isProvisionalFiled: payload.isProvisionalFiled || '',
+      provisionalSpecDate: payload.provisionalSpecDate || '',
+      applicationNumber: payload.applicationNumber || '',
+      isPCTFiled: payload.isPCTFiled || '',
+      pctFilingDate: payload.pctFilingDate || '',
+      citedPatent: payload.citedPatent || '',
+      independentClaim: payload.independentClaim || '',
+      dependentClaim: payload.dependentClaim || '',
+      broadenedFeature: payload.broadenedFeature || '',
+      draftingEffort: payload.draftingEffort || '',
+      drafterEmpId: payload.drafterEmpId || '',
+      hoursSpent: payload.hoursSpent || '',
+      agencyRecognizer: payload.agencyRecognizer || '',
+      agencyCost: payload.agencyCost || '',
+      reviewEffort: payload.reviewEffort || '',
+      managerEmpId: payload.managerEmpId || '',
+      
+      // Additional Provisional Application fields
+      nodrafter: payload.nodrafter || '',
+      noreviewer: payload.noreviewer || '',
+      bned: payload.bned || '',
+      ifdescribed: payload.ifdescribed || '',
+      toinvention: payload.toinvention || '',
+      esfd: payload.esfd || '',
+      pdrafter: payload.pdrafter || '',
+      nohspent: payload.nohspent || '',
+      eafd: payload.eafd || '',
+      csoagency: payload.csoagency || '',
+      eihfr: payload.eihfr || '',
+      mres: payload.mres || '',
+      
+      // Additional PCT Application fields
+      isDirectPCT: payload.isDirectPCT || '',
+      pctProvisionalDate: payload.pctProvisionalDate || '',
+      pctApplicationNumber: payload.pctApplicationNumber || '',
+      pctDrafterName: payload.pctDrafterName || '',
+      pctCountryFiling: payload.pctCountryFiling || '',
+      pctReviewBy: payload.pctReviewBy || '',
+      pctCitedPatent: payload.pctCitedPatent || '',
+      pctIndependentClaim: payload.pctIndependentClaim || '',
+      pctDependentClaim: payload.pctDependentClaim || '',
+      pctBroadenedFeature: payload.pctBroadenedFeature || '',
+      pctDraftingEffort: payload.pctDraftingEffort || '',
+      pctDrafterEmpId: payload.pctDrafterEmpId || '',
+      pctHoursSpent: payload.pctHoursSpent || '',
+      pctAgencyRecognizer: payload.pctAgencyRecognizer || '',
+      pctAgencyCost: payload.pctAgencyCost || '',
+      pctReviewEffort: payload.pctReviewEffort || '',
+      pctManagerEmpId: payload.pctManagerEmpId || '',
     };
 
-    console.log('📊 Data being sent to Prisma:', JSON.stringify(data, null, 2));
     
     // Check if record exists, then create or update
     const existingRecord = await prisma.PatentFiling.findFirst({
@@ -196,6 +294,10 @@ export async function POST(req) {
           
           // Average Rating fields
           patentApplicationNumber: data.patentApplicationNumber,
+          averageRating: data.averageRating,
+          
+          // Patentability Extractor Rating field
+          patentabilityRating: data.patentabilityRating,
           
           // Effort Sheet fields
           ipRecognizer: data.ipRecognizer,
@@ -226,12 +328,59 @@ export async function POST(req) {
           datePatentApplication: data.datePatentApplication,
           pctFilingPermission: data.pctFilingPermission,
           
+          // Additional PCT fields
+          pctAgencyCost: data.pctAgencyCost,
+          pctAgencyRecognizer: data.pctAgencyRecognizer,
+          pctApplicationNumber: data.pctApplicationNumber,
+          pctBroadenedFeature: data.pctBroadenedFeature,
+          pctCitedPatent: data.pctCitedPatent,
+          pctCountryFiling: data.pctCountryFiling,
+          pctDependentClaim: data.pctDependentClaim,
+          pctDrafterEmpId: data.pctDrafterEmpId,
+          pctDrafterName: data.pctDrafterName,
+          pctDraftingEffort: data.pctDraftingEffort,
+          pctHoursSpent: data.pctHoursSpent,
+          pctIndependentClaim: data.pctIndependentClaim,
+          pctIsProfit: data.pctIsProfit,
+          pctManagerEmpId: data.pctManagerEmpId,
+          pctReviewBy: data.pctReviewBy,
+          pctReviewEffort: data.pctReviewEffort,
+          
+          // Additional Patentability Analysis fields
+          nfeature: data.nfeature,
+          ifeature: data.ifeature,
+          oextractor: data.oextractor,
+          scountry: data.scountry,
+          
           // National Phase fields
           dateProvisionalPatent: data.dateProvisionalPatent,
           dateCompletePatentApplication: data.dateCompletePatentApplication,
           datePCTPatentApplication: data.datePCTPatentApplication,
           finalSubmitted: data.finalSubmitted,
           filedForms: data.filedForms,
+          
+          // Additional National Phase fields
+          npAgencyCost: data.npAgencyCost,
+          npAgencyRecognizer: data.npAgencyRecognizer,
+          npApplicationCountry: data.npApplicationCountry,
+          npApplicationNumber: data.npApplicationNumber,
+          npBroadenedFeature: data.npBroadenedFeature,
+          npCitedPatent: data.npCitedPatent,
+          npDependentClaim: data.npDependentClaim,
+          npDrafterEmpId: data.npDrafterEmpId,
+          npDrafterName: data.npDrafterName,
+          npDraftingEffort: data.npDraftingEffort,
+          npFormsPrepared: data.npFormsPrepared,
+          npHoursSpent: data.npHoursSpent,
+          npIndependentClaim: data.npIndependentClaim,
+          npIsDefensive: data.npIsDefensive,
+          npIsProfit: data.npIsProfit,
+          npManagerEmpId: data.npManagerEmpId,
+          npPCTDate: data.npPCTDate,
+          npPCTOrProvisionalDate: data.npPCTOrProvisionalDate,
+          npPCTPublication: data.npPCTPublication,
+          npReviewBy: data.npReviewBy,
+          npReviewEffort: data.npReviewEffort,
           
           // Complete fields
           dateOfPatent: data.dateOfPatent,
@@ -242,6 +391,57 @@ export async function POST(req) {
           filedFormsComplete: data.filedFormsComplete,
           dateOfComplete: data.dateOfComplete,
           isPostDated: data.isPostDated,
+          
+          // Additional Complete Specification fields
+          isProvisionalFiled: data.isProvisionalFiled,
+          provisionalSpecDate: data.provisionalSpecDate,
+          applicationNumber: data.applicationNumber,
+          isPCTFiled: data.isPCTFiled,
+          pctFilingDate: data.pctFilingDate,
+          citedPatent: data.citedPatent,
+          independentClaim: data.independentClaim,
+          dependentClaim: data.dependentClaim,
+          broadenedFeature: data.broadenedFeature,
+          draftingEffort: data.draftingEffort,
+          drafterEmpId: data.drafterEmpId,
+          hoursSpent: data.hoursSpent,
+          agencyRecognizer: data.agencyRecognizer,
+          agencyCost: data.agencyCost,
+          reviewEffort: data.reviewEffort,
+          managerEmpId: data.managerEmpId,
+          
+          // Additional Provisional Application fields
+          nodrafter: data.nodrafter,
+          noreviewer: data.noreviewer,
+          bned: data.bned,
+          ifdescribed: data.ifdescribed,
+          toinvention: data.toinvention,
+          esfd: data.esfd,
+          pdrafter: data.pdrafter,
+          nohspent: data.nohspent,
+          eafd: data.eafd,
+          csoagency: data.csoagency,
+          eihfr: data.eihfr,
+          mres: data.mres,
+          
+          // Additional PCT Application fields
+          isDirectPCT: data.isDirectPCT,
+          pctProvisionalDate: data.pctProvisionalDate,
+          pctApplicationNumber: data.pctApplicationNumber,
+          pctDrafterName: data.pctDrafterName,
+          pctCountryFiling: data.pctCountryFiling,
+          pctReviewBy: data.pctReviewBy,
+          pctCitedPatent: data.pctCitedPatent,
+          pctIndependentClaim: data.pctIndependentClaim,
+          pctDependentClaim: data.pctDependentClaim,
+          pctBroadenedFeature: data.pctBroadenedFeature,
+          pctDraftingEffort: data.pctDraftingEffort,
+          pctDrafterEmpId: data.pctDrafterEmpId,
+          pctHoursSpent: data.pctHoursSpent,
+          pctAgencyRecognizer: data.pctAgencyRecognizer,
+          pctAgencyCost: data.pctAgencyCost,
+          pctReviewEffort: data.pctReviewEffort,
+          pctManagerEmpId: data.pctManagerEmpId,
         },
       });
     } else {
@@ -251,7 +451,6 @@ export async function POST(req) {
       });
     }
 
-    console.log('✅ PatentFiling upserted successfully:', result);
     return NextResponse.json({ 
       success: true, 
       data: result,

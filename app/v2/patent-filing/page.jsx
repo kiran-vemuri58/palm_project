@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import useV2Store from '@/store/v2Store';
 import V2Navigation from '@/components/V2Navigation';
 import InventionDetailsV2 from '@/components/V2/InventionDetailsV2';
@@ -25,28 +25,33 @@ import { Save, Loader2 } from 'lucide-react';
 
 const PatentFilingV2 = () => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const assetId = searchParams.get('assetId');
-  const mode = searchParams.get('mode') || 'new';
   
   const { 
-    patentFiling, 
     updateFormData, 
     currentAssetId,
     markFormAsSaved,
-    refreshStoreAfterAPI
+  // No need for API refresh functions - data is pre-loaded from assets page
   } = useV2Store();
+  
+  const patentFiling = useV2Store((state) => state.getFormData('patentFiling'));
 
   const [mounted, setMounted] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [saveMessage, setSaveMessage] = useState('');
+  const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
   // Ensure client-side rendering
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Redirect if no assetId (for both new and edit modes)
+  const showNotification = (message, type = 'success') => {
+    setNotification({ show: true, message, type });
+    setTimeout(() => {
+      setNotification({ show: false, message: '', type: '' });
+    }, 3000); // Hide after 3 seconds - same as Forms 1, 2, 3 & 4
+  };
+
+  // Redirect if no assetId
   useEffect(() => {
     if (mounted && !currentAssetId) {
       router.push('/v2/invention-recognition?new=true');
@@ -56,17 +61,13 @@ const PatentFilingV2 = () => {
   // Save function
   const handleSave = async () => {
     if (!currentAssetId) {
-      setSaveMessage('Error: No Asset ID found');
+      showNotification('Error: No Asset ID found', 'error');
       return;
     }
 
     setIsSaving(true);
-    setSaveMessage('');
 
     try {
-      console.log('💾 Saving Patent Filing data for Asset ID:', currentAssetId);
-      console.log('📦 Patent Filing data:', patentFiling);
-
       const response = await fetch('/api/patentFiling', {
         method: 'POST',
         headers: {
@@ -81,30 +82,23 @@ const PatentFilingV2 = () => {
       const result = await response.json();
 
       if (result.success) {
-        console.log('✅ Patent Filing saved successfully:', result);
-        setSaveMessage('Patent Filing saved successfully!');
+        showNotification('Patent Filing saved successfully!', 'success');
         
         // Mark form as saved in the store
         markFormAsSaved('patentFiling');
         
-        // Refresh store data with the latest from API
-        try {
-          await refreshStoreAfterAPI(currentAssetId, 'patentFiling');
-          console.log('✅ Store refreshed with latest data from API');
-        } catch (refreshError) {
-          console.error('⚠️ Failed to refresh store after save:', refreshError);
-          // Don't show error to user as save was successful
-        }
+        // No need to refresh store - data is pre-loaded from assets page
         
         // Clear message after 3 seconds
-        setTimeout(() => setSaveMessage(''), 3000);
+        // Auto-hide success message after 3 seconds
+        setTimeout(() => {}, 3000);
       } else {
         console.error('❌ Save failed:', result.message);
-        setSaveMessage(`Error: ${result.message}`);
+        showNotification(`Error: ${result.message}`, 'error');
       }
     } catch (error) {
       console.error('❌ Save error:', error);
-      setSaveMessage(`Error: ${error.message}`);
+      showNotification(`Error: ${error.message}`, 'error');
     } finally {
       setIsSaving(false);
     }
@@ -278,15 +272,6 @@ const PatentFilingV2 = () => {
                           </div>
                           
                           <div className="p-6">
-                            {saveMessage && (
-                              <div className={`p-4 rounded-lg mb-4 ${
-                                saveMessage.includes('Error') 
-                                  ? 'bg-red-50 border border-red-200 text-red-700' 
-                                  : 'bg-green-50 border border-green-200 text-green-700'
-                              }`}>
-                                {saveMessage}
-                              </div>
-                            )}
                             
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
                               <div>
@@ -296,44 +281,53 @@ const PatentFilingV2 = () => {
                                 <span className="font-medium">Draft Type:</span> {patentFiling?.draftType || 'None'}
                               </div>
                               <div>
-                                <span className="font-medium">Mode:</span> {mode}
+                                <span className="font-medium">Mode:</span> {currentAssetId ? 'Edit' : 'New'}
                               </div>
                             </div>
                           </div>
                         </div>
+
           </div>
         </div>
       </div>
+
+      {/* Beautiful Notification Popup - Same as Forms 1, 2, 3 & 4 */}
+      {notification.show && (
+        <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-right duration-300">
+          <div className={`px-6 py-4 rounded-lg shadow-lg border-l-4 flex items-center space-x-3 ${
+            notification.type === 'success' 
+              ? 'bg-green-50 border-green-400 text-green-800' 
+              : 'bg-red-50 border-red-400 text-red-800'
+          }`}>
+            <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+              notification.type === 'success' ? 'bg-green-100' : 'bg-red-100'
+            }`}>
+              {notification.type === 'success' ? (
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+              )}
+            </div>
+            <div>
+              <p className="font-semibold text-sm">{notification.message}</p>
+            </div>
+            <button
+              onClick={() => setNotification({ show: false, message: '', type: '' })}
+              className="ml-4 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-// Wrapper component with Suspense boundary
-const PatentFilingV2WithSuspense = () => {
-  return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-        <div className="bg-gray-50 border-b border-gray-200 sticky top-24 z-40">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-center h-14">
-              <div className="flex items-center space-x-2">
-                <div className="flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-bold bg-gray-200 text-gray-400">
-                  <span className="text-lg">📄</span>
-                  <span className="text-sm font-mono">PF</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="p-8 text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Patent Filing V2</h1>
-          <p className="text-lg text-gray-600">Loading...</p>
-        </div>
-      </div>
-    }>
-      <PatentFilingV2 />
-    </Suspense>
-  );
-};
-
-export default PatentFilingV2WithSuspense;
+export default PatentFilingV2;

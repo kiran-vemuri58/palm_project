@@ -35,6 +35,16 @@ export async function POST(request) {
 
     // Process data - no date conversion needed since we're using strings
     const processedData = { ...patentabilityData };
+    
+    // Map field names to match Prisma schema
+    if (processedData.decisionNodc !== undefined) {
+      processedData.nodc = processedData.decisionNodc;
+      delete processedData.decisionNodc;
+    }
+    if (processedData.decisionDibrief !== undefined) {
+      processedData.dibrief = processedData.decisionDibrief;
+      delete processedData.decisionDibrief;
+    }
 
     // Process integer fields - convert empty strings to null for Int fields
     const integerFields = ['rating', 'hoursspent', 'agencycost', 'revieweffort', 'extractionEffort'];

@@ -7,7 +7,6 @@ export async function GET(request, { params }) {
   try {
     const { assetId } = params;
     
-    console.log('🔍 Fetching invention data for Asset ID:', assetId);
     
     // Find the invention by asset_id
     const invention = await prisma.invention.findUnique({
@@ -26,11 +25,10 @@ export async function GET(request, { params }) {
       );
     }
 
-    console.log('✅ Found invention data:', invention);
 
-    return NextResponse.json({ 
-      success: true, 
-      data: invention 
+    return NextResponse.json({
+      success: true,
+      data: invention
     });
 
   } catch (error) {

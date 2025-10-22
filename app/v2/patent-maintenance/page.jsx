@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import V2Navigation from '@/components/V2Navigation';
 import InventionDetailsV2 from '@/components/V2/InventionDetailsV2';
@@ -14,26 +14,34 @@ import PMPatentabilityExtractorV2 from '@/components/V2/PatentMaintenance/PMPate
 import PMEffortSheetDetailsV2 from '@/components/V2/PatentMaintenance/PMEffortSheetDetailsV2';
 import PMActivityStatusV2 from '@/components/V2/PatentMaintenance/PMActivityStatusV2';
 import useV2Store from '@/store/v2Store';
-import { toast } from 'sonner';
 import axios from 'axios';
 
 const PatentMaintenanceV2 = () => {
   const router = useRouter();
   const { 
     currentAssetId, 
-    patentMaintenance, 
     updateFormData, 
     setStoreData, 
     markFormAsSaved,
-    loadFormDataFromAPI 
+  // No need for API loading functions - data is pre-loaded from assets page 
   } = useV2Store();
+  
+  const patentMaintenance = useV2Store((state) => state.getFormData('patentMaintenance'));
   const [mounted, setMounted] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
   // Ensure client-side rendering
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const showNotification = (message, type = 'success') => {
+    setNotification({ show: true, message, type });
+    setTimeout(() => {
+      setNotification({ show: false, message: '', type: '' });
+    }, 3000); // Hide after 3 seconds - same as Forms 1, 2, 3 & 4
+  };
 
   // Redirect if no assetId
   useEffect(() => {
@@ -42,30 +50,17 @@ const PatentMaintenanceV2 = () => {
     }
   }, [mounted, currentAssetId, router]);
 
-  // Load data from API when component mounts
-  useEffect(() => {
-    if (mounted && currentAssetId) {
-      loadDataFromAPI();
-    }
-  }, [mounted, currentAssetId]);
-
-  const loadDataFromAPI = async () => {
-    try {
-      await loadFormDataFromAPI(currentAssetId, 'patentMaintenance');
-    } catch (error) {
-      console.error('Error loading PM data:', error);
-    }
-  };
+  // No need to load data - it's already in store from assets page
+  // Data is pre-loaded when user clicks "View" from assets page
 
   // Create a wrapper function for updateFormData
   const handleUpdateFormData = (field, value) => {
-    console.log('🔄 PM Form Update:', { field, value });
     updateFormData('patentMaintenance', field, value);
   };
 
   const handleSave = async () => {
     if (!currentAssetId) {
-      toast.error('No Asset ID found. Please complete Form 1 first.');
+      showNotification('No Asset ID found. Please complete Form 1 first.', 'error');
       return;
     }
 
@@ -76,22 +71,19 @@ const PatentMaintenanceV2 = () => {
         ...patentMaintenance
       };
 
-      console.log('💾 Saving PM data:', payload);
-
       const response = await axios.post('/api/pm', payload);
       
       if (response.data.success) {
-        toast.success('Patent Maintenance data saved successfully!');
+        showNotification('Patent Maintenance data saved successfully!', 'success');
         markFormAsSaved('patentMaintenance');
         
-        // Refresh store data after successful save
-        await loadDataFromAPI();
+        // No need to refresh store - data is pre-loaded from assets page
       } else {
-        toast.error('Failed to save Patent Maintenance data');
+        showNotification('Failed to save Patent Maintenance data', 'error');
       }
     } catch (error) {
       console.error('Error saving PM data:', error);
-      toast.error('Error saving Patent Maintenance data');
+      showNotification('Error saving Patent Maintenance data', 'error');
     } finally {
       setIsSaving(false);
     }
@@ -103,22 +95,7 @@ const PatentMaintenanceV2 = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      <Suspense fallback={
-        <div className="bg-gray-50 border-b border-gray-200 sticky top-24 z-40">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-center h-14">
-              <div className="flex items-center space-x-2">
-                <div className="flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-bold bg-gray-200 text-gray-400">
-                  <span className="text-lg">🔧</span>
-                  <span className="text-sm font-mono">PM</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      }>
-        <V2Navigation />
-      </Suspense>
+      <V2Navigation />
       
       <div className="p-8">
         <div className="max-w-6xl mx-auto">
@@ -259,8 +236,45 @@ const PatentMaintenanceV2 = () => {
               )}
             </button>
           </div>
+
         </div>
       </div>
+
+      {/* Beautiful Notification Popup - Same as Forms 1, 2, 3 & 4 */}
+      {notification.show && (
+        <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-right duration-300">
+          <div className={`px-6 py-4 rounded-lg shadow-lg border-l-4 flex items-center space-x-3 ${
+            notification.type === 'success' 
+              ? 'bg-green-50 border-green-400 text-green-800' 
+              : 'bg-red-50 border-red-400 text-red-800'
+          }`}>
+            <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+              notification.type === 'success' ? 'bg-green-100' : 'bg-red-100'
+            }`}>
+              {notification.type === 'success' ? (
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+              )}
+            </div>
+            <div>
+              <p className="font-semibold text-sm">{notification.message}</p>
+            </div>
+            <button
+              onClick={() => setNotification({ show: false, message: '', type: '' })}
+              className="ml-4 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

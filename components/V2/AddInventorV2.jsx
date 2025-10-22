@@ -17,15 +17,11 @@ const AddInventorV2 = ({
   if (formData.inventors) {
     if (Array.isArray(formData.inventors)) {
       inventors = formData.inventors;
-      console.log('🔍 AddInventorV2: inventors is direct array:', inventors);
     } else if (formData.inventors.inventors && Array.isArray(formData.inventors.inventors)) {
       inventors = formData.inventors.inventors;
-      console.log('🔍 AddInventorV2: inventors is nested object, extracted array:', inventors);
     } else {
-      console.log('🔍 AddInventorV2: inventors structure unknown:', formData.inventors);
     }
   } else {
-    console.log('🔍 AddInventorV2: no inventors data found');
   }
   const addInventor = useV2Store((state) => state.addInventor);
   const updateInventor = useV2Store((state) => state.updateInventor);

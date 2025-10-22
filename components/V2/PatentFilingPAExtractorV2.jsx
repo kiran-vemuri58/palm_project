@@ -10,18 +10,18 @@ const PatentFilingPAExtractorV2 = ({ page }) => {
   const updateFormData = useV2Store((state) => state.updateFormData);
 
   const safeFormData = formData || {};
-  const [rating, setRating] = useState(safeFormData.rating || 0);
+  const [rating, setRating] = useState(safeFormData.patentabilityRating || 0);
   const [attachmentFiles, setAttachmentFiles] = useState([]);
 
   // Update local state when formData changes
   useEffect(() => {
-    if (safeFormData.rating) {
-      setRating(safeFormData.rating);
+    if (safeFormData.patentabilityRating) {
+      setRating(safeFormData.patentabilityRating);
     }
     if (safeFormData.attachment && Array.isArray(safeFormData.attachment)) {
       setAttachmentFiles(safeFormData.attachment);
     }
-  }, [safeFormData.rating, safeFormData.attachment]);
+  }, [safeFormData.patentabilityRating, safeFormData.attachment]);
 
   const handleChange = (field, value) => {
     updateFormData(page, field, value);
@@ -29,7 +29,7 @@ const PatentFilingPAExtractorV2 = ({ page }) => {
 
   const handleRatingChange = (newRating) => {
     setRating(newRating);
-    updateFormData(page, 'rating', newRating);
+    updateFormData(page, 'patentabilityRating', newRating);
   };
 
   const handleFileChange = (fileList) => {

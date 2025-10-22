@@ -351,6 +351,8 @@ function getInitialFormData(page) {
       pppd_any_person_opposed: '',
       pppd_opponent_name: '',
       pppd_attachments: [],
+      pppd_response_attachments: [],
+      pppd_review_attachments: [],
       pppd_case_filed_by_opposer: '',
       pppd_basis_of_action_of_filing: '',
       pppd_reason_for_filing_opposition: '',
@@ -485,6 +487,98 @@ function getInitialFormData(page) {
       
       // PM Activity Status fields
       activityStatus: ''
+    },
+    
+    patentProsecution: {
+      // PP Invention Details fields (ppid_ prefix)
+      ppid_title: '',
+      ppid_common_name: '',
+      ppid_inventor_details: '',
+      ppid_entity: '',
+      ppid_date: '',
+      ppid_country: '',
+      ppid_creation_country: '',
+      ppid_collaboration: '',
+      ppid_collaborator_name: '',
+      ppid_collaborator_country: '',
+      ppid_stakeholders: '',
+      
+      // PP Extractor Details fields (pped_ prefix)
+      pped_one: '',
+      pped_two: '',
+      pped_extraction_date: '',
+      pped_available_with_prior_literature: '',
+      pped_novel_feature: '',
+      pped_inventive_feature: '',
+      pped_specific_country: '',
+      pped_opinion: '',
+      pped_attachments: [],
+      
+      // PP Patent Prosecution Details fields (pppd_ prefix)
+      pppd_published: '',
+      pppd_publication_number: '',
+      pppd_any_person_opposed: '',
+      pppd_opponent_name: '',
+      pppd_attachments: [],
+      pppd_response_attachments: [],
+      pppd_review_attachments: [],
+      pppd_case_filed_by_opposer: '',
+      pppd_basis_of_action_of_filing: '',
+      pppd_reason_for_filing_opposition: '',
+      pppd_opinion_rendered_by_you: '',
+      pppd_external_agency: '',
+      pppd_reviewed_by: '',
+      
+      // PP Patent Application Status fields (ppas_ prefix)
+      ppas_status: '',
+      ppas_number: '',
+      ppas_attachment: [],
+      ppas_grant_date: '',
+      ppas_rejection_reason_attachment: [],
+      
+      // PP FER fields (ppfer_ prefix)
+      ppfer_list: [],
+      
+      // PP Hearing fields (pph_ prefix)
+      pph_list: [],
+      
+      // PP Decision Sheet fields (ppds_ prefix)
+      ppds_name_of_decision_maker: '',
+      ppds_decision_in_brief: '',
+      ppds_attachments: [],
+      
+      // PP Innovation Analysis fields (ppi_ prefix)
+      ppi_more_than_invention: '',
+      ppi_prior_art_documents: [],
+      ppi_npl_documents: [],
+      
+      // PP Patentability Extractor fields (pppe_ prefix)
+      pppe_searcher1: '',
+      pppe_searcher2: '',
+      pppe_rating: 0,
+      pppe_invention_accordance: '',
+      pppe_novel_feature: '',
+      pppe_inventive_feature: '',
+      pppe_attachment: [],
+      pppe_specific_country: '',
+      pppe_opinion_of_extractor: '',
+      
+      // PP Average Patentability Rating fields (ppapr_ prefix)
+      ppapr_rating: 0,
+      ppapr_patent_application_number: '',
+      
+      // PP Effort Sheet fields (ppes_ prefix)
+      ppes_ip_recognizer: '',
+      ppes_hours_spent: '',
+      ppes_agency_recognizer: '',
+      ppes_agency_cost: '',
+      ppes_review_effort: '',
+      ppes_manager_emp_id: '',
+      
+      // PP Activity Status fields (ppact_ prefix)
+      ppact_status: '',
+      ppact_description: '',
+      ppact_last_updated: ''
     },
     
     patentCommercialization: {
@@ -628,7 +722,6 @@ const useV2Store = create((set, get) => ({
 
   setCurrentAssetId: (assetId) => {
     set({ currentAssetId: assetId });
-    console.log('🆔 Asset ID set in store:', assetId);
   },
 
   // Track saved forms
@@ -636,7 +729,6 @@ const useV2Store = create((set, get) => ({
     set((state) => ({
       savedForms: new Set([...state.savedForms, formName])
     }));
-    console.log('✅ Form marked as saved:', formName);
   },
 
   isFormSaved: (formName) => {
@@ -649,7 +741,6 @@ const useV2Store = create((set, get) => ({
 
   clearSavedForms: () => {
     set({ savedForms: new Set() });
-    console.log('🧹 Cleared saved forms tracking');
   },
 
   setStoreData: (page, data) => {
@@ -660,7 +751,6 @@ const useV2Store = create((set, get) => ({
         ...data
       }
     }));
-    console.log('🔄 Store data updated for page:', page);
   },
 
   setErrors: (newErrors) => {
@@ -674,7 +764,6 @@ const useV2Store = create((set, get) => ({
   // Load form data from API and map to respective store
   loadFormDataFromAPI: async (assetId, page = 'inventionRecognition') => {
     try {
-      console.log('🌐 Loading form data from API for Asset ID:', assetId, 'Page:', page);
       
       // Use different API endpoints based on page
       let apiEndpoint;
@@ -703,7 +792,6 @@ const useV2Store = create((set, get) => ({
       if (response.ok) {
         const data = await response.json();
         if (data.success && data.data) {
-          console.log('✅ Loaded form data from API:', data.data);
           
           // Map API data to the respective page store
           const mappedData = get().mapAPIDataToStore(data.data, page);
@@ -713,11 +801,9 @@ const useV2Store = create((set, get) => ({
             [page]: mappedData
           }));
           
-          console.log('✅ Mapped and stored data for page:', page);
           return mappedData;
         }
       }
-      console.log('❌ Failed to load form data from API');
       return null;
     } catch (error) {
       console.error('Error loading form data from API:', error);
@@ -728,7 +814,6 @@ const useV2Store = create((set, get) => ({
   // Ensure page data is loaded (check store first, then API if needed)
   ensurePageDataLoaded: async (assetId, page = 'inventionRecognition') => {
     try {
-      console.log('🔄 Ensuring page data is loaded for:', page);
       
       const currentState = get();
       const pageData = currentState[page];
@@ -740,10 +825,8 @@ const useV2Store = create((set, get) => ({
       );
       
       if (hasData) {
-        console.log('✅ Store already has data for page:', page);
         return pageData;
       } else if (assetId) {
-        console.log('🔄 No store data found, loading from API for page:', page);
         
         // Load data from API directly
         try {
@@ -773,7 +856,6 @@ const useV2Store = create((set, get) => ({
           if (response.ok) {
             const data = await response.json();
             if (data.success && data.data) {
-              console.log('✅ Loaded data from API for page:', page);
               
               // Map API data to store format
               const mappedData = get().mapAPIDataToStore(data.data, page);
@@ -790,7 +872,6 @@ const useV2Store = create((set, get) => ({
           console.error('Error loading data from API:', error);
         }
       } else {
-        console.log('⚠️ No asset ID provided for page:', page);
         return getInitialFormData(page);
       }
     } catch (error) {
@@ -802,7 +883,6 @@ const useV2Store = create((set, get) => ({
   // Ensure Page 1 data is loaded for Invention Details display on other pages
   ensurePage1DataLoaded: async (assetId) => {
     try {
-      console.log('🔄 Ensuring Page 1 data is loaded for Invention Details display');
       
       const currentState = get();
       const page1Data = currentState.inventionRecognition;
@@ -815,10 +895,8 @@ const useV2Store = create((set, get) => ({
       );
       
       if (hasInventionDetails) {
-        console.log('✅ Page 1 Invention Details already available in store');
         return page1Data;
       } else if (assetId) {
-        console.log('🔄 Loading Page 1 data from API for Invention Details display');
         
         // Load Page 1 data from API directly
         try {
@@ -827,7 +905,6 @@ const useV2Store = create((set, get) => ({
           if (response.ok) {
             const data = await response.json();
             if (data.success && data.data) {
-              console.log('✅ Page 1 data loaded from API for Invention Details display');
               
               // Map API data to store format
               const mappedData = get().mapAPIDataToStore(data.data, 'inventionRecognition');
@@ -855,7 +932,6 @@ const useV2Store = create((set, get) => ({
   // Refresh store data after API operations (save, update, etc.)
   refreshStoreAfterAPI: async (assetId, page = 'inventionRecognition') => {
     try {
-      console.log('🔄 Refreshing store data after API operation for Asset ID:', assetId, 'Page:', page);
       
       // Use different API endpoints based on page
       let apiEndpoint;
@@ -884,7 +960,6 @@ const useV2Store = create((set, get) => ({
       if (response.ok) {
         const data = await response.json();
         if (data.success && data.data) {
-          console.log('✅ Loaded fresh data from API:', data.data);
           
           // Map API data to the respective page store
           const mappedData = get().mapAPIDataToStore(data.data, page);
@@ -894,12 +969,10 @@ const useV2Store = create((set, get) => ({
             [page]: mappedData
           }));
           
-          console.log('✅ Store refreshed with latest data from API');
           return mappedData;
         }
       }
       
-      console.log('⚠️ No fresh data received from API');
       return null;
     } catch (error) {
       console.error('Error refreshing store after API operation:', error);
@@ -910,7 +983,6 @@ const useV2Store = create((set, get) => ({
   // Refresh all relevant store data after any API operation
   refreshAllRelevantData: async (assetId) => {
     try {
-      console.log('🔄 Refreshing all relevant store data after API operation');
       
       // Refresh Page 1 data (always relevant for Invention Details)
       await get().refreshStoreAfterAPI(assetId, 'inventionRecognition');
@@ -921,7 +993,6 @@ const useV2Store = create((set, get) => ({
         await get().refreshStoreAfterAPI(assetId, 'inventionExtraction');
       }
       
-      console.log('✅ All relevant store data refreshed');
     } catch (error) {
       console.error('Error refreshing all relevant data:', error);
     }
@@ -935,8 +1006,6 @@ const useV2Store = create((set, get) => ({
 
   // Helper function to map API data to store format
   mapAPIDataToStore: (apiData, page) => {
-    console.log('🔄 Mapping API data for page:', page);
-    
     switch (page) {
       case 'inventionRecognition':
         return {
@@ -1026,7 +1095,7 @@ const useV2Store = create((set, get) => ({
         };
         
       case 'patentabilityAnalysis':
-        return {
+        const paResult = {
           // Patentability Analysis fields
           analysisType: apiData.analysisType || '',
           analysisDate: apiData.analysisDate || '',
@@ -1088,6 +1157,8 @@ const useV2Store = create((set, get) => ({
           // Activity Status
           activityStatus: apiData.activityStatus || ''
         };
+        
+        return paResult;
         
       case 'patentSpecification':
         return {
@@ -1195,6 +1266,44 @@ const useV2Store = create((set, get) => ({
           rating: apiData.rating || 0,
           draftType: apiData.draftType || '',
           
+          // Extractor Details fields
+          extractorOne: apiData.extractorOne || '',
+          extractortwo: apiData.extractortwo || '',
+          iEDate: apiData.iEDate || '',
+          iawpl: apiData.iawpl || '',
+          idattachments: apiData.idattachments || [],
+          
+          // Innovation Analysis fields
+          trainRun: apiData.trainRun || '',
+          minuteOfMeeting: apiData.minuteOfMeeting || [],
+          attachments: apiData.attachments || [],
+          
+          // Patentability Extractor fields
+          psone: apiData.psone || '',
+          pstwo: apiData.pstwo || '',
+          collaboration: apiData.collaboration || '',
+          paNfeature: apiData.paNfeature || '',
+          paIfeature: apiData.paIfeature || '',
+          paScountry: apiData.paScountry || '',
+          paOoextractor: apiData.paOoextractor || '',
+          
+          // Decision Sheet fields
+          nodc: apiData.nodc || '',
+          dibrief: apiData.dibrief || '',
+          
+          // Average Rating fields
+          patentApplicationNumber: apiData.patentApplicationNumber || '',
+          averageRating: apiData.averageRating || 0,
+          
+          // Patentability Extractor Rating field
+          patentabilityRating: apiData.patentabilityRating || 0,
+          
+          // Effort Sheet fields
+          ipRecognizer: apiData.ipRecognizer || '',
+          reviewEffort: apiData.reviewEffort || '',
+          managerEmpId: apiData.managerEmpId || '',
+          extractionEffort: apiData.extractionEffort || '',
+          
           // Provisional fields
           patentFilingName: apiData.patentFilingName || '',
           provisionalPatent: apiData.provisionalPatent || [],
@@ -1217,6 +1326,30 @@ const useV2Store = create((set, get) => ({
           applicationProvisionalNumber: apiData.applicationProvisionalNumber || '',
           datePatentApplication: apiData.datePatentApplication || '',
           pctFilingPermission: apiData.pctFilingPermission || '',
+          
+          // Additional PCT fields
+          pctAgencyCost: apiData.pctAgencyCost || '',
+          pctAgencyRecognizer: apiData.pctAgencyRecognizer || '',
+          pctApplicationNumber: apiData.pctApplicationNumber || '',
+          pctBroadenedFeature: apiData.pctBroadenedFeature || '',
+          pctCitedPatent: apiData.pctCitedPatent || '',
+          pctCountryFiling: apiData.pctCountryFiling || '',
+          pctDependentClaim: apiData.pctDependentClaim || '',
+          pctDrafterEmpId: apiData.pctDrafterEmpId || '',
+          pctDrafterName: apiData.pctDrafterName || '',
+          pctDraftingEffort: apiData.pctDraftingEffort || '',
+          pctHoursSpent: apiData.pctHoursSpent || '',
+          pctIndependentClaim: apiData.pctIndependentClaim || '',
+          pctIsProfit: apiData.pctIsProfit || '',
+          pctManagerEmpId: apiData.pctManagerEmpId || '',
+          pctReviewBy: apiData.pctReviewBy || '',
+          pctReviewEffort: apiData.pctReviewEffort || '',
+          
+          // Additional Patentability Analysis fields
+          nfeature: apiData.nfeature || '',
+          ifeature: apiData.ifeature || '',
+          oextractor: apiData.oextractor || '',
+          scountry: apiData.scountry || '',
 
           // National Phase fields
           dateProvisionalPatent: apiData.dateProvisionalPatent || '',
@@ -1224,6 +1357,29 @@ const useV2Store = create((set, get) => ({
           datePCTPatentApplication: apiData.datePCTPatentApplication || '',
           finalSubmitted: apiData.finalSubmitted || '',
           filedForms: apiData.filedForms || [],
+          
+          // Additional National Phase fields
+          npAgencyCost: apiData.npAgencyCost || '',
+          npAgencyRecognizer: apiData.npAgencyRecognizer || '',
+          npApplicationCountry: apiData.npApplicationCountry || '',
+          npApplicationNumber: apiData.npApplicationNumber || '',
+          npBroadenedFeature: apiData.npBroadenedFeature || '',
+          npCitedPatent: apiData.npCitedPatent || '',
+          npDependentClaim: apiData.npDependentClaim || '',
+          npDrafterEmpId: apiData.npDrafterEmpId || '',
+          npDrafterName: apiData.npDrafterName || '',
+          npDraftingEffort: apiData.npDraftingEffort || '',
+          npFormsPrepared: apiData.npFormsPrepared || '',
+          npHoursSpent: apiData.npHoursSpent || '',
+          npIndependentClaim: apiData.npIndependentClaim || '',
+          npIsDefensive: apiData.npIsDefensive || '',
+          npIsProfit: apiData.npIsProfit || '',
+          npManagerEmpId: apiData.npManagerEmpId || '',
+          npPCTDate: apiData.npPCTDate || '',
+          npPCTOrProvisionalDate: apiData.npPCTOrProvisionalDate || '',
+          npPCTPublication: apiData.npPCTPublication || '',
+          npReviewBy: apiData.npReviewBy || '',
+          npReviewEffort: apiData.npReviewEffort || '',
 
           // Complete fields
           dateOfPatent: apiData.dateOfPatent || '',
@@ -1234,80 +1390,39 @@ const useV2Store = create((set, get) => ({
           filedFormsComplete: apiData.filedFormsComplete || [],
           dateOfComplete: apiData.dateOfComplete || '',
           isPostDated: apiData.isPostDated || '',
+          
+          // Additional Complete Specification fields
+          isProvisionalFiled: apiData.isProvisionalFiled || '',
+          provisionalSpecDate: apiData.provisionalSpecDate || '',
+          applicationNumber: apiData.applicationNumber || '',
+          isPCTFiled: apiData.isPCTFiled || '',
+          pctFilingDate: apiData.pctFilingDate || '',
+          citedPatent: apiData.citedPatent || '',
+          independentClaim: apiData.independentClaim || '',
+          dependentClaim: apiData.dependentClaim || '',
+          broadenedFeature: apiData.broadenedFeature || '',
+          draftingEffort: apiData.draftingEffort || '',
+          drafterEmpId: apiData.drafterEmpId || '',
+
+          // Additional Provisional Application fields
+          nodrafter: apiData.nodrafter || '',
+          noreviewer: apiData.noreviewer || '',
+          bned: apiData.bned || '',
+          ifdescribed: apiData.ifdescribed || '',
+          toinvention: apiData.toinvention || '',
+          esfd: apiData.esfd || '',
+          pdrafter: apiData.pdrafter || '',
+          nohspent: apiData.nohspent || '',
+          eafd: apiData.eafd || '',
+          csoagency: apiData.csoagency || '',
+          eihfr: apiData.eihfr || '',
+          mres: apiData.mres || '',
+
+          // Additional PCT Application fields
+          isDirectPCT: apiData.isDirectPCT || '',
+          pctProvisionalDate: apiData.pctProvisionalDate || '',
         };
         
-      case 'patentProsecution':
-        return {
-          // Patent Prosecution Details fields (matching old component)
-          patentPublished: apiData.patentPublished || '',
-          publicationNumber: apiData.publicationNumber || '',
-          apopposed: apiData.apopposed || '',
-          oname: apiData.oname || '',
-          attachments: apiData.attachments || [],
-          cfbopposer: apiData.cfbopposer || '',
-          boaof: apiData.boaof || '',
-          rffo: apiData.rffo || '',
-          orpby: apiData.orpby || '',
-          eagency: apiData.eagency || '',
-          revby: apiData.revby || '',
-          
-          // Patent Application Status fields
-          patentStatus: apiData.patentStatus || 'yes',
-          patentNumber: apiData.patentNumber || '',
-          patentAttachment: apiData.patentAttachment || [],
-          patentGrantDate: apiData.patentGrantDate || '',
-          rejectionReasonAttachment: apiData.rejectionReasonAttachment || [],
-          
-          // FER (First Examination Report) fields - as array
-          ferList: apiData.ferList || [],
-          
-          // Hearing Details fields - as array
-          hearingList: apiData.hearingList || [],
-          
-          // Decision Sheet fields - with decision prefix
-          decisionNodc: apiData.decisionNodc || '',
-          decisionDibrief: apiData.decisionDibrief || '',
-          decisionAttachments: apiData.decisionAttachments || [],
-          
-          // Also map old field names for backward compatibility
-          ppNodc: apiData.decisionNodc || '',
-          ppDibrief: apiData.decisionDibrief || '',
-          ppDecisionAttachments: apiData.decisionAttachments || [],
-          
-          // Innovation Analysis fields (pp prefix)
-          ppTrainRun: apiData.ppTrainRun || '',
-          ppMinuteOfMeeting: apiData.ppMinuteOfMeeting || [],
-          ppInnovationAttachments: apiData.ppInnovationAttachments || [],
-          
-          // Patentability Extractor fields (pp prefix)
-          ppPsone: apiData.ppPsone || '',
-          ppPstwo: apiData.ppPstwo || '',
-          ppCollaboration: apiData.ppCollaboration || '',
-          ppNfeature: apiData.ppNfeature || '',
-          ppIfeature: apiData.ppIfeature || '',
-          ppAttachment: apiData.ppAttachment || [],
-          ppScountry: apiData.ppScountry || '',
-          ppOextractor: apiData.ppOextractor || '',
-          
-          // Average Patentability Rating fields (pp prefix)
-          ppRating: apiData.ppRating || 0,
-          ppPatentApplicationNumber: apiData.ppPatentApplicationNumber || '',
-          
-          // Effort Sheet fields (pp prefix)
-          ppIpRecognizer: apiData.ppIpRecognizer || '',
-          ppHoursSpent: apiData.ppHoursSpent || '',
-          ppAgencyRecognizer: apiData.ppAgencyRecognizer || '',
-          ppAgencyCost: apiData.ppAgencyCost || '',
-          ppReviewEffort: apiData.ppReviewEffort || '',
-          ppManagerEmpId: apiData.ppManagerEmpId || '',
-          ppExtractionEffort: apiData.ppExtractionEffort || '',
-
-          ipRecognizer: apiData.ipRecognizer || '',
-          hoursSpent: apiData.hoursSpent || '',
-          agencyRecognizer: apiData.agencyRecognizer || '',
-          agencyCost: apiData.agencyCost || '',
-          activityStatus: apiData.activityStatus || ''
-        };
         
       case 'postGrantOpposition':
         return {
@@ -1367,6 +1482,111 @@ const useV2Store = create((set, get) => ({
           managerEmpId: apiData.managerEmpId || '',
           activityStatus: apiData.activityStatus || ''
         };
+        
+      case 'patentProsecution':
+        const ppResult = {
+          // PP Invention Details fields (ppid_ prefix)
+          ppid_title: apiData.ppid_title || '',
+          ppid_common_name: apiData.ppid_common_name || '',
+          ppid_inventor_details: apiData.ppid_inventor_details || '',
+          ppid_entity: apiData.ppid_entity || '',
+          ppid_date: apiData.ppid_date || '',
+          ppid_country: apiData.ppid_country || '',
+          ppid_creation_country: apiData.ppid_creation_country || '',
+          ppid_collaboration: apiData.ppid_collaboration || '',
+          ppid_collaborator_name: apiData.ppid_collaborator_name || '',
+          ppid_collaborator_country: apiData.ppid_collaborator_country || '',
+          ppid_stakeholders: apiData.ppid_stakeholders || '',
+          
+          // PP Extractor Details fields (pped_ prefix)
+          pped_one: apiData.pped_one || '',
+          pped_two: apiData.pped_two || '',
+          pped_extraction_date: apiData.pped_extraction_date || '',
+          pped_available_with_prior_literature: apiData.pped_available_with_prior_literature || '',
+          pped_novel_feature: apiData.pped_novel_feature || '',
+          pped_inventive_feature: apiData.pped_inventive_feature || '',
+          pped_specific_country: apiData.pped_specific_country || '',
+          pped_opinion: apiData.pped_opinion || '',
+          pped_attachments: apiData.pped_attachments || [],
+          
+          // PP Patent Prosecution Details fields (pppd_ prefix)
+          pppd_published: apiData.pppd_published || '',
+          pppd_publication_number: apiData.pppd_publication_number || '',
+          pppd_any_person_opposed: apiData.pppd_any_person_opposed || '',
+          pppd_opponent_name: apiData.pppd_opponent_name || '',
+          pppd_attachments: apiData.pppd_attachments || [],
+          pppd_response_attachments: apiData.pppd_response_attachments || [],
+          pppd_review_attachments: apiData.pppd_review_attachments || [],
+          pppd_case_filed_by_opposer: apiData.pppd_case_filed_by_opposer || '',
+          pppd_basis_of_action_of_filing: apiData.pppd_basis_of_action_of_filing || '',
+          pppd_reason_for_filing_opposition: apiData.pppd_reason_for_filing_opposition || '',
+          pppd_opinion_rendered_by_you: apiData.pppd_opinion_rendered_by_you || '',
+          pppd_external_agency: apiData.pppd_external_agency || '',
+          pppd_reviewed_by: apiData.pppd_reviewed_by || '',
+          
+          // PP Patent Application Status fields (ppas_ prefix)
+          ppas_status: apiData.ppas_status || '',
+          ppas_number: apiData.ppas_number || '',
+          ppas_attachment: apiData.ppas_attachment || [],
+          ppas_grant_date: apiData.ppas_grant_date || '',
+          ppas_rejection_reason_attachment: apiData.ppas_rejection_reason_attachment || [],
+          
+          // PP FER fields (ppfer_ prefix)
+          ppfer_list: apiData.ppfer_list || [],
+          
+          // PP Hearing fields (pph_ prefix)
+          pph_list: apiData.pph_list || [],
+          
+          // PP Decision Sheet fields (ppds_ prefix)
+          ppds_name_of_decision_maker: apiData.ppds_name_of_decision_maker || '',
+          ppds_decision_in_brief: apiData.ppds_decision_in_brief || '',
+          ppds_attachments: apiData.ppds_attachments || [],
+          
+          // Debug: Log Decision Sheet mapping
+          _debug_decision_sheet: {
+            api_ppds_name_of_decision_maker: apiData.ppds_name_of_decision_maker,
+            api_ppds_decision_in_brief: apiData.ppds_decision_in_brief,
+            api_ppds_attachments: apiData.ppds_attachments,
+            mapped_ppds_name_of_decision_maker: apiData.ppds_name_of_decision_maker || '',
+            mapped_ppds_decision_in_brief: apiData.ppds_decision_in_brief || '',
+            mapped_ppds_attachments: apiData.ppds_attachments || []
+          },
+          
+          // PP Innovation Analysis fields (ppi_ prefix)
+          ppi_more_than_invention: apiData.ppi_more_than_invention || '',
+          ppi_prior_art_documents: apiData.ppi_prior_art_documents || [],
+          ppi_npl_documents: apiData.ppi_npl_documents || [],
+          
+          // PP Patentability Extractor fields (pppe_ prefix)
+          pppe_searcher1: apiData.pppe_searcher1 || '',
+          pppe_searcher2: apiData.pppe_searcher2 || '',
+          pppe_rating: apiData.pppe_rating || 0,
+          pppe_invention_accordance: apiData.pppe_invention_accordance || '',
+          pppe_novel_feature: apiData.pppe_novel_feature || '',
+          pppe_inventive_feature: apiData.pppe_inventive_feature || '',
+          pppe_attachment: apiData.pppe_attachment || [],
+          pppe_specific_country: apiData.pppe_specific_country || '',
+          pppe_opinion_of_extractor: apiData.pppe_opinion_of_extractor || '',
+          
+          // PP Average Patentability Rating fields (ppapr_ prefix)
+          ppapr_rating: apiData.ppapr_rating || 0,
+          ppapr_patent_application_number: apiData.ppapr_patent_application_number || '',
+          
+          // PP Effort Sheet fields (ppes_ prefix)
+          ppes_ip_recognizer: apiData.ppes_ip_recognizer || '',
+          ppes_hours_spent: apiData.ppes_hours_spent || '',
+          ppes_agency_recognizer: apiData.ppes_agency_recognizer || '',
+          ppes_agency_cost: apiData.ppes_agency_cost || '',
+          ppes_review_effort: apiData.ppes_review_effort || '',
+          ppes_manager_emp_id: apiData.ppes_manager_emp_id || '',
+          
+          // PP Activity Status fields (ppact_ prefix)
+          ppact_status: apiData.ppact_status || '',
+          ppact_description: apiData.ppact_description || '',
+          ppact_last_updated: apiData.ppact_last_updated || ''
+        };
+        
+        return ppResult;
         
       case 'patentMaintenance':
         return {
@@ -1448,29 +1668,61 @@ const useV2Store = create((set, get) => ({
         
       case 'patentCommercialization':
         return {
-          // Patent Commercialization fields
-          commercializationDate: apiData.commercializationDate || '',
-          patentNumber: apiData.patentNumber || '',
-          commercializationStrategy: apiData.commercializationStrategy || '',
-          targetMarkets: apiData.targetMarkets || [],
-          licensingOpportunities: apiData.licensingOpportunities || '',
-          potentialLicensees: apiData.potentialLicensees || [],
-          royaltyRates: apiData.royaltyRates || {},
-          licensingTerms: apiData.licensingTerms || '',
-          marketAnalysis: apiData.marketAnalysis || '',
-          competitiveAdvantage: apiData.competitiveAdvantage || '',
-          revenueProjections: apiData.revenueProjections || {},
-          partnershipOpportunities: apiData.partnershipOpportunities || [],
-          technologyTransfer: apiData.technologyTransfer || '',
-          IPPortfolio: apiData.IPPortfolio || '',
-          valuation: apiData.valuation || 0,
-          commercializationStatus: apiData.commercializationStatus || '',
+          // PC Invention Details fields (pcInventionDetails prefix)
+          pcInventionDetailsTitle: apiData.pcInventionDetailsTitle || '',
+          pcInventionDetailsCommonName: apiData.pcInventionDetailsCommonName || '',
+          pcInventionDetailsInventorDetails: apiData.pcInventionDetailsInventorDetails || '',
+          pcInventionDetailsEntity: apiData.pcInventionDetailsEntity || '',
+          pcInventionDetailsDate: apiData.pcInventionDetailsDate || '',
+          pcInventionDetailsCountry: apiData.pcInventionDetailsCountry || '',
+          pcInventionDetailsCreationCountry: apiData.pcInventionDetailsCreationCountry || '',
+          pcInventionDetailsCollaboration: apiData.pcInventionDetailsCollaboration || '',
+          pcInventionDetailsCollaboratorName: apiData.pcInventionDetailsCollaboratorName || '',
+          pcInventionDetailsCollaboratorCountry: apiData.pcInventionDetailsCollaboratorCountry || '',
+          pcInventionDetailsStakeholders: apiData.pcInventionDetailsStakeholders || '',
+          
+          // PC Patent Commercialization Child fields (pcPatentCommercializationChild prefix)
+          pcPatentCommercializationChildStage: apiData.pcPatentCommercializationChildStage || '',
+          pcPatentCommercializationChildWorkingFiled: apiData.pcPatentCommercializationChildWorkingFiled || '',
+          pcPatentCommercializationChildImplementationFile: apiData.pcPatentCommercializationChildImplementationFile || [],
+          pcPatentCommercializationChildFirstWorkingDate: apiData.pcPatentCommercializationChildFirstWorkingDate || '',
+          pcPatentCommercializationChildCommercializationStatus: apiData.pcPatentCommercializationChildCommercializationStatus || '',
+          pcPatentCommercializationChildRevenueGenerated: apiData.pcPatentCommercializationChildRevenueGenerated || '',
+          pcPatentCommercializationChildMarketValue: apiData.pcPatentCommercializationChildMarketValue || '',
+          pcPatentCommercializationChildLicensingFee: apiData.pcPatentCommercializationChildLicensingFee || '',
+          pcPatentCommercializationChildRoyaltyRate: apiData.pcPatentCommercializationChildRoyaltyRate || '',
+          pcPatentCommercializationChildPartnerName: apiData.pcPatentCommercializationChildPartnerName || '',
+          pcPatentCommercializationChildPartnershipType: apiData.pcPatentCommercializationChildPartnershipType || '',
+          pcPatentCommercializationChildPartnershipDetails: apiData.pcPatentCommercializationChildPartnershipDetails || '',
+          pcPatentCommercializationChildStartDate: apiData.pcPatentCommercializationChildStartDate || '',
+          pcPatentCommercializationChildExpectedCompletionDate: apiData.pcPatentCommercializationChildExpectedCompletionDate || '',
+          pcPatentCommercializationChildActualCompletionDate: apiData.pcPatentCommercializationChildActualCompletionDate || '',
+          
+          // PC PAN fields (pcPAN prefix)
+          pcPANPatentApplicationNumber: apiData.pcPANPatentApplicationNumber || '',
+          pcPANPatentNumber: apiData.pcPANPatentNumber || '',
+          
+          // PC Patent Commercialization Efforts fields (pcPatentCommercializationEfforts prefix)
+          pcPatentCommercializationEffortsSalesFile: apiData.pcPatentCommercializationEffortsSalesFile || [],
+          pcPatentCommercializationEffortsPeriodicSales: apiData.pcPatentCommercializationEffortsPeriodicSales || '',
+          pcPatentCommercializationEffortsInvoiceFile: apiData.pcPatentCommercializationEffortsInvoiceFile || [],
+          pcPatentCommercializationEffortsCommercializationDate: apiData.pcPatentCommercializationEffortsCommercializationDate || '',
+          pcPatentCommercializationEffortsProductId: apiData.pcPatentCommercializationEffortsProductId || '',
+          pcPatentCommercializationEffortsIsLicensed: apiData.pcPatentCommercializationEffortsIsLicensed || '',
+          pcPatentCommercializationEffortsIsCrossLicensed: apiData.pcPatentCommercializationEffortsIsCrossLicensed || '',
+          pcPatentCommercializationEffortsIsCompulsoryLicenseFiled: apiData.pcPatentCommercializationEffortsIsCompulsoryLicenseFiled || '',
+          
+          // PC Activity Status fields (pcActivityStatus prefix)
+          pcActivityStatusStatus: apiData.pcActivityStatusStatus || '',
+          pcActivityStatusDescription: apiData.pcActivityStatusDescription || '',
+          pcActivityStatusLastUpdated: apiData.pcActivityStatusLastUpdated || '',
+          
+          // Additional fields for compatibility
           rating: apiData.rating || 0,
           activityStatus: apiData.activityStatus || ''
         };
         
       default:
-        console.log('⚠️ Unknown page for mapping:', page);
         return {};
     }
   },
@@ -1505,7 +1757,6 @@ const useV2Store = create((set, get) => ({
       currentAssetId: null,
       errors: {}
     });
-    console.log('🗑️ All store data and asset ID cleared');
   },
 
   // Form 9 (Patent Commercialization) - Complete Field Names Reference
@@ -1767,7 +2018,6 @@ const useV2Store = create((set, get) => ({
         }
       };
     });
-    console.log('➕ Added new inventor to', page);
   },
 
   updateInventor: (page, index, field, value) => {
@@ -1812,7 +2062,6 @@ const useV2Store = create((set, get) => ({
       
       return state;
     });
-    console.log('🗑️ Removed inventor at index', index, 'from', page);
   },
 
   markInventorAsSaved: (page, index) => {
@@ -1837,7 +2086,6 @@ const useV2Store = create((set, get) => ({
       
       return state;
     });
-    console.log('✅ Marked inventor at index', index, 'as saved in', page);
   }
 }));
 
