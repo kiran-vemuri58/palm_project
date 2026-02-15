@@ -120,6 +120,9 @@ export async function POST(req) {
       provisionalPatent: Array.isArray(payload.provisionalPatent) ? payload.provisionalPatent.filter(item => typeof item === 'string' && item.trim() !== '') : [],
       attachment: Array.isArray(payload.attachment) ? payload.attachment.filter(item => typeof item === 'string' && item.trim() !== '') : [],
       dateProvision: payload.dateProvision || '',
+      provisionalApplicationNumber: payload.provisionalApplicationNumber || '',
+      cbrReceiptNumber: payload.cbrReceiptNumber || '',
+      filingAgency: payload.filingAgency || '',
       applicantName: payload.applicantName || '',
       isProfilePatent: payload.isProfilePatent || '',
       isDefensivePatent: payload.isDefensivePatent || '',
@@ -134,6 +137,8 @@ export async function POST(req) {
       applicationProvisionalNumber: payload.applicationProvisionalNumber || '',
       datePatentApplication: payload.datePatentApplication || '',
       pctFilingPermission: payload.pctFilingPermission || '',
+      pctFiledForms: Array.isArray(payload.pctFiledForms) ? payload.pctFiledForms.filter(item => typeof item === 'string' && item.trim() !== '') : [],
+      pctCbrReceiptNumber: payload.pctCbrReceiptNumber || '',
       
       // Additional PCT fields
       pctAgencyCost: payload.pctAgencyCost || '',
@@ -165,6 +170,8 @@ export async function POST(req) {
       datePCTPatentApplication: payload.datePCTPatentApplication || '',
       finalSubmitted: payload.finalSubmitted || '',
       filedForms: Array.isArray(payload.filedForms) ? payload.filedForms.filter(item => typeof item === 'string' && item.trim() !== '') : [],
+      npFilingDate: payload.npFilingDate || '',
+      npCbrReceiptNumber: payload.npCbrReceiptNumber || '',
       
       // Additional National Phase fields
       npAgencyCost: payload.npAgencyCost || '',
@@ -197,6 +204,7 @@ export async function POST(req) {
       filedDraft: Array.isArray(payload.filedDraft) ? payload.filedDraft.filter(item => typeof item === 'string' && item.trim() !== '') : [],
       filedFormsComplete: Array.isArray(payload.filedFormsComplete) ? payload.filedFormsComplete.filter(item => typeof item === 'string' && item.trim() !== '') : [],
       dateOfComplete: payload.dateOfComplete || '',
+      cbrReceiptNumberComplete: payload.cbrReceiptNumberComplete || '',
       isPostDated: payload.isPostDated || '',
       
       // Additional Complete Specification fields
@@ -313,6 +321,9 @@ export async function POST(req) {
           provisionalPatent: data.provisionalPatent,
           attachment: data.attachment,
           dateProvision: data.dateProvision,
+          provisionalApplicationNumber: data.provisionalApplicationNumber,
+          cbrReceiptNumber: data.cbrReceiptNumber,
+          filingAgency: data.filingAgency,
           applicantName: data.applicantName,
           isProfilePatent: data.isProfilePatent,
           isDefensivePatent: data.isDefensivePatent,
@@ -327,6 +338,8 @@ export async function POST(req) {
           applicationProvisionalNumber: data.applicationProvisionalNumber,
           datePatentApplication: data.datePatentApplication,
           pctFilingPermission: data.pctFilingPermission,
+          pctFiledForms: data.pctFiledForms,
+          pctCbrReceiptNumber: data.pctCbrReceiptNumber,
           
           // Additional PCT fields
           pctAgencyCost: data.pctAgencyCost,
@@ -358,6 +371,8 @@ export async function POST(req) {
           datePCTPatentApplication: data.datePCTPatentApplication,
           finalSubmitted: data.finalSubmitted,
           filedForms: data.filedForms,
+          npFilingDate: data.npFilingDate,
+          npCbrReceiptNumber: data.npCbrReceiptNumber,
           
           // Additional National Phase fields
           npAgencyCost: data.npAgencyCost,
@@ -390,6 +405,7 @@ export async function POST(req) {
           filedDraft: data.filedDraft,
           filedFormsComplete: data.filedFormsComplete,
           dateOfComplete: data.dateOfComplete,
+          cbrReceiptNumberComplete: data.cbrReceiptNumberComplete,
           isPostDated: data.isPostDated,
           
           // Additional Complete Specification fields

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Upload, X } from 'lucide-react';
 import useV2Store from '@/store/v2Store';
 
-const CompleteSpecificationV2 = ({ page }) => {
+const CompleteSpecificationV2 = ({ page, isPage4 = false }) => {
   const formData = useV2Store((state) => state.getFormData(page));
   const updateFormData = useV2Store((state) => state.updateFormData);
 
@@ -163,8 +163,8 @@ const CompleteSpecificationV2 = ({ page }) => {
         </div>
       </div>
 
-      {/* Row 4 */}
-      <div className="grid grid-cols-3 gap-4 mb-4">
+      {/* Row 4 - Page 4: hide Is it a Profitable Patent? */}
+      <div className={`grid grid-cols-3 gap-4 mb-4 ${isPage4 ? 'grid-cols-2' : ''}`}>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Broadened claimed invention feature
@@ -178,20 +178,22 @@ const CompleteSpecificationV2 = ({ page }) => {
             className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
           />
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Is it a Profitable Patent?
-          </label>
-          <select
-            value={safeFormData.isProfitPatent || ''}
-            onChange={(e) => handleSelectChange('isProfitPatent', e.target.value)}
-            className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
-          >
-            <option value="">Select</option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
-        </div>
+        {!isPage4 && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Is it a Profitable Patent?
+            </label>
+            <select
+              value={safeFormData.isProfitPatent || ''}
+              onChange={(e) => handleSelectChange('isProfitPatent', e.target.value)}
+              className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+            >
+              <option value="">Select</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        )}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Is it a Defensive Patent?
@@ -287,34 +289,38 @@ const CompleteSpecificationV2 = ({ page }) => {
         </div>
       </div>
 
-      {/* Row 6 */}
-      <div className="grid grid-cols-3 gap-4 mb-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Number of hours spent
-          </label>
-          <input
-            type="number"
-            name="hoursSpent"
-            placeholder="Enter hours spent"
-            value={safeFormData.hoursSpent || ''}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            External Agency Recognizer
-          </label>
-          <input
-            type="text"
-            name="agencyRecognizer"
-            placeholder="Enter external agency recognizer"
-            value={safeFormData.agencyRecognizer || ''}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
-          />
-        </div>
+      {/* Row 6 - Page 4: hide Number of hours spent and External Agency Recognizer */}
+      <div className={`grid grid-cols-3 gap-4 mb-4 ${isPage4 ? 'grid-cols-1' : ''}`}>
+        {!isPage4 && (
+          <>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Number of hours spent
+              </label>
+              <input
+                type="number"
+                name="hoursSpent"
+                placeholder="Enter hours spent"
+                value={safeFormData.hoursSpent || ''}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                External Agency Recognizer
+              </label>
+              <input
+                type="text"
+                name="agencyRecognizer"
+                placeholder="Enter external agency recognizer"
+                value={safeFormData.agencyRecognizer || ''}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              />
+            </div>
+          </>
+        )}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Cost spent on Agency

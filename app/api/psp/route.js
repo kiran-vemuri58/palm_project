@@ -165,6 +165,9 @@ export async function POST(req) {
       csoagency: payload.csoagency || '',
       eihfr: payload.eihfr || '',
       mres: payload.mres || '',
+      foreignFilingPermissionDate: payload.foreignFilingPermissionDate || '',
+      foreignFilingPermissionFile: Array.isArray(payload.foreignFilingPermissionFile) ? payload.foreignFilingPermissionFile.filter(item => typeof item === 'string' && item.trim() !== '') : [],
+      externalAgencyDrafter: payload.externalAgencyDrafter || '',
     };
 
     
@@ -265,6 +268,9 @@ export async function POST(req) {
           csoagency: data.csoagency,
           eihfr: data.eihfr,
           mres: data.mres,
+          foreignFilingPermissionDate: data.foreignFilingPermissionDate,
+          foreignFilingPermissionFile: data.foreignFilingPermissionFile,
+          externalAgencyDrafter: data.externalAgencyDrafter,
         },
       });
     } else {

@@ -5,20 +5,11 @@ import { useRouter } from 'next/navigation';
 import useV2Store from '@/store/v2Store';
 import V2Navigation from '@/components/V2Navigation';
 import InventionDetailsV2 from '@/components/V2/InventionDetailsV2';
-import ExtractorDetailsV2 from '@/components/V2/ExtractorDetailsV2';
 import TypeOfDraftV2 from '@/components/V2/TypeOfDraftV2';
-import CompleteSpecificationV2 from '@/components/V2/CompleteSpecificationV2';
-import ProvisionalApplicationV2 from '@/components/V2/ProvisionalApplicationV2';
-import PCTApplicationV2 from '@/components/V2/PCTApplicationV2';
-import NationalPhaseV2 from '@/components/V2/NationalPhaseV2';
-import DecisionSheetV2 from '@/components/V2/DecisionSheetV2';
-import InnovationV2 from '@/components/V2/InnovationV2';
-import PatentFilingInnovationV2 from '@/components/V2/PatentFilingInnovationV2';
-import PAExtractorV2 from '@/components/V2/PAExtractorV2';
-import PatentFilingPAExtractorV2 from '@/components/V2/PatentFilingPAExtractorV2';
-import AveragePatentabilityRatingV2 from '@/components/V2/AveragePatentabilityRatingV2';
-import PatentFilingAverageRatingV2 from '@/components/V2/PatentFilingAverageRatingV2';
-import EffortSheetDetailsV2 from '@/components/V2/EffortSheetDetailsV2';
+import PatentFilingCompleteSpecV2 from '@/components/V2/PatentFilingCompleteSpecV2';
+import PatentFilingProvisionalV2 from '@/components/V2/PatentFilingProvisionalV2';
+import PatentFilingPCTV2 from '@/components/V2/PatentFilingPCTV2';
+import PatentFilingNationalPhaseV2 from '@/components/V2/PatentFilingNationalPhaseV2';
 import PatentFilingEffortSheetV2 from '@/components/V2/PatentFilingEffortSheetV2';
 import ActivityStatusV2 from '@/components/V2/ActivityStatusV2';
 import { Save, Loader2 } from 'lucide-react';
@@ -150,15 +141,6 @@ const PatentFilingV2 = () => {
               />
             </div>
 
-            {/* Extractor Details */}
-            <div className="mb-8">
-              <ExtractorDetailsV2 
-                formData={patentFiling}
-                updateFormData={(field, value) => updateFormData('patentFiling', field, value)}
-                page="patentFiling"
-              />
-            </div>
-
             {/* Type of Draft Section */}
             <div className="mb-8">
               <TypeOfDraftV2 page="patentFiling" />
@@ -167,63 +149,27 @@ const PatentFilingV2 = () => {
             {/* All Draft Components with Correct Props */}
             {patentFiling?.draftType === 'complete' && (
               <div className="mb-8">
-                <CompleteSpecificationV2 
-                  page="patentFiling"
-                />
+                <PatentFilingCompleteSpecV2 page="patentFiling" />
               </div>
             )}
 
             {patentFiling?.draftType === 'provisional' && (
               <div className="mb-8">
-                <ProvisionalApplicationV2 
-                  page="patentFiling"
-                />
+                <PatentFilingProvisionalV2 page="patentFiling" />
               </div>
             )}
 
             {patentFiling?.draftType === 'pct' && (
               <div className="mb-8">
-                <PCTApplicationV2 
-                  page="patentFiling"
-                />
+                <PatentFilingPCTV2 page="patentFiling" />
               </div>
             )}
 
             {patentFiling?.draftType === 'national_phase' && (
               <div className="mb-8">
-                <NationalPhaseV2 
-                  page="patentFiling"
-                />
+                <PatentFilingNationalPhaseV2 page="patentFiling" />
               </div>
             )}
-
-            {/* Decision Sheet */}
-            <div className="mb-8">
-              <DecisionSheetV2 
-                page="patentFiling"
-              />
-            </div>
-
-            {/* Innovation Analysis */}
-            <div className="mb-8">
-              <PatentFilingInnovationV2 
-                page="patentFiling"
-              />
-            </div>
-
-            {/* Patentability Extractor */}
-            <div className="mb-8">
-              <PatentFilingPAExtractorV2 
-                page="patentFiling"
-              />
-            </div>
-
-            {/* Average Patentability Rating */}
-            <div className="mb-8">
-              <PatentFilingAverageRatingV2 
-                page="patentFiling"
-              />
-            </div>
 
             {/* Effort Sheet Details */}
             <div className="mb-8">

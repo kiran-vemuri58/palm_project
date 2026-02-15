@@ -216,25 +216,25 @@ function PatentSpecificationV2Content() {
           {/* Conditionally show sections based on draft type */}
           {formData?.draftType === 'complete' && (
             <div className="mb-8">
-              <CompleteSpecificationV2 page="patentSpecification" />
+              <CompleteSpecificationV2 page="patentSpecification" isPage4={true} />
             </div>
           )}
 
           {formData?.draftType === 'provisional' && (
             <div className="mb-8">
-              <ProvisionalApplicationV2 page="patentSpecification" />
+              <ProvisionalApplicationV2 page="patentSpecification" isPage4={true} />
             </div>
           )}
 
           {formData?.draftType === 'pct' && (
             <div className="mb-8">
-              <PCTApplicationV2 page="patentSpecification" />
+              <PCTApplicationV2 page="patentSpecification" isPage4={true} />
             </div>
           )}
 
           {formData?.draftType === 'national_phase' && (
             <div className="mb-8">
-              <NationalPhaseV2 page="patentSpecification" />
+              <NationalPhaseV2 page="patentSpecification" isPage4={true} />
             </div>
           )}
 

@@ -187,6 +187,10 @@ function getInitialFormData(page) {
       csoagency: '',
       eihfr: '',
       mres: '',
+      // Page 4 only: Foreign filing permission
+      foreignFilingPermissionDate: '',
+      foreignFilingPermissionFile: [],
+      externalAgencyDrafter: '',
       
       // PCT Application fields
       isDirectPCT: '',
@@ -291,6 +295,9 @@ function getInitialFormData(page) {
       patentFilingName: '',
       provisionalPatent: [],
       dateProvision: '',
+      provisionalApplicationNumber: '',
+      cbrReceiptNumber: '',
+      filingAgency: '',
       applicantName: '',
       isProfilePatent: '',
       isDefensivePatent: '',
@@ -305,6 +312,10 @@ function getInitialFormData(page) {
       applicationProvisionalNumber: '',
       datePatentApplication: '',
       pctFilingPermission: '',
+      pctApplicationNumber: '',
+      pctFiledForms: [],
+      pctCbrReceiptNumber: '',
+      pctAgencyRecognizer: '',
 
       // National Phase fields
       dateProvisionalPatent: '',
@@ -312,6 +323,10 @@ function getInitialFormData(page) {
       datePCTPatentApplication: '',
       finalSubmitted: '',
       filedForms: [],
+      npFilingDate: '',
+      npApplicationNumber: '',
+      npCbrReceiptNumber: '',
+      npAgencyRecognizer: '',
 
       // Complete fields
       dateOfPatent: '',
@@ -321,6 +336,7 @@ function getInitialFormData(page) {
       filedDraft: [],
       filedFormsComplete: [],
       dateOfComplete: '',
+      cbrReceiptNumberComplete: '',
       isPostDated: '',
     },
     
@@ -1211,6 +1227,9 @@ const useV2Store = create((set, get) => ({
           csoagency: apiData.csoagency || '',
           eihfr: apiData.eihfr || '',
           mres: apiData.mres || '',
+          foreignFilingPermissionDate: apiData.foreignFilingPermissionDate || '',
+          foreignFilingPermissionFile: apiData.foreignFilingPermissionFile || [],
+          externalAgencyDrafter: apiData.externalAgencyDrafter || '',
           
           // PCT Application fields
           isDirectPCT: apiData.isDirectPCT || '',
@@ -1317,6 +1336,9 @@ const useV2Store = create((set, get) => ({
           provisionalPatent: apiData.provisionalPatent || [],
           attachment: apiData.attachment || [],
           dateProvision: apiData.dateProvision || '',
+          provisionalApplicationNumber: apiData.provisionalApplicationNumber || '',
+          cbrReceiptNumber: apiData.cbrReceiptNumber || '',
+          filingAgency: apiData.filingAgency || '',
           applicantName: apiData.applicantName || '',
           isProfilePatent: apiData.isProfilePatent || '',
           isDefensivePatent: apiData.isDefensivePatent || '',
@@ -1334,6 +1356,8 @@ const useV2Store = create((set, get) => ({
           applicationProvisionalNumber: apiData.applicationProvisionalNumber || '',
           datePatentApplication: apiData.datePatentApplication || '',
           pctFilingPermission: apiData.pctFilingPermission || '',
+          pctFiledForms: apiData.pctFiledForms || [],
+          pctCbrReceiptNumber: apiData.pctCbrReceiptNumber || '',
           
           // Additional PCT fields
           pctAgencyCost: apiData.pctAgencyCost || '',
@@ -1365,6 +1389,8 @@ const useV2Store = create((set, get) => ({
           datePCTPatentApplication: apiData.datePCTPatentApplication || '',
           finalSubmitted: apiData.finalSubmitted || '',
           filedForms: apiData.filedForms || [],
+          npFilingDate: apiData.npFilingDate || '',
+          npCbrReceiptNumber: apiData.npCbrReceiptNumber || '',
           
           // Additional National Phase fields
           npAgencyCost: apiData.npAgencyCost || '',
@@ -1397,6 +1423,7 @@ const useV2Store = create((set, get) => ({
           filedDraft: apiData.filedDraft || [],
           filedFormsComplete: apiData.filedFormsComplete || [],
           dateOfComplete: apiData.dateOfComplete || '',
+          cbrReceiptNumberComplete: apiData.cbrReceiptNumberComplete || '',
           isPostDated: apiData.isPostDated || '',
           
           // Additional Complete Specification fields

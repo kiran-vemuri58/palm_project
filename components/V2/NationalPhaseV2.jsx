@@ -1,13 +1,24 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Upload, X } from 'lucide-react';
 import useV2Store from '@/store/v2Store';
 
-const NationalPhaseV2 = ({ page }) => {
+const NationalPhaseV2 = ({ page, isPage4 = false }) => {
   const formData = useV2Store((state) => state.getFormData(page));
   const updateFormData = useV2Store((state) => state.updateFormData);
 
   const safeFormData = formData || {};
+  const [foreignFilingFileList, setForeignFilingFileList] = useState([]);
+
+  useEffect(() => {
+    const files = safeFormData.foreignFilingPermissionFile;
+    if (Array.isArray(files) && files.length > 0) {
+      setForeignFilingFileList(files);
+    } else {
+      setForeignFilingFileList([]);
+    }
+  }, [safeFormData.foreignFilingPermissionFile]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -192,21 +203,23 @@ const NationalPhaseV2 = ({ page }) => {
         </div>
       </div>
 
-      {/* Row 5 */}
-      <div className="grid grid-cols-3 gap-4 mb-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Is it a Profitable Patent?
-          </label>
-          <select
-            value={safeFormData.npIsProfit || 'No'}
-            onChange={(e) => handleSelectChange('npIsProfit', e.target.value)}
-            className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
-          >
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
-        </div>
+      {/* Row 5 - Page 4: hide Is it a Profitable Patent? */}
+      <div className={`grid grid-cols-3 gap-4 mb-4 ${isPage4 ? 'grid-cols-2' : ''}`}>
+        {!isPage4 && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Is it a Profitable Patent?
+            </label>
+            <select
+              value={safeFormData.npIsProfit || 'No'}
+              onChange={(e) => handleSelectChange('npIsProfit', e.target.value)}
+              className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+            >
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        )}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Is it a Defensive Patent?
@@ -235,8 +248,8 @@ const NationalPhaseV2 = ({ page }) => {
         </div>
       </div>
 
-      {/* Row 6 */}
-      <div className="grid grid-cols-3 gap-4 mb-4">
+      {/* Row 6 - Page 4: hide Number of hours spent */}
+      <div className={`grid grid-cols-3 gap-4 mb-4 ${isPage4 ? 'grid-cols-2' : ''}`}>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Patent Drafter (Employee ID)
@@ -250,19 +263,21 @@ const NationalPhaseV2 = ({ page }) => {
             className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
           />
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Number of hours spent
-          </label>
-          <input
-            type="number"
-            name="npHoursSpent"
-            placeholder="Enter hours spent"
-            value={safeFormData.npHoursSpent || ''}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
-          />
-        </div>
+        {!isPage4 && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Number of hours spent
+            </label>
+            <input
+              type="number"
+              name="npHoursSpent"
+              placeholder="Enter hours spent"
+              value={safeFormData.npHoursSpent || ''}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+            />
+          </div>
+        )}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             External Agency Recognizer
@@ -320,6 +335,66 @@ const NationalPhaseV2 = ({ page }) => {
           />
         </div>
       </div>
+
+      {/* Page 4 only: Foreign filing permission fields - inside National Phase */}
+      {isPage4 && (
+        <div className="mt-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Date of application for permission for foreign filing
+              </label>
+              <input
+                type="date"
+                value={safeFormData.foreignFilingPermissionDate || ''}
+                onChange={(e) => updateFormData(page, 'foreignFilingPermissionDate', e.target.value)}
+                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                File upload
+                <span className="text-xs text-gray-500 ml-2">(Single file - PDF, DOC, DOCX, XLS, XLSX - Max 20MB)</span>
+              </label>
+              <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 hover:border-blue-400 transition-colors">
+                <input
+                  type="file"
+                  accept=".pdf,.doc,.docx,.xls,.xlsx"
+                  onChange={(e) => {
+                    const files = Array.from(e.target.files || []);
+                    const single = files.slice(0, 1);
+                    setForeignFilingFileList(single);
+                    updateFormData(page, 'foreignFilingPermissionFile', single);
+                  }}
+                  className="hidden"
+                  id="np-foreign-filing-upload"
+                />
+                <label htmlFor="np-foreign-filing-upload" className="cursor-pointer flex flex-col items-center space-y-2">
+                  <Upload className="w-8 h-8 text-gray-400" />
+                  <span className="text-sm text-gray-600">Click to upload file</span>
+                </label>
+                {foreignFilingFileList.length > 0 && (
+                  <div className="mt-4 flex items-center justify-between bg-white p-2 rounded border">
+                    <span className="text-sm text-gray-700 truncate">
+                      {foreignFilingFileList[0].name || (typeof foreignFilingFileList[0] === 'string' ? foreignFilingFileList[0] : 'File')}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setForeignFilingFileList([]);
+                        updateFormData(page, 'foreignFilingPermissionFile', []);
+                      }}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -352,6 +352,11 @@ model PatentSpecificInformation {
   eihfr                       String?
   mres                        String?
 
+  // Page 4 only: Foreign filing permission
+  foreignFilingPermissionDate     String?
+  foreignFilingPermissionFile     String[] @default([])
+  externalAgencyDrafter           String?
+
   invention      Invention @relation("PatentSpecificInfoToInvention", fields: [asset_id], references: [asset_id], onDelete: Cascade)
 }
 
@@ -405,6 +410,9 @@ model PatentFiling {
   provisionalPatent          String[] @default([])
   attachment                 String[] @default([])
   dateProvision              String?
+  provisionalApplicationNumber String?  // Page 5: Application number
+  cbrReceiptNumber           String?   // Page 5: CBR receipt number
+  filingAgency               String?   // Page 5: Filing agency
   applicantName              String?
   isProfilePatent            String?
   isDefensivePatent          String?
@@ -422,6 +430,8 @@ model PatentFiling {
   applicationProvisionalNumber String?
   datePatentApplication      String?
   pctFilingPermission        String?
+  pctFiledForms              String[] @default([])  // Page 5 PCT: uploaded files
+  pctCbrReceiptNumber        String?               // Page 5 PCT: CBR receipt number
   
   // Additional PCT fields
   pctAgencyCost              String?
@@ -453,6 +463,8 @@ model PatentFiling {
   datePCTPatentApplication   String?
   finalSubmitted             String?
   filedForms                 String[] @default([])
+  npFilingDate               String?   // Page 5 NP: Date of filing of National phase application
+  npCbrReceiptNumber         String?   // Page 5 NP: CBR receipt number
   
   // Additional National Phase fields
   npAgencyCost               String?
@@ -486,6 +498,7 @@ model PatentFiling {
   filedFormsComplete         String[] @default([])
   dateOfComplete             String?
   isPostDated                String?
+  cbrReceiptNumberComplete   String?   // Page 5 Complete spec: CBR receipt number
   
   // Additional Complete Specification fields
   isProvisionalFiled         String?

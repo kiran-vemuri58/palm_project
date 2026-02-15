@@ -342,7 +342,7 @@ const EffortSheetV2 = ({
 
           {/* Page 3 only: Novel element(s) and Inventive element(s) */}
           {showNovelInventiveElements && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2 border-t border-gray-200">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-3">
                   Novel element(s)

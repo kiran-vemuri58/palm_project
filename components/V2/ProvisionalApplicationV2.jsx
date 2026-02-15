@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Upload, X } from 'lucide-react';
 import useV2Store from '@/store/v2Store';
 
-const ProvisionalApplicationV2 = ({ page }) => {
+const ProvisionalApplicationV2 = ({ page, isPage4 = false }) => {
   const formData = useV2Store((state) => state.getFormData(page));
   const updateFormData = useV2Store((state) => state.updateFormData);
 
@@ -142,8 +142,8 @@ const ProvisionalApplicationV2 = ({ page }) => {
         </div>
       </div>
 
-      {/* Row 3 */}
-      <div className="grid grid-cols-3 gap-4 mb-4">
+      {/* Row 3 - Page 4: hide Number of hours spent */}
+      <div className={`grid grid-cols-3 gap-4 mb-4 ${isPage4 ? 'grid-cols-2' : ''}`}>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Efforts spent for drafting
@@ -170,19 +170,21 @@ const ProvisionalApplicationV2 = ({ page }) => {
             className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
           />
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Number of hours spent
-          </label>
-          <input
-            type="number"
-            name="nohspent"
-            placeholder="Enter Number of hours spent"
-            value={safeFormData.nohspent || ''}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
-          />
-        </div>
+        {!isPage4 && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Number of hours spent
+            </label>
+            <input
+              type="number"
+              name="nohspent"
+              placeholder="Enter Number of hours spent"
+              value={safeFormData.nohspent || ''}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+            />
+          </div>
+        )}
       </div>
 
       {/* Row 4 */}
