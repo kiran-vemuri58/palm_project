@@ -47,13 +47,17 @@ export async function POST(request) {
     }
 
     // Process integer fields - convert empty strings to null for Int fields
-    const integerFields = ['rating', 'hoursspent', 'agencycost', 'revieweffort', 'extractionEffort'];
+    const integerFields = ['rating', 'hoursspent', 'agencycost', 'revieweffort', 'extractionEffort', 'patentabilityScore'];
     integerFields.forEach(field => {
       if (processedData[field] === '' || processedData[field] === null || processedData[field] === undefined) {
         processedData[field] = null;
       } else {
         const num = parseInt(processedData[field]);
-        processedData[field] = isNaN(num) ? null : num;
+        if (field === 'patentabilityScore') {
+          processedData[field] = (isNaN(num) || num < 1 || num > 10) ? null : num;
+        } else {
+          processedData[field] = isNaN(num) ? null : num;
+        }
       }
     });
 

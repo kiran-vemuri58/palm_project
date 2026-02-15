@@ -10,7 +10,12 @@ const EffortSheetV2 = ({
   isEditable = true,
   isNewAsset = false,
   title = 'Effort Sheet Details',
-  description = 'Track time, costs, and responsibilities for this process'
+  description = 'Track time, costs, and responsibilities for this process',
+  showHoursSpent = true,
+  hoursSpentLabel = 'Hours Spent',
+  extractionEffortLabel = 'Efforts Spent for Extraction',
+  ipRecognizerLabel = 'IP Recognizer (Emp ID)',
+  showNovelInventiveElements = false  // Page 3 only: Novel element(s), Inventive element(s)
 }) => {
   // Get form data and actions from store
   const formData = useV2Store((state) => state.getFormData(page));
@@ -65,11 +70,11 @@ const EffortSheetV2 = ({
       <div className="p-6">
         <div className="space-y-6">
           {/* First Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* IP Recognizer (Emp ID) */}
+          <div className={`grid grid-cols-1 gap-6 ${showHoursSpent ? 'lg:grid-cols-3' : 'lg:grid-cols-2'}`}>
+            {/* IP Recognizer / IP Extractor (label configurable per page) */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-3">
-                IP Recognizer (Emp ID)
+                {ipRecognizerLabel}
                 {errors.iprecognizer && (
                   <span className="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200">
                     <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -102,10 +107,11 @@ const EffortSheetV2 = ({
               </div>
             </div>
 
-            {/* Hours Spent */}
+            {showHoursSpent && (
+            /* Hours Spent - label can be overridden via hoursSpentLabel (e.g. Page 1) */
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-3">
-                Hours Spent
+                {hoursSpentLabel}
                 {errors.hoursspent && (
                   <span className="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200">
                     <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -139,6 +145,7 @@ const EffortSheetV2 = ({
                 />
               </div>
             </div>
+            )}
 
             {/* External Agency Recognizer */}
             <div>
@@ -294,10 +301,10 @@ const EffortSheetV2 = ({
 
           {/* Third Row */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Efforts Spent for Extraction */}
+            {/* Extraction effort - label can be overridden (e.g. Page 1: "Effort sheet for extraction", Page 3: "Effort spent for Analysis") */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-3">
-                Efforts Spent for Extraction
+                {extractionEffortLabel}
                 {errors.extractionEffort && (
                   <span className="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200">
                     <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -317,7 +324,7 @@ const EffortSheetV2 = ({
                   step="0.5"
                   value={localData.extractionEffort || ''}
                   onChange={(e) => handleChange('extractionEffort', e.target.value)}
-                  placeholder="Enter extraction effort hours"
+                  placeholder={showNovelInventiveElements ? 'Enter analysis effort hours' : 'Enter extraction effort hours'}
                   disabled={!isEditable}
                   className={`w-full pl-10 pr-4 py-3 border-2 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 ${
                     errors.extractionEffort 
@@ -332,6 +339,42 @@ const EffortSheetV2 = ({
               </div>
             </div>
           </div>
+
+          {/* Page 3 only: Novel element(s) and Inventive element(s) */}
+          {showNovelInventiveElements && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2 border-t border-gray-200">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                  Novel element(s)
+                </label>
+                <input
+                  type="text"
+                  value={localData.novelElements || ''}
+                  onChange={(e) => handleChange('novelElements', e.target.value)}
+                  placeholder="Enter novel element(s)"
+                  disabled={!isEditable}
+                  className={`w-full px-4 py-3 border-2 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 ${
+                    !isEditable ? 'bg-gray-50 text-gray-500 cursor-not-allowed' : 'bg-white'
+                  }`}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                  Inventive element(s)
+                </label>
+                <input
+                  type="text"
+                  value={localData.inventiveElements || ''}
+                  onChange={(e) => handleChange('inventiveElements', e.target.value)}
+                  placeholder="Enter inventive element(s)"
+                  disabled={!isEditable}
+                  className={`w-full px-4 py-3 border-2 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 ${
+                    !isEditable ? 'bg-gray-50 text-gray-500 cursor-not-allowed' : 'bg-white'
+                  }`}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

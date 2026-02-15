@@ -4,22 +4,34 @@ import React, { useState, useEffect } from 'react';
 import { FileCheck, Upload, X } from 'lucide-react';
 import useV2Store from '@/store/v2Store';
 
-const DecisionSheetV2 = ({ page }) => {
+const OPINION_OPTIONS = [
+  'Novel and Inventive.',
+  'Novel but not inventive.',
+  'Not novel and not inventive.'
+];
+
+const DecisionSheetV2 = ({ page, showOpinionDropdown }) => {
   // Get form data from store using page parameter
   const formData = useV2Store((state) => state.getFormData(page));
   const updateFormData = useV2Store((state) => state.updateFormData);
+  // Page 3 (Patentability Analysis): show Opinion dropdown; other pages: show Name of Decision Maker
+  const useOpinionDropdown = showOpinionDropdown === true || page === 'patentabilityAnalysis';
 
   const safeFormData = formData || {};
   const [attachmentFiles, setAttachmentFiles] = useState([]);
 
   // Update local file state when formData changes
   useEffect(() => {
-    if (safeFormData.ppds_attachments && Array.isArray(safeFormData.ppds_attachments)) {
-      setAttachmentFiles(safeFormData.ppds_attachments);
+    if (safeFormData.decisionAttachments && Array.isArray(safeFormData.decisionAttachments)) {
+      setAttachmentFiles(safeFormData.decisionAttachments);
     }
-  }, [safeFormData.ppds_attachments]);
+  }, [safeFormData.decisionAttachments]);
 
   const handleChange = (field, value) => {
+    if (field === 'patentabilityScore' && value !== '') {
+      const num = parseInt(value, 10);
+      if (isNaN(num) || num < 1 || num > 10) return;
+    }
     updateFormData(page, field, value);
   };
 
@@ -79,15 +91,28 @@ const DecisionSheetV2 = ({ page }) => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-3">
-                Name of Decision Maker
+                {useOpinionDropdown ? 'Opinion' : 'Name of Decision Maker'}
               </label>
-              <input
-                type="text"
-                value={safeFormData.nodc || ''}
-                onChange={(e) => handleChange('nodc', e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:border-blue-500 focus:ring-blue-500/20"
-                placeholder="Enter Name of Decision Maker"
-              />
+              {useOpinionDropdown ? (
+                <select
+                  value={safeFormData.nodc || ''}
+                  onChange={(e) => handleChange('nodc', e.target.value)}
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:border-blue-500 focus:ring-blue-500/20"
+                >
+                  <option value="">Select opinion</option>
+                  {OPINION_OPTIONS.map((opt) => (
+                    <option key={opt} value={opt}>{opt}</option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  type="text"
+                  value={safeFormData.nodc || ''}
+                  onChange={(e) => handleChange('nodc', e.target.value)}
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:border-blue-500 focus:ring-blue-500/20"
+                  placeholder="Enter Name of Decision Maker"
+                />
+              )}
             </div>
 
             <div>
@@ -145,6 +170,26 @@ const DecisionSheetV2 = ({ page }) => {
               </div>
             </div>
           </div>
+
+          {/* Patentability score - Page 3 only (1-10, displayed as e.g. 6/10) */}
+          {useOpinionDropdown && (
+            <div className="pt-4 border-t border-gray-200">
+              <label className="block text-sm font-semibold text-gray-700 mb-3">
+                Patentability score
+                <span className="text-xs text-gray-500 ml-2">(1–10)</span>
+              </label>
+              <select
+                value={safeFormData.patentabilityScore ?? ''}
+                onChange={(e) => handleChange('patentabilityScore', e.target.value)}
+                className="w-full max-w-xs px-4 py-3 border-2 border-gray-200 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:border-purple-500 focus:ring-purple-500/20"
+              >
+                <option value="">Select score</option>
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
+                  <option key={n} value={n}>{n}/10</option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
       </div>
     </div>

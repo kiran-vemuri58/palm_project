@@ -77,6 +77,7 @@ function InventionRecognitionV2Content() {
     converted.evidence = converted.evidence || [];
     converted.minuteOfMeeting = converted.minuteOfMeeting || [];
     converted.attachments = converted.attachments || [];
+    converted.agreementDocuments = converted.agreementDocuments || [];
     
     // Convert inventors to JSON format
     if (converted.inventors && Array.isArray(converted.inventors)) {
@@ -201,6 +202,12 @@ function InventionRecognitionV2Content() {
           if (formData.attachments && formData.attachments.length > 0) {
             fileSavePromises.push(
               saveFilesToDocuments(formData.attachments, assetNumber, pageName, 'attachments')
+            );
+          }
+          
+          if (formData.agreementDocuments && formData.agreementDocuments.length > 0) {
+            fileSavePromises.push(
+              saveFilesToDocuments(formData.agreementDocuments, assetNumber, pageName, 'agreement-documents')
             );
           }
           
@@ -399,7 +406,7 @@ function InventionRecognitionV2Content() {
               />
             </div>
 
-            {/* Effort Sheet Section */}
+            {/* Effort Sheet Section - Page 1 only: no Hours Spent, extraction label "Effort spent for recognition" */}
             <div className="mt-8">
               <EffortSheetV2
                 page="inventionRecognition"
@@ -408,6 +415,8 @@ function InventionRecognitionV2Content() {
                 isNewAsset={!currentAssetId}
                 title="Effort Sheet Details"
                 description="Track time, costs, and responsibilities for invention recognition process"
+                showHoursSpent={false}
+                extractionEffortLabel="Effort spent for Recognition"
               />
             </div>
 

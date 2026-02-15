@@ -22,6 +22,7 @@ function getInitialFormData(page) {
       stakeholders: '',
       entityJournalNumbers: '',
       entityProductIdentity: '',
+      agreementDocuments: [],
       
       // Technology Details
       incrementalrenovation: '',
@@ -123,6 +124,7 @@ function getInitialFormData(page) {
       // Decision Sheet fields
       nodc: '',
       dibrief: '',
+      patentabilityScore: '',  // 1-10, Page 3 only (displayed as e.g. 6/10)
       
       // Patentability Extractor fields
       psone: '',
@@ -137,6 +139,8 @@ function getInitialFormData(page) {
       revieweffort: 0,
       managerempid: '',
       extractionEffort: 0,
+      novelElements: '',      // Page 3 only
+      inventiveElements: '',  // Page 3 only
       // Activity Status
       activityStatus: ''
     },
@@ -1034,6 +1038,7 @@ const useV2Store = create((set, get) => ({
           stakeholders: apiData.stakeholders || '',
           entityJournalNumbers: apiData.entityJournalNumbers || '',
           entityProductIdentity: apiData.entityProductIdentity || '',
+          agreementDocuments: apiData.agreementDocuments || [],
           
           // Technology Details
           incrementalrenovation: apiData.incrementalrenovation || '',
@@ -1138,6 +1143,7 @@ const useV2Store = create((set, get) => ({
           // Decision Sheet fields
           nodc: apiData.nodc || '',
           dibrief: apiData.dibrief || '',
+          patentabilityScore: apiData.patentabilityScore !== undefined && apiData.patentabilityScore !== null ? String(apiData.patentabilityScore) : '',
           
           // Patentability Extractor fields
           psone: apiData.psone || '',
@@ -1153,6 +1159,8 @@ const useV2Store = create((set, get) => ({
           revieweffort: apiData.revieweffort || 0,
           managerempid: apiData.managerempid || '',
           extractionEffort: apiData.extractionEffort || 0,
+          novelElements: apiData.novelElements || '',
+          inventiveElements: apiData.inventiveElements || '',
           
           // Activity Status
           activityStatus: apiData.activityStatus || ''

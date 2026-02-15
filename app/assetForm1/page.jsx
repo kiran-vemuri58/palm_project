@@ -77,7 +77,8 @@ const InventionRecognitionFormContent = () => {
       uploadedFilePaths: {
         evidence: dbData.evidence || [],
         minuteOfMeeting: dbData.minuteofmeeting || [],
-        attachments: dbData.attachments || []
+        attachments: dbData.attachments || [],
+        agreementDocuments: dbData.agreementDocuments || []
       }
     };
   };

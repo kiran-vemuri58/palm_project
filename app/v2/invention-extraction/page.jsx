@@ -333,11 +333,13 @@ function InventionExtractionV2Content() {
               errors={errors}
             />
 
-            {/* Effort Sheet Details */}
+            {/* Effort Sheet Details - Page 2: no Hours Spent, IP Extractor label */}
             <EffortSheetV2 
               page="inventionExtraction"
               errors={errors}
               isEditable={true}
+              showHoursSpent={false}
+              ipRecognizerLabel="IP Extractor (Emp ID)"
             />
 
             {/* Activity Status */}

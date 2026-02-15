@@ -4,7 +4,15 @@ import React, { useState, useEffect } from 'react';
 import { Upload, X } from 'lucide-react';
 import useV2Store from '@/store/v2Store';
 
-const ExtractorDetailsV2 = ({ formData, updateFormData, page }) => {
+const ExtractorDetailsV2 = ({
+  formData,
+  updateFormData,
+  page,
+  extractor1Label = 'Name of the Extractor 1',
+  extractor2Label = 'Name of the Extractor 2',
+  extractor1Placeholder = 'Enter the name of Extractor 1',
+  extractor2Placeholder = 'Enter the name of Extractor 2'
+}) => {
   const safeFormData = formData || {};
   const [attachmentFiles, setAttachmentFiles] = useState([]);
 
@@ -92,27 +100,27 @@ const ExtractorDetailsV2 = ({ formData, updateFormData, page }) => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-3">
-            Name of the Extractor 1
+            {extractor1Label}
           </label>
           <input
             type="text"
             value={safeFormData.extractorOne || ''}
             onChange={(e) => handleChange('extractorOne', e.target.value)}
             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:border-blue-500 focus:ring-blue-500/20"
-            placeholder="Enter the name of Extractor 1"
+            placeholder={extractor1Placeholder}
           />
         </div>
         
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-3">
-            Name of the Extractor 2
+            {extractor2Label}
           </label>
           <input
             type="text"
             value={safeFormData.extractortwo || ''}
             onChange={(e) => handleChange('extractortwo', e.target.value)}
             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:border-blue-500 focus:ring-blue-500/20"
-            placeholder="Enter the name of Extractor 2"
+            placeholder={extractor2Placeholder}
           />
         </div>
         

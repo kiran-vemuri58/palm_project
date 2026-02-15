@@ -86,8 +86,6 @@ const InnovationAnalysisV2 = ({ page = 'patentabilityAnalysis', errors = {}, isE
     });
   };
 
-  const isTrainRun = localData.trainRun === 'yes';
-
   return (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
       {/* Header */}
@@ -106,13 +104,6 @@ const InnovationAnalysisV2 = ({ page = 'patentabilityAnalysis', errors = {}, isE
       {/* Form Fields */}
       <div className="p-6">
         <div className="space-y-6">
-          {/* Debug: Component is rendering */}
-          <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
-            <p className="text-green-800 text-sm">
-              <strong>✅ InnovationAnalysisV2 Component is rendering!</strong>
-            </p>
-          </div>
-          
           {/* Is there more than an invention? */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-3">
@@ -139,117 +130,115 @@ const InnovationAnalysisV2 = ({ page = 'patentabilityAnalysis', errors = {}, isE
             )}
           </div>
 
-          {/* Show additional fields only if "Yes" is selected */}
-          {isTrainRun && (
-            <div className="space-y-6 p-6 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl border border-purple-200">
-              <h4 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <AlertCircle className="w-5 h-5 text-purple-600 mr-2" />
-                Additional Documents Required
-              </h4>
-              
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Prior Art Documents */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-3">
-                    Prior Art Documents
-                    <span className="text-xs text-gray-500 ml-2">(PDF, DOC, DOCX, XLS, XLSX - Max 20MB)</span>
+          {/* Documents section - always visible */}
+          <div className="space-y-6 p-6 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl border border-purple-200">
+            <h4 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+              <AlertCircle className="w-5 h-5 text-purple-600 mr-2" />
+              Additional Documents Required
+            </h4>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Prior Art Documents */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                  Prior Art Documents
+                  <span className="text-xs text-gray-500 ml-2">(PDF, DOC, DOCX, XLS, XLSX - Max 20MB)</span>
+                </label>
+                <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 hover:border-purple-400 transition-colors">
+                  <input
+                    type="file"
+                    multiple
+                    accept=".pdf,.doc,.docx,.xls,.xlsx"
+                    onChange={(e) => handleFileChange(e.target.files, setMinuteFiles, 'minuteOfMeeting')}
+                    disabled={!isEditable}
+                    className="hidden"
+                    id="minute-upload"
+                  />
+                  <label
+                    htmlFor="minute-upload"
+                    className={`cursor-pointer flex flex-col items-center space-y-2 ${
+                      !isEditable ? 'cursor-not-allowed opacity-50' : ''
+                    }`}
+                  >
+                    <Upload className="w-8 h-8 text-gray-400" />
+                    <span className="text-sm text-gray-600">Click to upload files</span>
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 hover:border-purple-400 transition-colors">
-                    <input
-                      type="file"
-                      multiple
-                      accept=".pdf,.doc,.docx,.xls,.xlsx"
-                      onChange={(e) => handleFileChange(e.target.files, setMinuteFiles, 'minuteOfMeeting')}
-                      disabled={!isEditable}
-                      className="hidden"
-                      id="minute-upload"
-                    />
-                    <label
-                      htmlFor="minute-upload"
-                      className={`cursor-pointer flex flex-col items-center space-y-2 ${
-                        !isEditable ? 'cursor-not-allowed opacity-50' : ''
-                      }`}
-                    >
-                      <Upload className="w-8 h-8 text-gray-400" />
-                      <span className="text-sm text-gray-600">Click to upload files</span>
-                    </label>
-                    
-                    {/* File List */}
-                    {minuteFiles.length > 0 && (
-                      <div className="mt-4 space-y-2">
-                        {minuteFiles.map((file, index) => (
-                          <div key={index} className="flex items-center justify-between bg-white p-2 rounded border">
-                            <span className="text-sm text-gray-700 truncate">{file.name}</span>
-                            <button
-                              type="button"
-                              onClick={() => removeFile(index, setMinuteFiles, 'minuteOfMeeting')}
-                              disabled={!isEditable}
-                              className="text-red-500 hover:text-red-700 disabled:opacity-50"
-                            >
-                              <X className="w-4 h-4" />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                  {errors.minuteOfMeeting && (
-                    <p className="mt-1 text-sm text-red-600">{errors.minuteOfMeeting}</p>
+                  
+                  {/* File List */}
+                  {minuteFiles.length > 0 && (
+                    <div className="mt-4 space-y-2">
+                      {minuteFiles.map((file, index) => (
+                        <div key={index} className="flex items-center justify-between bg-white p-2 rounded border">
+                          <span className="text-sm text-gray-700 truncate">{file.name}</span>
+                          <button
+                            type="button"
+                            onClick={() => removeFile(index, setMinuteFiles, 'minuteOfMeeting')}
+                            disabled={!isEditable}
+                            className="text-red-500 hover:text-red-700 disabled:opacity-50"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
                   )}
                 </div>
+                {errors.minuteOfMeeting && (
+                  <p className="mt-1 text-sm text-red-600">{errors.minuteOfMeeting}</p>
+                )}
+              </div>
 
-                {/* NPL Documents */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-3">
-                    NPL Documents
-                    <span className="text-xs text-gray-500 ml-2">(PDF, DOC, DOCX, XLS, XLSX - Max 20MB)</span>
+              {/* NPL Documents */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                  NPL Documents
+                  <span className="text-xs text-gray-500 ml-2">(PDF, DOC, DOCX, XLS, XLSX - Max 20MB)</span>
+                </label>
+                <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 hover:border-purple-400 transition-colors">
+                  <input
+                    type="file"
+                    multiple
+                    accept=".pdf,.doc,.docx,.xls,.xlsx"
+                    onChange={(e) => handleFileChange(e.target.files, setAttachmentFiles, 'attachments')}
+                    disabled={!isEditable}
+                    className="hidden"
+                    id="attachment-upload"
+                  />
+                  <label
+                    htmlFor="attachment-upload"
+                    className={`cursor-pointer flex flex-col items-center space-y-2 ${
+                      !isEditable ? 'cursor-not-allowed opacity-50' : ''
+                    }`}
+                  >
+                    <Upload className="w-8 h-8 text-gray-400" />
+                    <span className="text-sm text-gray-600">Click to upload files</span>
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 hover:border-purple-400 transition-colors">
-                    <input
-                      type="file"
-                      multiple
-                      accept=".pdf,.doc,.docx,.xls,.xlsx"
-                      onChange={(e) => handleFileChange(e.target.files, setAttachmentFiles, 'attachments')}
-                      disabled={!isEditable}
-                      className="hidden"
-                      id="attachment-upload"
-                    />
-                    <label
-                      htmlFor="attachment-upload"
-                      className={`cursor-pointer flex flex-col items-center space-y-2 ${
-                        !isEditable ? 'cursor-not-allowed opacity-50' : ''
-                      }`}
-                    >
-                      <Upload className="w-8 h-8 text-gray-400" />
-                      <span className="text-sm text-gray-600">Click to upload files</span>
-                    </label>
-                    
-                    {/* File List */}
-                    {attachmentFiles.length > 0 && (
-                      <div className="mt-4 space-y-2">
-                        {attachmentFiles.map((file, index) => (
-                          <div key={index} className="flex items-center justify-between bg-white p-2 rounded border">
-                            <span className="text-sm text-gray-700 truncate">{file.name}</span>
-                            <button
-                              type="button"
-                              onClick={() => removeFile(index, setAttachmentFiles, 'attachments')}
-                              disabled={!isEditable}
-                              className="text-red-500 hover:text-red-700 disabled:opacity-50"
-                            >
-                              <X className="w-4 h-4" />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                  {errors.attachments && (
-                    <p className="mt-1 text-sm text-red-600">{errors.attachments}</p>
+                  
+                  {/* File List */}
+                  {attachmentFiles.length > 0 && (
+                    <div className="mt-4 space-y-2">
+                      {attachmentFiles.map((file, index) => (
+                        <div key={index} className="flex items-center justify-between bg-white p-2 rounded border">
+                          <span className="text-sm text-gray-700 truncate">{file.name}</span>
+                          <button
+                            type="button"
+                            onClick={() => removeFile(index, setAttachmentFiles, 'attachments')}
+                            disabled={!isEditable}
+                            className="text-red-500 hover:text-red-700 disabled:opacity-50"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
                   )}
                 </div>
+                {errors.attachments && (
+                  <p className="mt-1 text-sm text-red-600">{errors.attachments}</p>
+                )}
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

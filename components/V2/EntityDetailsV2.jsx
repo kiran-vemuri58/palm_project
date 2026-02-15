@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Building2, Calendar, Globe, Users, FileText } from 'lucide-react';
+import { Building2, Calendar, Globe, Users, FileText, Upload, X } from 'lucide-react';
 import useV2Store from '@/store/v2Store';
 
 const EntityDetailsV2 = ({
@@ -16,6 +16,7 @@ const EntityDetailsV2 = ({
   const updateFormData = useV2Store((state) => state.updateFormData);
   const setErrors = useV2Store((state) => state.setErrors);
   const [localData, setLocalData] = useState(formData);
+  const [agreementFiles, setAgreementFiles] = useState([]);
 
   // Update local data when formData changes
   useEffect(() => {
@@ -34,16 +35,19 @@ const EntityDetailsV2 = ({
         collaboratorcountry: '',
         stakeholders: '',
         entityJournalNumbers: '',
-        entityProductIdentity: ''
+        entityProductIdentity: '',
+        agreementDocuments: []
       };
       setLocalData(clearedData);
+      setAgreementFiles([]);
       updateFormData(page, {
         [field]: value,
         collaboratorname: '',
         collaboratorcountry: '',
         stakeholders: '',
         entityJournalNumbers: '',
-        entityProductIdentity: ''
+        entityProductIdentity: '',
+        agreementDocuments: []
       });
     } else {
       // Always update the store immediately for real-time saving
@@ -58,6 +62,32 @@ const EntityDetailsV2 = ({
     }
   };
 
+  const handleAgreementFileChange = (fileList) => {
+    const files = Array.from(fileList || []);
+    const allowedTypes = ['.pdf', '.doc', '.docx', '.xls', '.xlsx'];
+    const invalidFiles = files.filter(file => {
+      const ext = '.' + (file.name.split('.').pop() || '').toLowerCase();
+      return !allowedTypes.includes(ext);
+    });
+    if (invalidFiles.length > 0) {
+      alert('Invalid file types. Only PDF, DOC, DOCX, XLS, XLSX are allowed.');
+      return;
+    }
+    if (files.some(f => f.size > 20 * 1024 * 1024)) {
+      alert('File size too large. Maximum 20MB per file.');
+      return;
+    }
+    setAgreementFiles(files);
+    updateFormData(page, 'agreementDocuments', files);
+  };
+
+  const removeAgreementFile = (index) => {
+    setAgreementFiles(prev => {
+      const next = prev.filter((_, i) => i !== index);
+      updateFormData(page, 'agreementDocuments', next);
+      return next;
+    });
+  };
 
   const isCollaboration = localData.collaboration === 'yes';
 
@@ -349,6 +379,51 @@ const EntityDetailsV2 = ({
                     }`}
                   />
                 </div>
+              </div>
+
+              {/* Upload agreements */}
+              <div className="mt-6">
+                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                  Upload agreements
+                </label>
+                <input
+                  type="file"
+                  multiple
+                  accept=".pdf,.doc,.docx,.xls,.xlsx"
+                  onChange={(e) => handleAgreementFileChange(e.target.files)}
+                  disabled={!isEditable}
+                  className="hidden"
+                  id="agreement-documents-upload"
+                />
+                <label
+                  htmlFor="agreement-documents-upload"
+                  className={`flex flex-col items-center justify-center w-full min-h-[120px] border-2 border-dashed rounded-xl cursor-pointer transition-colors ${
+                    !isEditable
+                      ? 'bg-gray-50 border-gray-200 cursor-not-allowed'
+                      : 'bg-white border-blue-300 hover:border-blue-500 hover:bg-blue-50/50'
+                  }`}
+                >
+                  <Upload className="w-8 h-8 text-gray-400 mb-2" />
+                  <span className="text-sm text-gray-600">Click to upload agreements (PDF, DOC, DOCX, XLS, XLSX, max 20MB)</span>
+                </label>
+                {agreementFiles.length > 0 && (
+                  <ul className="mt-3 space-y-2">
+                    {agreementFiles.map((file, index) => (
+                      <li key={index} className="flex items-center justify-between py-2 px-3 bg-white rounded-lg border border-gray-200">
+                        <span className="text-sm text-gray-700 truncate flex-1">{file.name}</span>
+                        <button
+                          type="button"
+                          onClick={() => removeAgreementFile(index)}
+                          disabled={!isEditable}
+                          className="p-1 text-red-500 hover:bg-red-50 rounded"
+                          aria-label="Remove file"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
           )}

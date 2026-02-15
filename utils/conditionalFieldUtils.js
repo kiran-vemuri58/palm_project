@@ -70,7 +70,7 @@ export const CONDITIONAL_FIELD_CONFIGS = {
   // Collaboration
   collaboration: {
     mainField: 'collaboration',
-    dependentFields: ['collaboratorName', 'collaboratorCountry', 'entityJournalNumbers', 'entityProductIdentity']
+    dependentFields: ['collaboratorName', 'collaboratorCountry', 'entityJournalNumbers', 'entityProductIdentity', 'agreementDocuments']
   }
 };
 

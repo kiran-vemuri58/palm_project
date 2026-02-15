@@ -116,7 +116,7 @@ const IE2ExtractorDetailsV2 = ({ formData, updateFormData, page }) => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
-                    Novel Feature
+                    Novel feature assumed
                   </label>
                   <input
                     type="text"
@@ -129,7 +129,7 @@ const IE2ExtractorDetailsV2 = ({ formData, updateFormData, page }) => {
                 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
-                    Inventive Feature
+                    Inventive feature assumed
                   </label>
                   <input
                     type="text"
@@ -145,7 +145,7 @@ const IE2ExtractorDetailsV2 = ({ formData, updateFormData, page }) => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
-                    Specific Country
+                    Countries consider for analysis
                   </label>
                   <input
                     type="text"

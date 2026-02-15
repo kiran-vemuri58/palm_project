@@ -56,6 +56,7 @@ model Invention {
   stakeholders              String?
   entityJournalNumbers      String?
   entityProductIdentity     String?
+  agreementDocuments        String[]                    @default([])
   
   // Optional fields - Technology Details
   incrementalrenovation     String?
@@ -223,8 +224,9 @@ model PatentabilityAnalysis {
   attachments      String[] @default([])
   
   // Decision Sheet fields
-  nodc             String?
-  dibrief          String?
+  nodc                 String?
+  dibrief              String?
+  patentabilityScore   Int?    // 1-10, Page 3 only (displayed as e.g. 6/10)
   
   // Patentability Extractor fields
   psone            String?
@@ -240,6 +242,8 @@ model PatentabilityAnalysis {
   revieweffort    Int?
   managerempid    String?
   extractionEffort Int?
+  novelElements    String?   // Page 3 only
+  inventiveElements String?  // Page 3 only
   
   // Activity Status
   activityStatus  String?

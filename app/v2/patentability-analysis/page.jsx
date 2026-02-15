@@ -198,6 +198,10 @@ function PatentabilityAnalysisV2Content() {
               page="patentabilityAnalysis"
               formData={formData}
               updateFormData={handleUpdateFormData}
+              extractor1Label="Name of the Analyst 1"
+              extractor2Label="Name of the Analyst 2"
+              extractor1Placeholder="Enter the name of Analyst 1"
+              extractor2Placeholder="Enter the name of Analyst 2"
             />
           </div>
 
@@ -209,15 +213,19 @@ function PatentabilityAnalysisV2Content() {
             updateFormData={handleUpdateFormData}
           />
 
-          {/* Decision Sheet */}
-          <DecisionSheetV2 page="patentabilityAnalysis" isEditable={true} />
+          {/* Decision Sheet - Opinion dropdown for patentability only */}
+          <DecisionSheetV2 page="patentabilityAnalysis" isEditable={true} showOpinionDropdown={true} />
 
-          {/* Effort Sheet Details */}
+          {/* Effort Sheet Details - Page 3 only: no Hours Spent, IP Analyst, Effort spent for Analysis, Novel/Inventive elements */}
           <EffortSheetV2
             formData={formData}
             updateFormData={handleUpdateFormData}
             page="patentabilityAnalysis"
             isEditable={true}
+            showHoursSpent={false}
+            ipRecognizerLabel="IP Analyst (Emp ID)"
+            extractionEffortLabel="Effort spent for Analysis"
+            showNovelInventiveElements={true}
           />
 
           {/* Activity Status */}
