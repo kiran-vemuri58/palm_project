@@ -5,8 +5,6 @@ import { useRouter } from 'next/navigation';
 import V2Navigation from '@/components/V2Navigation';
 import InventionDetailsV2 from '@/components/V2/InventionDetailsV2';
 import PCPatentCommercializationChildV2 from '@/components/V2/PatentCommercialization/PCPatentCommercializationChildV2';
-import PCPANV2 from '@/components/V2/PatentCommercialization/PCPANV2';
-import PCPatentCommercializationEffortsV2 from '@/components/V2/PatentCommercialization/PCPatentCommercializationEffortsV2';
 import PCActivityStatusV2 from '@/components/V2/PatentCommercialization/PCActivityStatusV2';
 import useV2Store from '@/store/v2Store';
 import axios from 'axios';
@@ -157,24 +155,6 @@ const PatentCommercializationV2 = () => {
             {/* Patent Commercialization Child */}
             <div className="mb-8">
               <PCPatentCommercializationChildV2 
-                formData={patentCommercialization}
-                updateFormData={handleUpdateFormData}
-                page="patentCommercialization"
-              />
-            </div>
-
-            {/* PAN - Post Grant Opposition */}
-            <div className="mb-8">
-              <PCPANV2 
-                formData={patentCommercialization}
-                updateFormData={handleUpdateFormData}
-                page="patentCommercialization"
-              />
-            </div>
-
-            {/* Patent Commercialization Efforts */}
-            <div className="mb-8">
-              <PCPatentCommercializationEffortsV2 
                 formData={patentCommercialization}
                 updateFormData={handleUpdateFormData}
                 page="patentCommercialization"

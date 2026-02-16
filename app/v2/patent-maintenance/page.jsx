@@ -4,13 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import V2Navigation from '@/components/V2Navigation';
 import InventionDetailsV2 from '@/components/V2/InventionDetailsV2';
-import PMExtractorDetailsV2 from '@/components/V2/PatentMaintenance/PMExtractorDetailsV2';
 import PMPatentProsecutionDetailsV2 from '@/components/V2/PatentMaintenance/PMPatentProsecutionDetailsV2';
 import PMPatentMaintenanceHistoryV2 from '@/components/V2/PatentMaintenance/PMPatentMaintenanceHistoryV2';
-import PMPANV2 from '@/components/V2/PatentMaintenance/PMPANV2';
-import PMDecisionSheetV2 from '@/components/V2/PatentMaintenance/PMDecisionSheetV2';
-import PMInnovationAnalysisV2 from '@/components/V2/PatentMaintenance/PMInnovationAnalysisV2';
-import PMPatentabilityExtractorV2 from '@/components/V2/PatentMaintenance/PMPatentabilityExtractorV2';
 import PMEffortSheetDetailsV2 from '@/components/V2/PatentMaintenance/PMEffortSheetDetailsV2';
 import PMActivityStatusV2 from '@/components/V2/PatentMaintenance/PMActivityStatusV2';
 import useV2Store from '@/store/v2Store';
@@ -133,15 +128,6 @@ const PatentMaintenanceV2 = () => {
               />
             </div>
 
-            {/* Extractor Details */}
-            <div className="mb-8">
-              <PMExtractorDetailsV2 
-                formData={patentMaintenance}
-                updateFormData={handleUpdateFormData}
-                page="patentMaintenance"
-              />
-            </div>
-
             {/* Patent Prosecution Details */}
             <div className="mb-8">
               <PMPatentProsecutionDetailsV2 
@@ -154,42 +140,6 @@ const PatentMaintenanceV2 = () => {
             {/* Patent Maintenance History */}
             <div className="mb-8">
               <PMPatentMaintenanceHistoryV2 
-                formData={patentMaintenance}
-                updateFormData={handleUpdateFormData}
-                page="patentMaintenance"
-              />
-            </div>
-
-            {/* PAN */}
-            <div className="mb-8">
-              <PMPANV2 
-                formData={patentMaintenance}
-                updateFormData={handleUpdateFormData}
-                page="patentMaintenance"
-              />
-            </div>
-
-            {/* Decision Sheet */}
-            <div className="mb-8">
-              <PMDecisionSheetV2 
-                formData={patentMaintenance}
-                updateFormData={handleUpdateFormData}
-                page="patentMaintenance"
-              />
-            </div>
-
-            {/* Innovation Analysis */}
-            <div className="mb-8">
-              <PMInnovationAnalysisV2 
-                formData={patentMaintenance}
-                updateFormData={handleUpdateFormData}
-                page="patentMaintenance"
-              />
-            </div>
-
-            {/* Patentability Extractor */}
-            <div className="mb-8">
-              <PMPatentabilityExtractorV2 
                 formData={patentMaintenance}
                 updateFormData={handleUpdateFormData}
                 page="patentMaintenance"

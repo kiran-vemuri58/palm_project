@@ -4,12 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import V2Navigation from '@/components/V2Navigation';
 import InventionDetailsV2 from '@/components/V2/InventionDetailsV2';
-import PGOExtractorDetailsV2 from '@/components/V2/PostGrantOpposition/PGOExtractorDetailsV2';
 import PGOPatentProsecutionDetailsV2 from '@/components/V2/PostGrantOpposition/PGOPatentProsecutionDetailsV2';
-import PGOPANV2 from '@/components/V2/PostGrantOpposition/PGOPANV2';
-import PGODecisionSheetV2 from '@/components/V2/PostGrantOpposition/PGODecisionSheetV2';
-import PGOInnovationAnalysisV2 from '@/components/V2/PostGrantOpposition/PGOInnovationAnalysisV2';
-import PGOPatentabilityExtractorV2 from '@/components/V2/PostGrantOpposition/PGOPatentabilityExtractorV2';
 import PGOEffortSheetDetailsV2 from '@/components/V2/PostGrantOpposition/PGOEffortSheetDetailsV2';
 import PGOActivityStatusV2 from '@/components/V2/PostGrantOpposition/PGOActivityStatusV2';
 import useV2Store from '@/store/v2Store';
@@ -158,54 +153,9 @@ const PostGrantOppositionV2 = () => {
               />
             </div>
 
-            {/* Extractor Details */}
-            <div className="mb-8">
-              <PGOExtractorDetailsV2 
-                formData={postGrantOpposition}
-                updateFormData={handleUpdateFormData}
-                page="postGrantOpposition"
-              />
-            </div>
-
             {/* Patent Prosecution Details */}
             <div className="mb-8">
               <PGOPatentProsecutionDetailsV2 
-                formData={postGrantOpposition}
-                updateFormData={handleUpdateFormData}
-                page="postGrantOpposition"
-              />
-            </div>
-
-            {/* PAN */}
-            <div className="mb-8">
-              <PGOPANV2 
-                formData={postGrantOpposition}
-                updateFormData={handleUpdateFormData}
-                page="postGrantOpposition"
-              />
-            </div>
-
-            {/* Decision Sheet */}
-            <div className="mb-8">
-              <PGODecisionSheetV2 
-                formData={postGrantOpposition}
-                updateFormData={handleUpdateFormData}
-                page="postGrantOpposition"
-              />
-            </div>
-
-            {/* Innovation Analysis */}
-            <div className="mb-8">
-              <PGOInnovationAnalysisV2 
-                formData={postGrantOpposition}
-                updateFormData={handleUpdateFormData}
-                page="postGrantOpposition"
-              />
-            </div>
-
-            {/* Patentability Extractor */}
-            <div className="mb-8">
-              <PGOPatentabilityExtractorV2 
                 formData={postGrantOpposition}
                 updateFormData={handleUpdateFormData}
                 page="postGrantOpposition"

@@ -79,7 +79,7 @@ const PPPatentApplicationStatusV2 = ({ formData, updateFormData, page }) => {
 
       <div className="p-6">
         <div className="space-y-6">
-          {/* Patent Status */}
+          {/* Patent Status: Granted or Prosecution (Page 6 only) */}
           <div className="space-y-2">
             <label className="block text-sm font-semibold text-gray-700 mb-3">
               Patent Status
@@ -90,8 +90,8 @@ const PPPatentApplicationStatusV2 = ({ formData, updateFormData, page }) => {
               className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:border-purple-500 focus:ring-purple-500/20 bg-white"
             >
               <option value="">Select status</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
+              <option value="Granted">Granted</option>
+              <option value="Prosecution">Prosecution</option>
             </select>
           </div>
 
@@ -156,22 +156,24 @@ const PPPatentApplicationStatusV2 = ({ formData, updateFormData, page }) => {
             )}
           </div>
 
-          {/* Conditional Fields - Only show when Patent Status is "yes" */}
-          {safeFormData.ppas_status === 'yes' && (
-            <>
-              {/* Patent Grant Date */}
-              <div className="space-y-2">
-                <label className="block text-sm font-semibold text-gray-700 mb-3">
-                  Patent Grant Date
-                </label>
-                <input
-                  type="date"
-                  value={safeFormData.ppas_grant_date || ''}
-                  onChange={(e) => handleChange('ppas_grant_date', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:border-purple-500 focus:ring-purple-500/20"
-                />
-              </div>
+          {/* Conditional: Patent Grant Date - show when status is Granted */}
+          {safeFormData.ppas_status === 'Granted' && (
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-700 mb-3">
+                Patent Grant Date
+              </label>
+              <input
+                type="date"
+                value={safeFormData.ppas_grant_date || ''}
+                onChange={(e) => handleChange('ppas_grant_date', e.target.value)}
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:border-purple-500 focus:ring-purple-500/20"
+              />
+            </div>
+          )}
 
+          {/* Conditional: Rejection Reason Attachments - show when status is Prosecution */}
+          {safeFormData.ppas_status === 'Prosecution' && (
+            <>
               {/* Rejection Reason Attachments */}
               <div className="space-y-2">
                 <label htmlFor="pp-rejection-attachments-upload" className="block text-sm font-semibold text-gray-700 mb-3">

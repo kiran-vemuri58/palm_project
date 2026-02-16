@@ -8,16 +8,10 @@ import useV2Store from '@/store/v2Store';
 
 // Import all V2 components
 import InventionDetailsV2 from '@/components/V2/InventionDetailsV2';
-import PPExtractorDetailsV2 from '@/components/V2/PatentProsecution/PPExtractorDetailsV2';
 import PPPatentProsecutionDetailsV2 from '@/components/V2/PatentProsecution/PPPatentProsecutionDetailsV2';
 import PPPatentApplicationStatusV2 from '@/components/V2/PatentProsecution/PPPatentApplicationStatusV2';
 import PPFERV2 from '@/components/V2/PatentProsecution/PPFERV2';
 import PPHearingV2 from '@/components/V2/PatentProsecution/PPHearingV2';
-import PPDecisionSheetV2 from '@/components/V2/PatentProsecution/PPDecisionSheetV2';
-import PPInnovationAnalysisV2 from '@/components/V2/PatentProsecution/PPInnovationAnalysisV2';
-import PPPatentabilityExtractorV2 from '@/components/V2/PatentProsecution/PPPatentabilityExtractorV2';
-import PPAveragePatentabilityRatingV2 from '@/components/V2/PatentProsecution/PPAveragePatentabilityRatingV2';
-import PPEffortSheetV2 from '@/components/V2/PatentProsecution/PPEffortSheetV2';
 import PPActivityStatusV2 from '@/components/V2/PatentProsecution/PPActivityStatusV2';
 
 const PatentProsecutionV2 = () => {
@@ -142,13 +136,6 @@ const PatentProsecutionV2 = () => {
             />
           </div>
 
-          {/* Extractor Details */}
-          <PPExtractorDetailsV2 
-            formData={patentProsecution} 
-            updateFormData={updateFormData} 
-            page="patentProsecution"
-          />
-
           {/* Patent Prosecution Details */}
           <PPPatentProsecutionDetailsV2 
             formData={patentProsecution} 
@@ -172,41 +159,6 @@ const PatentProsecutionV2 = () => {
 
           {/* Hearing Details */}
           <PPHearingV2 
-            formData={patentProsecution} 
-            updateFormData={updateFormData} 
-            page="patentProsecution"
-          />
-
-          {/* Decision Sheet */}
-          <PPDecisionSheetV2 
-            formData={patentProsecution} 
-            updateFormData={updateFormData} 
-            page="patentProsecution"
-          />
-
-          {/* Innovation Analysis */}
-          <PPInnovationAnalysisV2 
-            formData={patentProsecution} 
-            updateFormData={updateFormData} 
-            page="patentProsecution"
-          />
-
-          {/* Patentability Extractor */}
-          <PPPatentabilityExtractorV2 
-            formData={patentProsecution} 
-            updateFormData={updateFormData} 
-            page="patentProsecution"
-          />
-
-          {/* Average Patentability Rating */}
-          <PPAveragePatentabilityRatingV2 
-            formData={patentProsecution} 
-            updateFormData={updateFormData} 
-            page="patentProsecution"
-          />
-
-          {/* Effort Sheet Details */}
-          <PPEffortSheetV2 
             formData={patentProsecution} 
             updateFormData={updateFormData} 
             page="patentProsecution"

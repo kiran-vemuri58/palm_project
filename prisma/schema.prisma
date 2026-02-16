@@ -578,6 +578,9 @@ model PostGrantOpposition {
   patentPublished         String?
   publicationNumber       String?
   apopposed              String?
+  datePostGrantOpposition       String?
+  dateResponsePostGrantOpposition String?
+  dateHearingOpposition         String?
   oname                  String?
   opposerAttachment      String[] @default([])
   cfbopposer             String?
@@ -635,6 +638,8 @@ model PatentProsecution {
   pppd_published                 String?
   pppd_publication_number        String?
   pppd_any_person_opposed        String?
+  pppd_date_pregrant_opposition   String?   // Date of Pregrant opposition
+  pppd_date_reply_pregrant_opposition String?   // Date of reply to pregrant opposition
   pppd_opponent_name            String?
   pppd_attachments               String[] @default([])
   pppd_response_attachments      String[] @default([])

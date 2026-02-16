@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { FileText, Calendar, CheckCircle, Upload, X, AlertCircle, User } from 'lucide-react';
+import useV2Store from '@/store/v2Store';
 
 const PGOPatentProsecutionDetailsV2 = ({ formData, updateFormData, page }) => {
   const safeFormData = formData || {};
@@ -101,6 +102,46 @@ const PGOPatentProsecutionDetailsV2 = ({ formData, updateFormData, page }) => {
           {/* Conditional Opposition Fields */}
           {safeFormData.apopposed === 'yes' && (
             <div className="space-y-6">
+              {/* Date of post grant opposition, response, hearing */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="space-y-2">
+                  <label className="flex items-center space-x-2 text-sm font-medium text-gray-700">
+                    <Calendar className="h-4 w-4 text-purple-600" />
+                    <span>Date of post grant opposition</span>
+                  </label>
+                  <input
+                    type="date"
+                    value={safeFormData.datePostGrantOpposition || ''}
+                    onChange={(e) => handleChange('datePostGrantOpposition', e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="flex items-center space-x-2 text-sm font-medium text-gray-700">
+                    <Calendar className="h-4 w-4 text-purple-600" />
+                    <span>Date of Response to post grant opposition</span>
+                  </label>
+                  <input
+                    type="date"
+                    value={safeFormData.dateResponsePostGrantOpposition || ''}
+                    onChange={(e) => handleChange('dateResponsePostGrantOpposition', e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="flex items-center space-x-2 text-sm font-medium text-gray-700">
+                    <Calendar className="h-4 w-4 text-purple-600" />
+                    <span>Date of Hearing on opposition</span>
+                  </label>
+                  <input
+                    type="date"
+                    value={safeFormData.dateHearingOpposition || ''}
+                    onChange={(e) => handleChange('dateHearingOpposition', e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                  />
+                </div>
+              </div>
+
               {/* First Row - Opposer Name, Citations Filed by Opposer */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">

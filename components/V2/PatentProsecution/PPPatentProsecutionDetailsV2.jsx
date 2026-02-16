@@ -115,10 +115,10 @@ const PPPatentProsecutionDetailsV2 = ({ formData, updateFormData, page }) => {
             </div>
           )}
 
-          {/* Post Grant Opposed? */}
+          {/* Pre Grant Opposed? */}
           <div className="space-y-2">
             <label className="block text-sm font-semibold text-gray-700 mb-3">
-              Post Grant Opposed?
+              Pre Grant Opposed?
             </label>
             <select
               value={safeFormData.pppd_any_person_opposed || ''}
@@ -131,9 +131,35 @@ const PPPatentProsecutionDetailsV2 = ({ formData, updateFormData, page }) => {
             </select>
           </div>
 
-          {/* Conditional Opposition Fields */}
+          {/* Conditional Opposition Fields (Pre Grant Opposed = Yes) */}
           {safeFormData.pppd_any_person_opposed === 'yes' && (
             <>
+              {/* Date of Pregrant opposition, Date of reply to pregrant opposition */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">
+                    Date of Pregrant opposition
+                  </label>
+                  <input
+                    type="date"
+                    value={safeFormData.pppd_date_pregrant_opposition || ''}
+                    onChange={(e) => handleChange('pppd_date_pregrant_opposition', e.target.value)}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:border-purple-500 focus:ring-purple-500/20"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">
+                    Date of reply to pregrant opposition
+                  </label>
+                  <input
+                    type="date"
+                    value={safeFormData.pppd_date_reply_pregrant_opposition || ''}
+                    onChange={(e) => handleChange('pppd_date_reply_pregrant_opposition', e.target.value)}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:border-purple-500 focus:ring-purple-500/20"
+                  />
+                </div>
+              </div>
+
               {/* Opposer Name, Citations */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
